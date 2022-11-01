@@ -4,7 +4,7 @@
   "license": "MPL-2.0",
   "author": "dora <31735614+dora1998@users.noreply.github.com>",
   "scripts": {
-    "build": "webpack --production",
+    "build": "webpack --mode production",
     "build:dev": "webpack",
     "build:watch": "yarn build:dev --watch --progress",
     "serve": "node --enable-source-maps dist/server.js",

@@ -1,8 +1,11 @@
 //import _ from "lodash";
+
 import { v4 as uuid } from "uuid";
 
 import { OddsItem, Race, RaceEntry } from "../src/model/index.js";
 import { createConnection } from "../src/server/typeorm/connection.js";
+
+import { random } from "./utils";
 
 export async function insertOddsItems() {
   process.stdout.write("Creating odds items...");
@@ -26,12 +29,6 @@ export async function insertOddsItems() {
           if (first === second || first === third || second === third) {
             continue;
           }
-
-          const random = (a = 1, b = 0) => {
-            const lower = Math.min(a, b);
-            const upper = Math.max(a, b);
-            return lower + Math.random() * (upper - lower);
-          };
 
           const odds = random(1.1, 300).toFixed(1);
           //         const odds = Number(_.random(1.1, 300, true).toFixed(1));
