@@ -34,7 +34,6 @@ module.exports = {
               [
                 "@babel/preset-env",
                 {
-                  modules: "cjs",
                   spec: true,
                 },
               ],
