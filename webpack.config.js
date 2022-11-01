@@ -4,6 +4,9 @@ const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 const nodeExternals = require("webpack-node-externals");
 
+const BundleAnalyzerPlugin =
+  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+
 function abs(...args) {
   return path.join(__dirname, ...args);
 }
@@ -51,12 +54,17 @@ module.exports = [
     },
     name: "client",
     output: {
+      chunkFilename: "[id].js",
+      filename: "main.js",
       path: DIST_PUBLIC,
+      //filename: "[name].bundle.js",
+      //path: DIST_PUBLIC,
     },
     plugins: [
       new CopyPlugin({
         patterns: [{ from: PUBLIC_ROOT, to: DIST_PUBLIC }],
       }),
+      new BundleAnalyzerPlugin(),
     ],
     resolve: {
       extensions: [".js", ".jsx"],

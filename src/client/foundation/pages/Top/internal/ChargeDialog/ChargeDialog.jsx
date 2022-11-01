@@ -1,16 +1,16 @@
-import { motion } from "framer-motion";
-import React, { forwardRef, useCallback, useState } from "react";
-import zenginCode from "zengin-code";
+import { motion } from "framer-motion"
+import React, { forwardRef, useCallback, useState } from "react"
+import zenginCode from "zengin-code"
 
-import { Dialog } from "../../../../components/layouts/Dialog";
-import { Spacer } from "../../../../components/layouts/Spacer";
-import { Stack } from "../../../../components/layouts/Stack";
-import { Heading } from "../../../../components/typographies/Heading";
-import { useMutation } from "../../../../hooks/useMutation";
-import { Space } from "../../../../styles/variables";
+import { Dialog } from "../../../../components/layouts/Dialog"
+import { Spacer } from "../../../../components/layouts/Spacer"
+import { Stack } from "../../../../components/layouts/Stack"
+import { Heading } from "../../../../components/typographies/Heading"
+import { useMutation } from "../../../../hooks/useMutation"
+import { Space } from "../../../../styles/variables"
 
-const CANCEL = "cancel";
-const CHARGE = "charge";
+const CANCEL = "cancel"
+const CHARGE = "charge"
 
 /**
  * @typedef Props
@@ -19,60 +19,60 @@ const CHARGE = "charge";
 
 /** @type {React.ForwardRefExoticComponent<{Props>} */
 export const ChargeDialog = forwardRef(({ onComplete }, ref) => {
-  const [bankCode, setBankCode] = useState("");
-  const [branchCode, setBranchCode] = useState("");
-  const [accountNo, setAccountNo] = useState("");
-  const [amount, setAmount] = useState(0);
+  const [bankCode, setBankCode] = useState("")
+  const [branchCode, setBranchCode] = useState("")
+  const [accountNo, setAccountNo] = useState("")
+  const [amount, setAmount] = useState(0)
 
   const clearForm = useCallback(() => {
-    setBankCode("");
-    setBranchCode("");
-    setAccountNo("");
-    setAmount(0);
-  }, []);
+    setBankCode("")
+    setBranchCode("")
+    setAccountNo("")
+    setAmount(0)
+  }, [])
 
   const [charge] = useMutation("/api/users/me/charge", {
     auth: true,
     method: "POST",
-  });
+  })
 
   const handleCodeChange = useCallback((e) => {
-    setBankCode(e.currentTarget.value);
-    setBranchCode("");
-  }, []);
+    setBankCode(e.currentTarget.value)
+    setBranchCode("")
+  }, [])
 
   const handleBranchChange = useCallback((e) => {
-    setBranchCode(e.currentTarget.value);
-  }, []);
+    setBranchCode(e.currentTarget.value)
+  }, [])
 
   const handleAccountNoChange = useCallback((e) => {
-    setAccountNo(e.currentTarget.value);
-  }, []);
+    setAccountNo(e.currentTarget.value)
+  }, [])
 
   const handleAmountChange = useCallback((e) => {
-    setAmount(parseInt(e.currentTarget.value, 10));
-  }, []);
+    setAmount(parseInt(e.currentTarget.value, 10))
+  }, [])
 
   const handleCloseDialog = useCallback(
     async (e) => {
       if (e.currentTarget.returnValue === CANCEL) {
-        clearForm();
-        return;
+        clearForm()
+        return
       }
 
-      await charge({ accountNo, amount, bankCode, branchCode });
-      clearForm();
-      onComplete();
+      await charge({ accountNo, amount, bankCode, branchCode })
+      clearForm()
+      onComplete()
     },
     [charge, bankCode, branchCode, accountNo, amount, onComplete, clearForm],
-  );
+  )
 
   const bankList = Object.entries(zenginCode).map(([code, { name }]) => ({
     code,
     name,
-  }));
-  const bank = zenginCode[bankCode];
-  const branch = bank?.branches[branchCode];
+  }))
+  const bank = zenginCode[bankCode]
+  const branch = bank?.branches[branchCode]
 
   return (
     <Dialog ref={ref} onClose={handleCloseDialog}>
@@ -157,7 +157,8 @@ export const ChargeDialog = forwardRef(({ onComplete }, ref) => {
         </form>
       </section>
     </Dialog>
-  );
-});
+  )
+})
 
-ChargeDialog.displayName = "ChargeDialog";
+ChargeDialog.displayName = "ChargeDialog"
+

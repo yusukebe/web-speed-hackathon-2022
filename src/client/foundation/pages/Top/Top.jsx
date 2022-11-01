@@ -1,80 +1,81 @@
-import _ from "lodash";
-import moment from "moment-timezone";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
-import styled from "styled-components";
+import _ from "lodash"
+import moment from "moment-timezone"
+import React, { useCallback, useEffect, useRef, useState, Suspense } from "react"
+import { useParams } from "react-router-dom"
+import styled from "styled-components"
 
-import { Container } from "../../components/layouts/Container";
-import { Spacer } from "../../components/layouts/Spacer";
-import { Stack } from "../../components/layouts/Stack";
-import { Heading } from "../../components/typographies/Heading";
-import { useAuthorizedFetch } from "../../hooks/useAuthorizedFetch";
-import { useFetch } from "../../hooks/useFetch";
-import { Color, Radius, Space } from "../../styles/variables";
-import { isSameDay } from "../../utils/DateUtils";
-import { authorizedJsonFetcher, jsonFetcher } from "../../utils/HttpUtils";
+import { Container } from "../../components/layouts/Container"
+import { Spacer } from "../../components/layouts/Spacer"
+import { Stack } from "../../components/layouts/Stack"
+import { Heading } from "../../components/typographies/Heading"
+import { useAuthorizedFetch } from "../../hooks/useAuthorizedFetch"
+import { useFetch } from "../../hooks/useFetch"
+import { Color, Radius, Space } from "../../styles/variables"
+import { isSameDay } from "../../utils/DateUtils"
+import { authorizedJsonFetcher, jsonFetcher } from "../../utils/HttpUtils"
 
-import { ChargeDialog } from "./internal/ChargeDialog";
-import { HeroImage } from "./internal/HeroImage";
-import { RecentRaceList } from "./internal/RecentRaceList";
+import { HeroImage } from "./internal/HeroImage"
+import { RecentRaceList } from "./internal/RecentRaceList"
+
+const ChargeDialog = React.lazy(() => import("./internal/ChargeDialog"))
 
 /**
  * @param {Model.Race[]} races
  * @returns {Model.Race[]}
  */
 function useTodayRacesWithAnimation(races) {
-  const [isRacesUpdate, setIsRacesUpdate] = useState(false);
-  const [racesToShow, setRacesToShow] = useState([]);
-  const numberOfRacesToShow = useRef(0);
-  const prevRaces = useRef(races);
-  const timer = useRef(null);
+  const [isRacesUpdate, setIsRacesUpdate] = useState(false)
+  const [racesToShow, setRacesToShow] = useState([])
+  const numberOfRacesToShow = useRef(0)
+  const prevRaces = useRef(races)
+  const timer = useRef(null)
 
   useEffect(() => {
     const isRacesUpdate =
       _.difference(
         races.map((e) => e.id),
         prevRaces.current.map((e) => e.id),
-      ).length !== 0;
+      ).length !== 0
 
-    prevRaces.current = races;
-    setIsRacesUpdate(isRacesUpdate);
-  }, [races]);
+    prevRaces.current = races
+    setIsRacesUpdate(isRacesUpdate)
+  }, [races])
 
   useEffect(() => {
     if (!isRacesUpdate) {
-      return;
+      return
     }
     // 視覚効果 off のときはアニメーションしない
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setRacesToShow(races);
-      return;
+      setRacesToShow(races)
+      return
     }
 
-    numberOfRacesToShow.current = 0;
+    numberOfRacesToShow.current = 0
     if (timer.current !== null) {
-      clearInterval(timer.current);
+      clearInterval(timer.current)
     }
 
     timer.current = setInterval(() => {
       if (numberOfRacesToShow.current >= races.length) {
-        clearInterval(timer.current);
-        return;
+        clearInterval(timer.current)
+        return
       }
 
-      numberOfRacesToShow.current++;
-      setRacesToShow(_.slice(races, 0, numberOfRacesToShow.current));
-    }, 100);
-  }, [isRacesUpdate, races]);
+      numberOfRacesToShow.current++
+      setRacesToShow(_.slice(races, 0, numberOfRacesToShow.current))
+    }, 100)
+  }, [isRacesUpdate, races])
 
   useEffect(() => {
     return () => {
       if (timer.current !== null) {
-        clearInterval(timer.current);
+        clearInterval(timer.current)
       }
-    };
-  }, []);
+    }
+  }, [])
 
-  return racesToShow;
+  return racesToShow
 }
 
 /**
@@ -82,24 +83,24 @@ function useTodayRacesWithAnimation(races) {
  * @returns {string | null}
  */
 function useHeroImage(todayRaces) {
-  const firstRaceId = todayRaces[0]?.id;
+  const firstRaceId = todayRaces[0]?.id
   const url =
     firstRaceId !== undefined
       ? `/api/hero?firstRaceId=${firstRaceId}`
-      : "/api/hero";
-  const { data } = useFetch(url, jsonFetcher);
+      : "/api/hero"
+  const { data } = useFetch(url, jsonFetcher)
 
   if (firstRaceId === undefined || data === null) {
-    return null;
+    return null
   }
 
-  const imageUrl = `${data.url}?${data.hash}`;
-  return imageUrl;
+  const imageUrl = `${data.url}?${data.hash}`
+  return imageUrl
 }
 
 /** @type {React.VFC} */
 export const Top = () => {
-  const { date = moment().format("YYYY-MM-DD") } = useParams();
+  const { date = moment().format("YYYY-MM-DD") } = useParams()
 
   const ChargeButton = styled.button`
     background: ${Color.mono[700]};
@@ -110,42 +111,42 @@ export const Top = () => {
     &:hover {
       background: ${Color.mono[800]};
     }
-  `;
+  `
 
-  const chargeDialogRef = useRef(null);
+  const chargeDialogRef = useRef(null)
 
   const { data: userData, revalidate } = useAuthorizedFetch(
     "/api/users/me",
     authorizedJsonFetcher,
-  );
+  )
 
-  const { data: raceData } = useFetch("/api/races", jsonFetcher);
+  const { data: raceData } = useFetch("/api/races", jsonFetcher)
 
   const handleClickChargeButton = useCallback(() => {
     if (chargeDialogRef.current === null) {
-      return;
+      return
     }
 
-    chargeDialogRef.current.showModal();
-  }, []);
+    chargeDialogRef.current.showModal()
+  }, [])
 
   const handleCompleteCharge = useCallback(() => {
-    revalidate();
-  }, [revalidate]);
+    revalidate()
+  }, [revalidate])
 
   const todayRaces =
     raceData != null
       ? [...raceData.races]
-          .sort(
-            (/** @type {Model.Race} */ a, /** @type {Model.Race} */ b) =>
-              moment(a.startAt) - moment(b.startAt),
-          )
-          .filter((/** @type {Model.Race} */ race) =>
-            isSameDay(race.startAt, date),
-          )
-      : [];
-  const todayRacesToShow = useTodayRacesWithAnimation(todayRaces);
-  const heroImageUrl = useHeroImage(todayRaces);
+        .sort(
+          (/** @type {Model.Race} */ a, /** @type {Model.Race} */ b) =>
+            moment(a.startAt) - moment(b.startAt),
+        )
+        .filter((/** @type {Model.Race} */ race) =>
+          isSameDay(race.startAt, date),
+        )
+      : []
+  const todayRacesToShow = useTodayRacesWithAnimation(todayRaces)
+  const heroImageUrl = useHeroImage(todayRaces)
 
   return (
     <Container>
@@ -177,7 +178,9 @@ export const Top = () => {
         )}
       </section>
 
-      <ChargeDialog ref={chargeDialogRef} onComplete={handleCompleteCharge} />
+      <Suspense fallback="foo!!">
+        <ChargeDialog ref={chargeDialogRef} onComplete={handleCompleteCharge} />
+      </Suspense>
     </Container>
-  );
-};
+  )
+}
