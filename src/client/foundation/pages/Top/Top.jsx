@@ -1,9 +1,9 @@
-import _ from "lodash"
 import moment from "moment-timezone"
-import React, { useCallback, useEffect, useRef, useState, Suspense } from "react"
+import React, { Suspense, useCallback, useEffect, useRef, useState } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
+import { difference } from '../../../../../common/utils'
 import { Container } from "../../components/layouts/Container"
 import { Spacer } from "../../components/layouts/Spacer"
 import { Stack } from "../../components/layouts/Stack"
@@ -32,10 +32,10 @@ function useTodayRacesWithAnimation(races) {
 
   useEffect(() => {
     const isRacesUpdate =
-      _.difference(
+      difference([
         races.map((e) => e.id),
         prevRaces.current.map((e) => e.id),
-      ).length !== 0
+      ]).length !== 0
 
     prevRaces.current = races
     setIsRacesUpdate(isRacesUpdate)
@@ -63,7 +63,7 @@ function useTodayRacesWithAnimation(races) {
       }
 
       numberOfRacesToShow.current++
-      setRacesToShow(_.slice(races, 0, numberOfRacesToShow.current))
+      setRacesToShow(races.slice(0, numberOfRacesToShow.current))
     }, 100)
   }, [isRacesUpdate, races])
 

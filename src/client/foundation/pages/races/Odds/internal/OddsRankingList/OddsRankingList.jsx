@@ -1,12 +1,13 @@
-import _ from "lodash";
-import React from "react";
-import styled from "styled-components";
+import sortBy from "lodash/sortBy"
+import take from "lodash/take"
+import React from "react"
+import styled from "styled-components"
 
-import { BaseButton } from "../../../../../components/buttons/BaseButton";
-import { EntryCombination } from "../../../../../components/displays/EntryCombination";
-import { Stack } from "../../../../../components/layouts/Stack";
-import { BreakPoint, Color, Space } from "../../../../../styles/variables";
-import { OddsMarker } from "../OddsMarker";
+import { BaseButton } from "../../../../../components/buttons/BaseButton"
+import { EntryCombination } from "../../../../../components/displays/EntryCombination"
+import { Stack } from "../../../../../components/layouts/Stack"
+import { BreakPoint, Color, Space } from "../../../../../styles/variables"
+import { OddsMarker } from "../OddsMarker"
 
 const Wrapper = styled.ol`
   display: grid;
@@ -32,7 +33,7 @@ const Wrapper = styled.ol`
       border-bottom: 1px solid ${Color.mono[400]};
     }
   }
-`;
+`
 
 const BuyButton = styled(BaseButton)`
   font-weight: bold;
@@ -43,7 +44,7 @@ const BuyButton = styled(BaseButton)`
   &:hover {
     background: ${Color.mono[200]};
   }
-`;
+`
 
 const InactiveBuyButton = styled.div`
   cursor: default;
@@ -51,11 +52,11 @@ const InactiveBuyButton = styled.div`
   justify-content: left;
   padding: ${Space * 2}px;
   width: 100%;
-`;
+`
 
 const RankNo = styled.div`
   width: 32px;
-`;
+`
 
 /**
  * @typedef Props
@@ -66,10 +67,10 @@ const RankNo = styled.div`
 
 /** @type {React.VFC<Props>} */
 export const OddsRankingList = ({ isRaceClosed, odds, onClickOdds }) => {
-  const sortedOdds = _.take(
-    _.sortBy(odds, (item) => item.odds),
+  const sortedOdds = take(
+    sortBy(odds, (item) => item.odds),
     50,
-  );
+  )
 
   return (
     <Wrapper>
@@ -95,5 +96,5 @@ export const OddsRankingList = ({ isRaceClosed, odds, onClickOdds }) => {
         </li>
       ))}
     </Wrapper>
-  );
-};
+  )
+}

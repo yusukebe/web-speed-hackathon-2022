@@ -2,10 +2,9 @@
 
 import { v4 as uuid } from "uuid";
 
+import { random } from "../common/utils";
 import { OddsItem, Race, RaceEntry } from "../src/model/index.js";
 import { createConnection } from "../src/server/typeorm/connection.js";
-
-import { random } from "./utils";
 
 export async function insertOddsItems() {
   process.stdout.write("Creating odds items...");
