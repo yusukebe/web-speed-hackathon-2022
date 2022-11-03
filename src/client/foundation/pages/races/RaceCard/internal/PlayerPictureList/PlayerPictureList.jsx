@@ -1,9 +1,9 @@
-import React from "react";
-import styled from "styled-components";
+import React from "react"
+import styled from "styled-components"
 
-import { Stack } from "../../../../../components/layouts/Stack";
-import { TrimmedImage } from "../../../../../components/media/TrimmedImage";
-import { Color, FontSize, Space } from "../../../../../styles/variables";
+import { Stack } from "../../../../../components/layouts/Stack"
+import { TrimmedImage } from "../../../../../components/media/TrimmedImage"
+import { Color, FontSize, Space } from "../../../../../styles/variables"
 
 const PlayerNumber = styled.span`
   border: 1px solid ${Color.mono[900]};
@@ -11,11 +11,11 @@ const PlayerNumber = styled.span`
   height: 24px;
   text-align: center;
   width: 24px;
-`;
+`
 
 const PlayerName = styled.span`
   font-size: ${FontSize.SMALL};
-`;
+`
 
 /**
  * @typedef ItemProps
@@ -26,12 +26,13 @@ const PlayerName = styled.span`
 
 /** @type {React.VFC<ItemProps>} */
 const Item = ({ image, name, number }) => {
+  const match = image.match(/([0-9]+)\.jpg$/)
   return (
     <Stack gap={Space * 1}>
-      <TrimmedImage
+      <img
         alt={`${name}選手のプロフィール写真`}
         height={100}
-        src={image}
+        src={`/assets/images/players/${match[1]}.webp`}
         width={100}
       />
 
@@ -40,14 +41,14 @@ const Item = ({ image, name, number }) => {
         <PlayerName>{name}</PlayerName>
       </Stack>
     </Stack>
-  );
-};
+  )
+}
 
 export const PlayerPictureList = ({ children }) => {
   return (
     <Stack horizontal gap={Space * 2} wrap="wrap">
       {children}
     </Stack>
-  );
-};
-PlayerPictureList.Item = Item;
+  )
+}
+PlayerPictureList.Item = Item

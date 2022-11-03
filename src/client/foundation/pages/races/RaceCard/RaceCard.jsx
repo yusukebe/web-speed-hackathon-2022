@@ -1,20 +1,20 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import styled from "styled-components";
+import React from "react"
+import { useParams } from "react-router-dom"
+import styled from "styled-components"
 
-import { Container } from "../../../components/layouts/Container";
-import { Section } from "../../../components/layouts/Section";
-import { Spacer } from "../../../components/layouts/Spacer";
-import { TrimmedImage } from "../../../components/media/TrimmedImage";
-import { TabNav } from "../../../components/navs/TabNav";
-import { Heading } from "../../../components/typographies/Heading";
-import { useFetch } from "../../../hooks/useFetch";
-import { Color, Radius, Space } from "../../../styles/variables";
-import { formatTime } from "../../../utils/DateUtils";
-import { jsonFetcher } from "../../../utils/HttpUtils";
+import { Container } from "../../../components/layouts/Container"
+import { Section } from "../../../components/layouts/Section"
+import { Spacer } from "../../../components/layouts/Spacer"
+import { TrimmedImage } from "../../../components/media/TrimmedImage"
+import { TabNav } from "../../../components/navs/TabNav"
+import { Heading } from "../../../components/typographies/Heading"
+import { useFetch } from "../../../hooks/useFetch"
+import { Color, Radius, Space } from "../../../styles/variables"
+import { formatTime } from "../../../utils/DateUtils"
+import { jsonFetcher } from "../../../utils/HttpUtils"
 
-import { EntryTable } from "./internal/EntryTable";
-import { PlayerPictureList } from "./internal/PlayerPictureList";
+import { EntryTable } from "./internal/EntryTable"
+import { PlayerPictureList } from "./internal/PlayerPictureList"
 
 const LiveBadge = styled.span`
   background: ${Color.red};
@@ -23,16 +23,20 @@ const LiveBadge = styled.span`
   font-weight: bold;
   padding: ${Space * 1}px;
   text-transform: uppercase;
-`;
+`
 
 /** @type {React.VFC} */
 export const RaceCard = () => {
-  const { raceId } = useParams();
-  const { data } = useFetch(`/api/races/${raceId}`, jsonFetcher);
+  const { raceId } = useParams()
+  const { data } = useFetch(`/api/races/${raceId}`, jsonFetcher)
 
   if (data == null) {
-    return <Container>Loading...</Container>;
+    return <Container>Loading...</Container>
   }
+
+  console.log(data.image)
+
+  const match = data.image.match(/([0-9]+)\.jpg$/)
 
   return (
     <Container>
@@ -47,7 +51,7 @@ export const RaceCard = () => {
       <Section dark shrink>
         <LiveBadge>Live</LiveBadge>
         <Spacer mt={Space * 2} />
-        <TrimmedImage height={225} src={data.image} width={400} />
+        <img src={`/assets/images/races/400x225/${match[1]}.webp`} />
       </Section>
 
       <Spacer mt={Space * 2} />
@@ -77,5 +81,5 @@ export const RaceCard = () => {
         <EntryTable entries={data.entries} />
       </Section>
     </Container>
-  );
-};
+  )
+}
