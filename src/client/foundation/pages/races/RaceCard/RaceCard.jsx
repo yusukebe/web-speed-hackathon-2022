@@ -34,8 +34,6 @@ export const RaceCard = () => {
     return <Container>Loading...</Container>
   }
 
-  console.log(data.image)
-
   const match = data.image.match(/([0-9]+)\.jpg$/)
 
   return (

@@ -61,6 +61,8 @@ export const Odds = () => {
     return <Container>Loading...</Container>
   }
 
+  const match = data.image.match(/([0-9]+)\.jpg$/)
+
   const isRaceClosed = dayjs(data.closeAt).isBefore(new Date())
 
   return (
@@ -76,7 +78,7 @@ export const Odds = () => {
       <Section dark shrink>
         <LiveBadge>Live</LiveBadge>
         <Spacer mt={Space * 2} />
-        <TrimmedImage height={225} src={data.image} width={400} />
+        <img src={`/assets/images/races/400x225/${match[1]}.webp`} />
       </Section>
 
       <Spacer mt={Space * 2} />
