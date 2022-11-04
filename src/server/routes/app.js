@@ -1,6 +1,10 @@
 import { join } from "path";
 
 import fastifyStatic from "@fastify/static";
+
+import { Race } from "../../model/index.js";
+import { createConnection } from "../typeorm/connection.js";
+
 /**
  * @type {import('fastify').FastifyPluginCallback}
  */
@@ -29,26 +33,34 @@ export const appRoute = async (fastify) => {
   });
 
   fastify.get("/", async (_req, res) => {
-    return res.view("index", { text: "text" });
+    return res.view("index", { hero: "/assets/images/hero.webp" });
   });
 
   fastify.get("/:date", async (_req, res) => {
     return res.view("index", { text: "text" });
   });
-
-  fastify.get("/races/:raceId", async (_req, res) => {
-    return res.view("index", { text: "text" });
+  fastify.get("/races/:raceId/race-card", async (req, res) => {
+    const imageURL = await getHero(req);
+    return res.view("index", { hero: imageURL });
   });
 
-  fastify.get("/races/:raceId/race-card", async (_req, res) => {
-    return res.view("index", { text: "text" });
+  fastify.get("/races/:raceId/odds", async (req, res) => {
+    const imageURL = await getHero(req);
+    return res.view("index", { hero: imageURL });
   });
 
-  fastify.get("/races/:raceId/odds", async (_req, res) => {
-    return res.view("index", { text: "text" });
+  fastify.get("/races/:raceId/result", async (req, res) => {
+    const imageURL = await getHero(req);
+    return res.view("index", { hero: imageURL });
   });
+};
 
-  fastify.get("/races/:raceId/result", async (_req, res) => {
-    return res.view("index", { text: "text" });
-  });
+const getHero = async (req) => {
+  const repo = (await createConnection()).getRepository(Race);
+  const race = await repo.findOne(req.params.raceId);
+  let imageURL = "";
+  if (race) {
+    imageURL = race.image;
+  }
+  return imageURL;
 };
