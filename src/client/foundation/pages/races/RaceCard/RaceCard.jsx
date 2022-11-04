@@ -49,7 +49,7 @@ export const RaceCard = () => {
       <Section dark shrink>
         <LiveBadge>Live</LiveBadge>
         <Spacer mt={Space * 2} />
-        <img src={`/assets/images/races/400x225/${match[1]}.webp`} />
+        <img height={225} src={`/assets/images/races/400x225/${match[1]}.webp`} style={{ height: 'auto', width: '100%' }} width={400} />
       </Section>
 
       <Spacer mt={Space * 2} />

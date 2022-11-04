@@ -151,7 +151,8 @@ export const Top = () => {
 
   return (
     <Container>
-      {heroImageUrl !== null && <HeroImage url={heroImageUrl} />}
+      {heroImageUrl ? <HeroImage url={heroImageUrl} /> : <HeroImage url={`data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==`} />}
+      {/* {heroImageUrl !== null && <HeroImage url={heroImageUrl} />} */}
 
       <Spacer mt={Space * 2} />
       {userData && (
