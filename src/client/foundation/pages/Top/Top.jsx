@@ -147,7 +147,8 @@ export const Top = () => {
         )
       : []
   const todayRacesToShow = useTodayRacesWithAnimation(todayRaces)
-  const heroImageUrl = useHeroImage(todayRaces)
+  /* API叩かなくてもいいのだろうか */
+  const heroImageUrl = "/assets/images/hero.webp" // useHeroImage(todayRaces)
 
   return (
     <Container>
