@@ -5,8 +5,7 @@ import fastifySensible from "fastify-sensible";
 import { User } from "../model/index.js";
 
 import { apiRoute } from "./routes/api.js";
-//import { appRoute } from "./routes/app.js";
-import { spaRoute } from "./routes/spa.js";
+import { appRoute } from "./routes/app.js";
 import { createConnection } from "./typeorm/connection.js";
 
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
@@ -35,13 +34,12 @@ server.addHook("onRequest", async (req, res) => {
   res.header("Connection", "close");
 });
 
-//server.register(appRoute);
+server.register(appRoute);
 server.register(apiRoute, { prefix: "/api" });
-server.register(spaRoute);
 
 server.listen({ host: "0.0.0.0", port: process.env.PORT || 3000 }, (err) => {
   if (err) {
-    fastify.log.error(err);
+    console.log(err);
     process.exit(1);
   }
 });

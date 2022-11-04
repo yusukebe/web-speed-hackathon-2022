@@ -10,6 +10,7 @@ function abs(...args) {
 const SRC_ROOT = abs("./src");
 const PUBLIC_ROOT = abs("./public");
 const DIST_PUBLIC = abs("./dist/public");
+const DIST_JS_PUBLIC = abs("./dist/public/assets/js");
 
 /** @type {Array<import('webpack').Configuration>} */
 module.exports = {
@@ -47,7 +48,7 @@ module.exports = {
   name: "client",
   output: {
     filename: "[name].bundle.js",
-    path: DIST_PUBLIC,
+    path: DIST_JS_PUBLIC,
   },
   plugins: [
     new CopyPlugin({
