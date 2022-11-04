@@ -5,6 +5,7 @@ import fastifySensible from "fastify-sensible";
 import { User } from "../model/index.js";
 
 import { apiRoute } from "./routes/api.js";
+//import { appRoute } from "./routes/app.js";
 import { spaRoute } from "./routes/spa.js";
 import { createConnection } from "./typeorm/connection.js";
 
@@ -34,6 +35,7 @@ server.addHook("onRequest", async (req, res) => {
   res.header("Connection", "close");
 });
 
+//server.register(appRoute);
 server.register(apiRoute, { prefix: "/api" });
 server.register(spaRoute);
 
