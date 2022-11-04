@@ -60,7 +60,8 @@ const getHero = async (req) => {
   const race = await repo.findOne(req.params.raceId);
   let imageURL = "";
   if (race) {
-    imageURL = race.image;
+    const match = race.image.match(/([0-9]+)\.jpg$/);
+    imageURL = `/assets/images/races/400x225/${match[1]}.webp`;
   }
   return imageURL;
 };
