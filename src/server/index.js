@@ -38,13 +38,9 @@ server.addHook("onRequest", async (req, res) => {
 server.register(apiRoute, { prefix: "/api" });
 server.register(spaRoute);
 
-const start = async () => {
-  try {
-    await initialize();
-    await server.listen(process.env.PORT || 3000, "0.0.0.0");
-  } catch (err) {
-    server.log.error(err);
+server.listen({ port: process.env.PORT || 3000 }, (err) => {
+  if (err) {
+    fastify.log.error(err);
     process.exit(1);
   }
-};
-start();
+});
