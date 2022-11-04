@@ -40,18 +40,18 @@ export const appRoute = async (fastify) => {
     return res.view("index", { text: "text" });
   });
   fastify.get("/races/:raceId/race-card", async (req, res) => {
-    const imageURL = await getHero(req);
-    return res.view("index", { hero: imageURL });
+    //const imageURL = await getHero(req);
+    return res.view("index");
   });
 
   fastify.get("/races/:raceId/odds", async (req, res) => {
-    const imageURL = await getHero(req);
-    return res.view("index", { hero: imageURL });
+    //const imageURL = await getHero(req);
+    return res.view("index");
   });
 
   fastify.get("/races/:raceId/result", async (req, res) => {
-    const imageURL = await getHero(req);
-    return res.view("index", { hero: imageURL });
+    //const imageURL = await getHero(req);
+    return res.view("index");
   });
 };
 
