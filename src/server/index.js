@@ -7,7 +7,6 @@ import { User } from "../model/index.js";
 import { apiRoute } from "./routes/api.js";
 import { spaRoute } from "./routes/spa.js";
 import { createConnection } from "./typeorm/connection.js";
-import { initialize } from "./typeorm/initialize.js";
 
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
