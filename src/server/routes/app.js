@@ -25,10 +25,30 @@ export const appRoute = async (fastify) => {
     },
     includeViewExtension: true,
     root: join(__dirname, "templates"),
-    viewExt: "hbs",
+    viewExt: "html",
   });
 
   fastify.get("/", async (_req, res) => {
+    return res.view("index", { text: "text" });
+  });
+
+  fastify.get("/:date", async (_req, res) => {
+    return res.view("index", { text: "text" });
+  });
+
+  fastify.get("/races/:raceId", async (_req, res) => {
+    return res.view("index", { text: "text" });
+  });
+
+  fastify.get("/races/:raceId/race-card", async (_req, res) => {
+    return res.view("index", { text: "text" });
+  });
+
+  fastify.get("/races/:raceId/odds", async (_req, res) => {
+    return res.view("index", { text: "text" });
+  });
+
+  fastify.get("/races/:raceId/result", async (_req, res) => {
     return res.view("index", { text: "text" });
   });
 };
