@@ -29,14 +29,26 @@ const LiveBadge = styled.span`
 /** @type {React.VFC} */
 export const RaceResult = () => {
   const { raceId } = useParams()
-  const { data } = useFetch(`/api/races/${raceId}`, jsonFetcher)
+  let { data } = useFetch(`/api/races/${raceId}`, jsonFetcher)
   const { data: ticketData } = useAuthorizedFetch(
     `/api/races/${raceId}/betting-tickets`,
     authorizedJsonFetcher,
   )
 
+  console.log(data)
   if (data == null) {
-    return <Container>Loading...</Container>
+
+    const preData = {
+      "entries": [
+      ],
+      "id": "1",
+      "image": "/assets/images/races/400x225/gray.webp",
+      "name": "loading...",
+    }
+
+    data = preData
+
+    // return <Container>Loading...</Container>
   }
 
   const match = data.image.match(/([0-9]+)\.jpg$/)
@@ -54,7 +66,7 @@ export const RaceResult = () => {
       <Section dark shrink>
         <LiveBadge>Live</LiveBadge>
         <Spacer mt={Space * 2} />
-        <img height={225} src={`/assets/images/races/400x225/${match[1]}.webp`} style={{ height: 'auto', width: '100%' }} width={400} />
+        <img height={225} src={match ? `/assets/images/races/400x225/${match[1]}.webp` : data.image} style={{ height: 'auto', width: '100%' }} width={400} />
       </Section>
 
       <Spacer mt={Space * 2} />

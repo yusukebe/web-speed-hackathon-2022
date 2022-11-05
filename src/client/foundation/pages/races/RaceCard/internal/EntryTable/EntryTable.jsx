@@ -1,11 +1,11 @@
-import React from "react";
-import styled from "styled-components";
+import React from "react"
+import styled from "styled-components"
 
-import { Color, FontSize, Space } from "../../../../../styles/variables";
+import { Color, FontSize, Space } from "../../../../../styles/variables"
 
 const Wrapper = styled.div`
   overflow-x: auto;
-`;
+`
 
 const Table = styled.table`
   border-collapse: collapse;
@@ -39,17 +39,17 @@ const Table = styled.table`
       border-right-width: 0;
     }
   }
-`;
+`
 
 const TableHCell = styled.th`
   font-weight: ${({ $bold }) => $bold && "bold"};
   text-align: ${({ $align }) => $align};
-`;
+`
 
 const TableCell = styled.td`
   font-weight: ${({ $bold }) => $bold && "bold"};
   text-align: ${({ $align }) => $align};
-`;
+`
 
 /**
  * @typedef Props
@@ -131,5 +131,5 @@ export const EntryTable = ({ entries }) => {
         </tbody>
       </Table>
     </Wrapper>
-  );
-};
+  )
+}

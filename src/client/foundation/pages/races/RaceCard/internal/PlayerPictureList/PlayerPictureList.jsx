@@ -32,7 +32,7 @@ const Item = ({ image, name, number }) => {
       <img
         alt={`${name}選手のプロフィール写真`}
         height={100}
-        src={`/assets/images/players/${match[1]}.webp`}
+        src={match ? `/assets/images/players/${match[1]}.webp` : image}
         width={100}
       />
 

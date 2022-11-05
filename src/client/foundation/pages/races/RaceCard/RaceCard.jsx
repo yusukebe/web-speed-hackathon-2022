@@ -5,7 +5,6 @@ import styled from "styled-components"
 import { Container } from "../../../components/layouts/Container"
 import { Section } from "../../../components/layouts/Section"
 import { Spacer } from "../../../components/layouts/Spacer"
-import { TrimmedImage } from "../../../components/media/TrimmedImage"
 import { TabNav } from "../../../components/navs/TabNav"
 import { Heading } from "../../../components/typographies/Heading"
 import { useFetch } from "../../../hooks/useFetch"
@@ -28,10 +27,26 @@ const LiveBadge = styled.span`
 /** @type {React.VFC} */
 export const RaceCard = () => {
   const { raceId } = useParams()
-  const { data } = useFetch(`/api/races/${raceId}`, jsonFetcher)
+  let { data } = useFetch(`/api/races/${raceId}`, jsonFetcher)
 
   if (data == null) {
-    return <Container>Loading...</Container>
+
+    const entries = [...Array(10)].map((_, i) => ({
+      id: i,
+      "player": {
+        "id": i,
+        "image": "data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==",
+        "name": "loading...",
+      },
+    }))
+    const preData = {
+      "entries": entries,
+      "image": "/assets/images/races/400x225/gray.webp",
+      "name": "loading...",
+    }
+
+    data = preData
+
   }
 
   const match = data.image.match(/([0-9]+)\.jpg$/)
@@ -49,7 +64,7 @@ export const RaceCard = () => {
       <Section dark shrink>
         <LiveBadge>Live</LiveBadge>
         <Spacer mt={Space * 2} />
-        <img height={225} src={`/assets/images/races/400x225/${match[1]}.webp`} style={{ height: 'auto', width: '100%' }} width={400} />
+        <img height={225} src={match ? `/assets/images/races/400x225/${match[1]}.webp` : data.image} style={{ height: 'auto', width: '100%' }} width={400} />
       </Section>
 
       <Spacer mt={Space * 2} />
@@ -76,7 +91,7 @@ export const RaceCard = () => {
         </PlayerPictureList>
 
         <Spacer mt={Space * 4} />
-        <EntryTable entries={data.entries} />
+        {data.entries && data.entries[0]['first'] ? <EntryTable entries={data.entries} /> : <></>}
       </Section>
     </Container>
   )

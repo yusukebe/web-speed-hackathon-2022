@@ -42,7 +42,7 @@ const Callout = styled.aside`
 /** @type {React.VFC} */
 export const Odds = () => {
   const { raceId } = useParams()
-  const { data } = useFetch(`/api/races/${raceId}`, jsonFetcher)
+  let { data } = useFetch(`/api/races/${raceId}`, jsonFetcher)
   const [oddsKeyToBuy, setOddsKeyToBuy] = useState(null)
   const modalRef = useRef(null)
 
@@ -58,9 +58,30 @@ export const Odds = () => {
   )
 
   if (data == null) {
-    return <Container>Loading...</Container>
-  }
+    const entries = [{
+      "id": "1",
+      "player": {
+        "id": "1",
+      },
+    }]
+    const odds = [{
+      "id": "1",
+      "key": [
+        1,
+      ],
+      "odds": 100,
+      "type": "trifecta"
+    }]
+    const preData = {
+      "entries": entries,
+      "image": "/assets/images/races/400x225/gray.webp",
+      "name": "loading...",
+      "trifectaOdds": odds
+    }
+    data = preData
 
+    //return <Container>Loading...</Container>
+  }
   const match = data.image.match(/([0-9]+)\.jpg$/)
 
   const isRaceClosed = dayjs(data.closeAt).isBefore(new Date())
@@ -78,7 +99,7 @@ export const Odds = () => {
       <Section dark shrink>
         <LiveBadge>Live</LiveBadge>
         <Spacer mt={Space * 2} />
-        <img height={225} src={`/assets/images/races/400x225/${match[1]}.webp`} style={{ height: 'auto', width: '100%' }} width={400} />
+        <img height={225} src={match ? `/assets/images/races/400x225/${match[1]}.webp` : data.image} style={{ height: 'auto', width: '100%' }} width={400} />
       </Section>
 
       <Spacer mt={Space * 2} />
