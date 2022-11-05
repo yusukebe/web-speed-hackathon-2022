@@ -1,8 +1,9 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
+import React, { Suspense } from "react"
+import { Outlet } from "react-router-dom"
 
-import { Footer } from "../../components/navs/Footer";
-import { Header } from "../../components/navs/Header/Header";
+import { Header } from "../../components/navs/Header/Header"
+
+const Footer = React.lazy(() => import("../../components/navs/Footer"))
 
 export const CommonLayout = () => {
   return (
@@ -13,7 +14,9 @@ export const CommonLayout = () => {
         <Outlet />
       </main>
 
-      <Footer />
+      <Suspense fallback="loading...">
+        <Footer />
+      </Suspense>
     </div>
-  );
-};
+  )
+}

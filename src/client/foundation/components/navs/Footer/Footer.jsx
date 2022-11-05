@@ -1,8 +1,8 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
+import React from "react"
+import { Link } from "react-router-dom"
+import styled from "styled-components"
 
-import { BreakPoint, Color, FontSize, Space } from "../../../styles/variables";
+import { BreakPoint, Color, FontSize, Space } from "../../../styles/variables"
 
 const Wrapper = styled.div`
   background: ${Color.mono[600]};
@@ -10,14 +10,14 @@ const Wrapper = styled.div`
   font-size: ${FontSize.SMALL};
   margin-top: ${Space * 5}px;
   padding: ${Space * 5}px ${Space * 5}px;
-`;
+`
 
 const List = styled.ul`
   @media (min-width: ${BreakPoint.TABLET}px) {
     display: flex;
     justify-content: flex-start;
   }
-`;
+`
 
 const ListItem = styled.li`
   cursor: pointer;
@@ -31,7 +31,7 @@ const ListItem = styled.li`
   &:hover {
     color: ${Color.mono[300]};
   }
-`;
+`
 
 const NameText = styled.h1`
   color: ${Color.green[400]};
@@ -43,12 +43,12 @@ const NameText = styled.h1`
     color: inherit;
     text-decoration: none;
   }
-`;
+`
 
 const WarningText = styled.p`
   color: ${Color.mono[300]};
   font-size: ${FontSize.X_SMALL};
-`;
+`
 
 /** @type {React.VFC} */
 export const Footer = () => {
@@ -72,5 +72,5 @@ export const Footer = () => {
         じゃんけんはどこの国の商標でもなく、中国から九州に伝来した虫拳に由来する日本の遊戯です。拳券の購入は20歳になってから。じゃんけんは適度に楽しみましょう。
       </WarningText>
     </Wrapper>
-  );
-};
+  )
+}
