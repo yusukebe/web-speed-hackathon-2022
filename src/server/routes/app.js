@@ -33,25 +33,22 @@ export const appRoute = async (fastify) => {
   });
 
   fastify.get("/", async (_req, res) => {
-    return res.view("index", { hero: "/assets/images/hero.webp" });
+    res.type("text/html").send(getHTML("/assets/images/hero.webp"));
   });
 
   fastify.get("/:date", async (_req, res) => {
-    return res.view("index", { text: "text" });
+    return res.type("text/html").send(getHTML());
   });
   fastify.get("/races/:raceId/race-card", async (req, res) => {
-    const imageURL = await getHero(req);
-    return res.view("index", { hero: imageURL });
+    return res.type("text/html").send(getHTML());
   });
 
   fastify.get("/races/:raceId/odds", async (req, res) => {
-    const imageURL = await getHero(req);
-    return res.view("index", { hero: imageURL });
+    return res.type("text/html").send(getHTML());
   });
 
   fastify.get("/races/:raceId/result", async (req, res) => {
-    const imageURL = await getHero(req);
-    return res.view("index", { hero: imageURL });
+    return res.type("text/html").send(getHTML());
   });
 };
 
@@ -64,4 +61,26 @@ const getHero = async (req) => {
     imageURL = `/assets/images/races/400x225/${match[1]}.webp`;
   }
   return imageURL;
+};
+
+const getHTML = (hero) => {
+  let preload = "";
+  if (hero) {
+    preload = `<link rel="preload" href="${hero}" as="image" />`;
+  }
+  return `<!DOCTYPE html>
+  <html lang="ja">
+    <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      ${preload}
+      <title>CyberTicket</title>
+    </head>
+    <body>
+      <div id="root"></div>
+      <script src="/assets/js/main.bundle.js"></script>
+    </body>
+  </html>
+  `;
 };
