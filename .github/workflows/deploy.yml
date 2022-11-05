@@ -12,4 +12,5 @@ jobs:
         uses: peter-evans/repository-dispatch@v2
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          repository: yusukebe/web-speed-hackathon-2022-deploy
           event-type: deploy
