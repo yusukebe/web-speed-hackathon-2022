@@ -1,4 +1,4 @@
-import React, { Suspense } from "react"
+import React from "react"
 import { Outlet } from "react-router-dom"
 
 import { Header } from "../../components/navs/Header/Header"
@@ -14,9 +14,7 @@ export const CommonLayout = () => {
         <Outlet />
       </main>
 
-      <Suspense fallback="loading...">
-        <Footer />
-      </Suspense>
+      <Footer />
     </div>
   )
 }

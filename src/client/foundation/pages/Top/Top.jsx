@@ -146,7 +146,7 @@ export const Top = () => {
           isSameDay(race.startAt, date),
         )
       : []
-  const todayRacesToShow = useTodayRacesWithAnimation(todayRaces)
+  const todayRacesToShow = todayRaces
   /* API叩かなくてもいいのだろうか */
   const heroImageUrl = "/assets/images/hero.webp" // useHeroImage(todayRaces)
 
@@ -172,18 +172,35 @@ export const Top = () => {
       <Spacer mt={Space * 2} />
       <section>
         <Heading as="h1">本日のレース</Heading>
-        {todayRacesToShow.length > 0 && (
-          <RecentRaceList>
-            {todayRacesToShow.map((race) => (
+
+
+        <RecentRaceList>
+          {todayRacesToShow.length !== 0 ?
+            todayRacesToShow.map((race, _) => (
               <RecentRaceList.Item key={race.id} race={race} />
-            ))}
-          </RecentRaceList>
-        )}
+            )) : [...Array(10)].map((_, i) => (
+              <RecentRaceList.Item key={`list-${i}`} />
+            ))
+          }
+        </RecentRaceList>
+
+
       </section>
 
       <Suspense fallback="foo!!">
         <ChargeDialog ref={chargeDialogRef} onComplete={handleCompleteCharge} />
       </Suspense>
     </Container>
+  )
+}
+
+const ListFallback = () => {
+  console.log('foo')
+  return (
+    <RecentRaceList>
+      {[...Array(10)].map((_, i) => {
+        return (<RecentRaceList.Item key={`list-${i}`} />)
+      })}
+    </RecentRaceList>
   )
 }

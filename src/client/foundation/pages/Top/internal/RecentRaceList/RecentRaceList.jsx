@@ -16,10 +16,21 @@ export const RecentRaceList = ({ children }) => {
   )
 }
 
+/*
 const ItemWrapper = styled.li`
   background: ${Color.mono[0]};
   border-radius: ${Radius.MEDIUM};
   opacity: ${({ $opacity }) => $opacity};
+  padding: ${Space * 3}px;
+`
+*/
+
+const ItemWrapper = styled.li.attrs(() => ({
+  style: {
+  }
+}))`
+  background: ${Color.mono[0]};
+  border-radius: ${Radius.MEDIUM};
   padding: ${Space * 3}px;
 `
 
@@ -46,6 +57,26 @@ const RaceTitle = styled.h2`
 
 /** @type {React.VFC<ItemProps>} */
 const Item = ({ race }) => {
+
+  if (!race || typeof race['closeAt'] === 'undefined') {
+    return (
+      <ItemWrapper>
+        <Stack horizontal alignItems="center" justifyContent="space-between">
+          <Stack gap={Space * 1}>
+          </Stack>
+
+          <Spacer mr={Space * 2} />
+
+          <Stack.Item grow={0} shrink={0}>
+            <Stack horizontal alignItems="center" gap={Space * 2}>
+              <img height={100} src={'data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=='} width={100} />
+
+            </Stack>
+          </Stack.Item>
+        </Stack>
+      </ItemWrapper>)
+  }
+
   const [closeAtText, setCloseAtText] = useState(formatCloseAt(race.closeAt))
 
   // 締切はリアルタイムで表示したい
