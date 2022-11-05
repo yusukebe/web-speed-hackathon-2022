@@ -45,13 +45,13 @@ export const appRoute = async (fastify) => {
   });
 
   fastify.get("/races/:raceId/odds", async (req, res) => {
-    //const imageURL = await getHero(req);
-    return res.view("index");
+    const imageURL = await getHero(req);
+    return res.view("index", { hero: imageURL });
   });
 
   fastify.get("/races/:raceId/result", async (req, res) => {
-    //const imageURL = await getHero(req);
-    return res.view("index");
+    const imageURL = await getHero(req);
+    return res.view("index", { hero: imageURL });
   });
 };
 
