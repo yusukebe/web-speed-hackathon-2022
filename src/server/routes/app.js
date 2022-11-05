@@ -37,18 +37,19 @@ export const appRoute = async (fastify) => {
   });
 
   fastify.get("/:date", async (_req, res) => {
-    return res.type("text/html").send(getHTML());
+    res.type("text/html").send(getHTML());
   });
+
   fastify.get("/races/:raceId/race-card", async (req, res) => {
-    return res.type("text/html").send(getHTML());
+    res.type("text/html").send(getHTML(await getHero(req)));
   });
 
   fastify.get("/races/:raceId/odds", async (req, res) => {
-    return res.type("text/html").send(getHTML());
+    res.type("text/html").send(getHTML(await getHero(req)));
   });
 
   fastify.get("/races/:raceId/result", async (req, res) => {
-    return res.type("text/html").send(getHTML());
+    res.type("text/html").send(getHTML(await getHero(req)));
   });
 };
 
