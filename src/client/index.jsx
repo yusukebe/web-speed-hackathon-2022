@@ -1,9 +1,10 @@
-import "./foundation/side-effects";
+import "./foundation/side-effects"
 
-import React from "react";
-import ReactDOM from "react-dom";
+import React from "react"
+import * as ReactDOMClient from "react-dom/client"
 
-import { App } from "./foundation/App";
+import { App } from "./foundation/App"
 
-const root = document.getElementById("root");
-ReactDOM.render(<App />, root);
+const container = document.getElementById('root')
+const root = ReactDOMClient.createRoot(container)
+root.render(<App />)
