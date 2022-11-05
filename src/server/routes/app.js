@@ -76,6 +76,7 @@ const getHTML = (hero) => {
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       ${preload}
+      <link rel="preload" href="/assets/images/races/400x225/gray.webp" as="image" />
       <title>CyberTicket</title>
     </head>
     <body>

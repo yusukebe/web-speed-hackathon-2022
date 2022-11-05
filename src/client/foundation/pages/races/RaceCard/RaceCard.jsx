@@ -35,7 +35,7 @@ export const RaceCard = () => {
       id: i,
       "player": {
         "id": i,
-        "image": "/assets/images/races/400x225/gray.webp",
+        "image": "data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==",
         "name": "loading...",
       },
     }))
