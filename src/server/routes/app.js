@@ -36,6 +36,7 @@ export const appRoute = async (fastify) => {
   });
 
   fastify.get("/", async (_req, res) => {
+    res.header("Link", '</assets/images/hero.webp>; rel="preload"');
     res.type("text/html").send(getHTML("/assets/images/hero.webp"));
   });
 
@@ -44,15 +45,21 @@ export const appRoute = async (fastify) => {
   });
 
   fastify.get("/races/:raceId/race-card", async (req, res) => {
-    res.type("text/html").send(getHTML(await getHero(req), true));
+    const hero = await getHero(req);
+    res.header("Link", `<${hero}>; rel="preload"`);
+    res.type("text/html").send(getHTML(hero, true));
   });
 
   fastify.get("/races/:raceId/odds", async (req, res) => {
-    res.type("text/html").send(getHTML(await getHero(req), true));
+    const hero = await getHero(req);
+    res.header("Link", `<${hero}>; rel="preload"`);
+    res.type("text/html").send(getHTML(hero, true));
   });
 
   fastify.get("/races/:raceId/result", async (req, res) => {
-    res.type("text/html").send(getHTML(await getHero(req), true));
+    const hero = await getHero(req);
+    res.header("Link", `<${hero}>; rel="preload"`);
+    res.type("text/html").send(getHTML(hero, true));
   });
 };
 

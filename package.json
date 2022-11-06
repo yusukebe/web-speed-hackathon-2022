@@ -12,6 +12,8 @@
     "serve": "node --enable-source-maps dist/server.js",
     "serve:dev": "wait-on dist/server.js && NODE_OPTIONS=--enable-source-maps nodemon dist/server.js",
     "dev": "npm-run-all -s clean -p build:watch build:server:watch serve:dev",
+    "dev:worker": "wrangler dev worker/index.ts",
+    "deploy:worker": "wrangler publish worker/index.ts",
     "clean": "rimraf dist",
     "gen": "scaffdog generate",
     "format": "prettier --write .",
@@ -28,6 +30,7 @@
     "@babel/core": "^7.16.7",
     "@babel/preset-env": "^7.16.7",
     "@babel/preset-react": "^7.16.7",
+    "@cloudflare/workers-types": "^3.18.0",
     "@stylelint/postcss-css-in-js": "^0.37.2",
     "@types/lodash": "^4.14.178",
     "@types/node": "^16.11.68",
@@ -65,7 +68,8 @@
     "webpack-bundle-analyzer": "^4.7.0",
     "webpack-cli": "^4.9.1",
     "webpack-merge": "^5.8.0",
-    "webpack-node-externals": "^3.0.0"
+    "webpack-node-externals": "^3.0.0",
+    "wrangler": "^2.1.15"
   },
   "dependencies": {
     "@babel/runtime": "^7.17.2",
@@ -79,6 +83,7 @@
     "fastify-sensible": "^3.1.2",
     "framer-motion": "^6.2.8",
     "handlebars": "^4.7.7",
+    "hono": "^2.4.1",
     "lodash": "^4.17.21",
     "modern-css-reset": "^1.4.0",
     "pino-pretty": "^7.3.0",

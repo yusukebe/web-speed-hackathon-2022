@@ -1,0 +1,6 @@
+name = "wsh2022-worker"
+compatibility_date = "2022-11-06"
+
+kv_namespaces = [
+  { binding = "CACHE_KEY_KV", id = "92a3581c14534b1fb02ca171dc09db49" }
+]
