@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import React, { Suspense, useCallback, useRef } from "react"
-import { useParams } from "react-router-dom"
+import { useLocation, useParams } from "react-router-dom"
 import styled from "styled-components"
 
 import { Container } from "../../components/layouts/Container"
@@ -16,6 +16,7 @@ import { authorizedJsonFetcher, jsonFetcher } from "../../utils/HttpUtils"
 import { HeroImage } from "./internal/HeroImage"
 import { RecentRaceList } from "./internal/RecentRaceList"
 
+
 const ChargeDialog = React.lazy(() => import("./internal/ChargeDialog"))
 const ChargeButton = styled.button`
 background: ${Color.mono[700]};
@@ -27,6 +28,20 @@ padding: ${Space * 1}px ${Space * 2}px;
   background: ${Color.mono[800]};
 }
 `
+
+const todayUnixTime = (d) => {
+  d.setHours(0)
+  d.setMinutes(0)
+  d.setSeconds(0)
+  return Math.floor(d.getTime() / 1000)
+}
+
+const lastUnixTime = (d) => {
+  d.setHours(23)
+  d.setMinutes(59)
+  d.setSeconds(59)
+  return Math.floor(d.getTime() / 1000)
+}
 
 let preData = null
 
@@ -41,7 +56,21 @@ export const Top = () => {
     authorizedJsonFetcher,
   )
 
-  const { data: raceData } = useFetch("/api/races", jsonFetcher)
+  const location = useLocation()
+  console.log(location.pathname)
+
+  const match = location.pathname.match(/^\/([0-9]{4}-[0-9]{2}-[0-9]{2})$/)
+
+  const d = match ? new Date(match[1]) : new Date()
+
+  const searchParam = new URLSearchParams({
+    since: todayUnixTime(d),
+    until: lastUnixTime(d),
+  })
+
+  const url = `/api/races?${searchParam.toString()}`
+
+  const { data: raceData } = useFetch(url, jsonFetcher)
 
   const handleClickChargeButton = useCallback(() => {
     if (chargeDialogRef.current === null) {
