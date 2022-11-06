@@ -13,11 +13,12 @@ import { Color, Radius, Space } from "../../../styles/variables"
 import { formatTime } from "../../../utils/DateUtils"
 import { jsonFetcher } from "../../../utils/HttpUtils"
 
-import { OddsRankingList } from "./internal/OddsRankingList"
+//import { OddsRankingList } from "./internal/OddsRankingList"
 //import { OddsTable } from "./internal/OddsTable"
 import { TicketVendingModal } from "./internal/TicketVendingModal"
 
 const OddsTable = lazy(() => import("./internal/OddsTable"))
+const OddsRankingList = lazy(() => import("./internal/OddsRankingList"))
 
 const LiveBadge = styled.span`
   background: ${Color.red};
@@ -144,17 +145,20 @@ export const Odds = () => {
             isRaceClosed={isRaceClosed}
             odds={data.trifectaOdds}
             onClickOdds={handleClickOdds}
-          /></Suspense>
+          />
+        </Suspense>
 
         <Spacer mt={Space * 4} />
         <Heading as="h2">人気順</Heading>
 
         <Spacer mt={Space * 2} />
-        <OddsRankingList
-          isRaceClosed={isRaceClosed}
-          odds={data.trifectaOdds}
-          onClickOdds={handleClickOdds}
-        />
+        <Suspense fallback="loading...">
+          <OddsRankingList
+            isRaceClosed={isRaceClosed}
+            odds={data.trifectaOdds}
+            onClickOdds={handleClickOdds}
+          />
+        </Suspense>
       </Section>
 
       <TicketVendingModal ref={modalRef} odds={oddsKeyToBuy} raceId={raceId} />

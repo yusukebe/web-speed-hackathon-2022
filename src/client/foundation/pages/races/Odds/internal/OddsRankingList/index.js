@@ -1,1 +1,1 @@
-export * from "./OddsRankingList";
+export { OddsRankingList as default } from "./OddsRankingList";
