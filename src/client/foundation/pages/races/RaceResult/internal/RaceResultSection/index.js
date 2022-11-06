@@ -1,1 +1,1 @@
-export * from "./RaceResultSection";
+export { RaceResultSection as default } from "./RaceResultSection";

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { lazy, Suspense } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
@@ -14,7 +14,9 @@ import { formatTime } from "../../../utils/DateUtils"
 import { authorizedJsonFetcher, jsonFetcher } from "../../../utils/HttpUtils"
 
 import { BettingTicketList } from "./internal/BettingTicketList"
-import { RaceResultSection } from "./internal/RaceResultSection"
+//import { RaceResultSection } from "./internal/RaceResultSection"
+
+const RaceResultSection = lazy(() => import("./internal/RaceResultSection"))
 
 const LiveBadge = styled.span`
   background: ${Color.red};
@@ -92,7 +94,9 @@ export const RaceResult = () => {
         <Heading as="h2">勝負結果</Heading>
 
         <Spacer mt={Space * 2} />
-        <RaceResultSection />
+        <Suspense>
+          <RaceResultSection />
+        </Suspense>
       </Section>
     </Container>
   )
