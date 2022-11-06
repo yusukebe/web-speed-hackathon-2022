@@ -8,7 +8,7 @@ import { apiRoute } from "./routes/api.js";
 import { appRoute } from "./routes/app.js";
 import { createConnection } from "./typeorm/connection.js";
 
-const IS_PRODUCTION = process.env.NODE_ENV === "production";
+export const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
 const server = fastify({
   logger: IS_PRODUCTION ? false : {},
@@ -29,8 +29,7 @@ server.addHook("onRequest", async (req, res) => {
   }
 });
 
-server.addHook("onRequest", async (req, res) => {
-  res.header("Cache-Control", "no-cache, no-store, no-transform");
+server.addHook("onRequest", async (_, res) => {
   res.header("Connection", "close");
 });
 
