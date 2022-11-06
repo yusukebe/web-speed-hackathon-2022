@@ -36,6 +36,9 @@ module.exports = {
                 "@babel/preset-env",
                 {
                   spec: true,
+                  targets: {
+                    browsers: ["last 2 versions"],
+                  },
                 },
               ],
               "@babel/preset-react",
