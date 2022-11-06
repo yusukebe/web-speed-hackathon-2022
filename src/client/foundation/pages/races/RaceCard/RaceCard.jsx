@@ -48,7 +48,6 @@ export const RaceCard = () => {
     }
 
     data = preData
-
   }
 
   const match = data.image.match(/([0-9]+)\.jpg$/)

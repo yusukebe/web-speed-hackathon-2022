@@ -28,6 +28,8 @@ padding: ${Space * 1}px ${Space * 2}px;
 }
 `
 
+let preData = null
+
 /** @type {React.VFC} */
 export const Top = () => {
   const { date = dayjs().format("YYYY-MM-DD") } = useParams()
@@ -52,7 +54,8 @@ export const Top = () => {
     revalidate()
   }, [revalidate])
 
-  const todayRaces =
+
+  let todayRaces =
     raceData != null
       ? [...raceData.races]
         .sort(
@@ -63,7 +66,15 @@ export const Top = () => {
           isSameDay(race.startAt, date),
         )
       : []
-  const todayRacesToShow = todayRaces
+
+  if (todayRaces.length === 0) {
+    preData = [...Array(10)].map((_, i) => ({
+      id: `${i}`,
+      name: "loading..."
+    }))
+    todayRaces = preData
+  }
+
   /* API叩かなくてもいいのだろうか */
   const heroImageUrl = "/assets/images/hero.webp" // useHeroImage(todayRaces)
   const heroSmallImageUrl = "/assets/images/hero-small.webp"
@@ -97,13 +108,9 @@ export const Top = () => {
         <Heading as="h1">本日のレース</Heading>
 
         <RecentRaceList>
-          {todayRacesToShow.length !== 0 ?
-            todayRacesToShow.map((race, _) => (
-              <RecentRaceList.Item key={race.id} race={race} />
-            )) : [...Array(10)].map((_, i) => (
-              <RecentRaceList.Item key={`list-${i}`} />
-            ))
-          }
+          {todayRaces.map((race, _) => (
+            <RecentRaceList.Item key={race.id} race={race} />
+          ))}
         </RecentRaceList>
 
       </section>

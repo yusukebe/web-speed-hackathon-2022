@@ -47,7 +47,6 @@ export const RaceResult = () => {
 
     data = preData
   }
-  if (data === null) data = preData
 
   const match = data.image.match(/([0-9]+)\.jpg$/)
 
