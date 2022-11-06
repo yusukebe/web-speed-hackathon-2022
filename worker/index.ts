@@ -31,12 +31,15 @@ const cacheHandler: Handler<{ Bindings: Bindings }> = async (c) => {
   const headers = response.headers;
   const kv: Record<string, string> = {};
   for (const [k, v] of headers.entries()) {
-    kv[k] = v;
+    if (k === "cache-control") {
+      kv[k] = `max-age=${maxAge}`;
+    } else {
+      kv[k] = v;
+    }
   }
   const newResponse = new Response(response.body, {
     headers: {
       ...kv,
-      "Cache-Control": `max-age:${maxAge}`,
     },
   });
   return newResponse;
