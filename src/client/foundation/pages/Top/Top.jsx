@@ -78,27 +78,6 @@ function useTodayRacesWithAnimation(races) {
   return racesToShow
 }
 
-/**
- * @param {Model.Race[]} todayRaces
- * @returns {string | null}
- */
-function useHeroImage(todayRaces) {
-  const firstRaceId = todayRaces[0]?.id
-  const url =
-    firstRaceId !== undefined
-      ? `/api/hero?firstRaceId=${firstRaceId}`
-      : "/api/hero"
-  const { data } = useFetch(url, jsonFetcher)
-
-  if (firstRaceId === undefined || data === null) {
-    return null
-  }
-
-  const imageUrl = `${data.url}?${data.hash}`
-  return imageUrl
-}
-
-
 /** @type {React.VFC} */
 export const Top = () => {
   const { date = dayjs().format("YYYY-MM-DD") } = useParams()
@@ -149,11 +128,11 @@ export const Top = () => {
   const todayRacesToShow = todayRaces
   /* API叩かなくてもいいのだろうか */
   const heroImageUrl = "/assets/images/hero.webp" // useHeroImage(todayRaces)
+  const heroSmallImageUrl = "/assets/images/hero-small.webp"
 
   return (
     <Container>
-      {heroImageUrl ? <HeroImage url={heroImageUrl} /> : <HeroImage url={`data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==`} />}
-      {/* {heroImageUrl !== null && <HeroImage url={heroImageUrl} />} */}
+      <HeroImage url={heroImageUrl} urlSmall={heroSmallImageUrl} />
 
       <Spacer mt={Space * 2} />
       {userData && (
