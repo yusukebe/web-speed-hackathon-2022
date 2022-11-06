@@ -15,7 +15,7 @@ import { isSameDay } from "../../utils/DateUtils"
 import { authorizedJsonFetcher, jsonFetcher } from "../../utils/HttpUtils"
 
 import { HeroImage } from "./internal/HeroImage"
-import { BlankItem, RecentRaceList } from "./internal/RecentRaceList"
+import { RecentRaceList } from "./internal/RecentRaceList"
 
 const ChargeDialog = React.lazy(() => import("./internal/ChargeDialog"))
 
@@ -98,21 +98,21 @@ function useHeroImage(todayRaces) {
   return imageUrl
 }
 
-const ChargeButton = styled.button`
-background: ${Color.mono[700]};
-border-radius: ${Radius.MEDIUM};
-color: ${Color.mono[0]};
-padding: ${Space * 1}px ${Space * 2}px;
-
-&:hover {
-  background: ${Color.mono[800]};
-}
-`
 
 /** @type {React.VFC} */
 export const Top = () => {
   const { date = dayjs().format("YYYY-MM-DD") } = useParams()
 
+  const ChargeButton = styled.button`
+    background: ${Color.mono[700]};
+    border-radius: ${Radius.MEDIUM};
+    color: ${Color.mono[0]};
+    padding: ${Space * 1}px ${Space * 2}px;
+
+    &:hover {
+      background: ${Color.mono[800]};
+    }
+  `
 
   const chargeDialogRef = useRef(null)
 
@@ -180,15 +180,16 @@ export const Top = () => {
         <Heading as="h1">本日のレース</Heading>
 
 
-        <Suspense fallback={<ListFallback />}>
-          <RecentRaceList>
-            {
-              todayRacesToShow.map((race, _) => (
-                <RecentRaceList.Item key={race.id} race={race} />
-              ))
-            }
-          </RecentRaceList>
-        </Suspense>
+        <RecentRaceList>
+          {todayRacesToShow.length !== 0 ?
+            todayRacesToShow.map((race, _) => (
+              <RecentRaceList.Item key={race.id} race={race} />
+            )) : [...Array(10)].map((_, i) => (
+              <RecentRaceList.Item key={`list-${i}`} />
+            ))
+          }
+        </RecentRaceList>
+
 
       </section>
 
@@ -197,10 +198,12 @@ export const Top = () => {
 }
 
 const ListFallback = () => {
+  console.log('foo')
   return (
-    <>
-      {[...Array(20)].map((_, i) => (
-        <BlankItem key={`list-${i}`} />))}
-    </>
+    <RecentRaceList>
+      {[...Array(10)].map((_, i) => {
+        return (<RecentRaceList.Item key={`list-${i}`} />)
+      })}
+    </RecentRaceList>
   )
 }
