@@ -72,7 +72,6 @@
     "@fastify/compress": "^6.1.1",
     "@fastify/static": "^6.5.0",
     "@fastify/view": "^7.1.1",
-    "axios": "^0.25.0",
     "bezier-easing": "^2.1.0",
     "core-js": "^3.21.1",
     "dayjs": "^1.11.6",
