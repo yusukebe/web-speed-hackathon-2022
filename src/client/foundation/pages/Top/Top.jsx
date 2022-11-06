@@ -157,16 +157,22 @@ export const Top = () => {
 
       <Spacer mt={Space * 2} />
       {userData && (
-        <Stack horizontal alignItems="center" justifyContent="space-between">
-          <div>
-            <p>ポイント残高: {userData.balance}pt</p>
-            <p>払戻金: {userData.payoff}Yeen</p>
-          </div>
+        <>
+          <Stack horizontal alignItems="center" justifyContent="space-between">
+            <div>
+              <p>ポイント残高: {userData.balance}pt</p>
+              <p>払戻金: {userData.payoff}Yeen</p>
+            </div>
 
-          <ChargeButton onClick={handleClickChargeButton}>
-            チャージ
-          </ChargeButton>
-        </Stack>
+            <ChargeButton onClick={handleClickChargeButton}>
+              チャージ
+            </ChargeButton>
+          </Stack>
+
+          <Suspense fallback="">
+            <ChargeDialog ref={chargeDialogRef} onComplete={handleCompleteCharge} />
+          </Suspense>
+        </>
       )}
 
       <Spacer mt={Space * 2} />
@@ -187,9 +193,6 @@ export const Top = () => {
 
       </section>
 
-      <Suspense fallback="foo!!">
-        <ChargeDialog ref={chargeDialogRef} onComplete={handleCompleteCharge} />
-      </Suspense>
     </Container>
   )
 }
