@@ -49,26 +49,6 @@ const RaceTitle = styled.h2`
   font-weight: bold;
 `
 
-export const BlankItem = () => {
-  return <ItemWrapper>
-    <Stack horizontal alignItems="center" justifyContent="space-between">
-      <Stack gap={Space * 1}>
-      </Stack>
-
-      <Spacer mr={Space * 2} />
-
-      <Stack.Item grow={0} shrink={0}>
-        <Stack horizontal alignItems="center" gap={Space * 2}>
-          <img height={100} src={'data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=='} width={100} />
-
-        </Stack>
-      </Stack.Item>
-    </Stack>
-  </ItemWrapper>
-}
-
-
-
 /**
  * @typedef ItemProps
  * @property {Model.Race} race

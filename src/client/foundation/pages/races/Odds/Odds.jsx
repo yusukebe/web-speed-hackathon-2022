@@ -11,7 +11,6 @@ import { Heading } from "../../../components/typographies/Heading"
 import { useFetch } from "../../../hooks/useFetch"
 import { Color, Radius, Space } from "../../../styles/variables"
 import { formatTime } from "../../../utils/DateUtils"
-import { jsonFetcher } from "../../../utils/HttpUtils"
 
 //import { OddsRankingList } from "./internal/OddsRankingList"
 //import { OddsTable } from "./internal/OddsTable"
@@ -41,13 +40,37 @@ const Callout = styled.aside`
   padding: ${Space * 1}px ${Space * 2}px;
 `
 
-let preData = null
+const entries = [...Array(12)].map((_, i) => ({
+  "id": `${i}`,
+  "number": `${i}`,
+  "player": {
+    "id": `${i}`,
+    "name": `loading...`
+  },
+}))
+
+const odds = [...Array(10)].map((_, i) => ({
+  "id": `${i}`,
+  "key": [
+    i,
+  ],
+  "odds": 100,
+  "type": "trifecta"
+}))
+
+const preData = {
+  "entries": entries,
+  "image": "/assets/images/races/400x225/gray.webp",
+  "name": "loading...",
+  "trifectaOdds": odds
+}
+
 
 /** @type {React.VFC} */
 export const Odds = () => {
   const { raceId } = useParams()
 
-  let { data } = useFetch(`/api/races/${raceId}`, jsonFetcher)
+  let { data } = useFetch(`/api/races/${raceId}`)
 
   const [oddsKeyToBuy, setOddsKeyToBuy] = useState(null)
   const modalRef = useRef(null)
@@ -63,35 +86,9 @@ export const Odds = () => {
     [],
   )
 
-  // Reactよくわからん
-  if (data === null && preData === null) {
-    const entries = [...Array(12)].map((_, i) => ({
-      "id": `${i}`,
-      "number": `${i}`,
-      "player": {
-        "id": `${i}`,
-        "name": `loading...`
-      },
-    }))
-
-    const odds = [...Array(10)].map((_, i) => ({
-      "id": `${i}`,
-      "key": [
-        i,
-      ],
-      "odds": 100,
-      "type": "trifecta"
-    }))
-
-    preData = {
-      "entries": entries,
-      "image": "/assets/images/races/400x225/gray.webp",
-      "name": "loading...",
-      "trifectaOdds": odds
-    }
+  if (!data) {
+    data = preData
   }
-  if (data == null) data = preData
-
 
   const match = data.image.match(/([0-9]+)\.jpg$/)
   const isRaceClosed = dayjs(data.closeAt).isBefore(new Date())

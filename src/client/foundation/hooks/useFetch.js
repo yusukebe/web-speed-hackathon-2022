@@ -1,20 +1,6 @@
 import { useEffect, useState } from "react";
 
-/**
- * @template T
- * @typedef {object} ReturnValues
- * @property {T | null} data
- * @property {Error | null} error
- * @property {boolean} loading
- */
-
-/**
- * @template T
- * @param {string} apiPath
- * @param {(apiPath: string) => Promise<T>} fetcher
- * @returns {ReturnValues<T>}
- */
-export function useFetch(apiPath, fetcher) {
+export function useFetch(apiPath) {
   const [result, setResult] = useState({
     data: null,
     error: null,
@@ -22,30 +8,24 @@ export function useFetch(apiPath, fetcher) {
   });
 
   useEffect(() => {
-    setResult(() => ({
-      data: null,
-      error: null,
-      loading: true,
-    }));
-
-    const promise = fetcher(apiPath);
-
-    promise.then((data) => {
-      setResult((cur) => ({
-        ...cur,
-        data,
-        loading: false,
-      }));
-    });
-
-    promise.catch((error) => {
-      setResult((cur) => ({
-        ...cur,
-        error,
-        loading: false,
-      }));
-    });
-  }, [apiPath, fetcher]);
-
+    const fetchData = async () => {
+      try {
+        const res = await fetch(apiPath);
+        const data = await res.json();
+        setResult({
+          data: data,
+          error: null,
+          loading: false,
+        });
+      } catch (error) {
+        setResult({
+          error,
+          loading: false,
+        });
+      }
+    };
+    fetchData();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return result;
 }
