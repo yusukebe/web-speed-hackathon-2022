@@ -36,11 +36,8 @@ export const appRoute = async (fastify) => {
   });
 
   fastify.get("/", async (_req, res) => {
-    res.header(
-      "Link",
-      '</assets/images/hero.webp>; rel="preload", </assets/images/hero-small.webp>; rel="preload"',
-    );
-    res.type("text/html").send(getHTML("/assets/images/hero.webp"));
+    res.header("Link", '</assets/images/hero-small.webp>; rel="preload"');
+    res.type("text/html").send(getHTML("/assets/images/hero-small.webp"));
   });
 
   fastify.get("/:date", async (_req, res) => {
