@@ -88,7 +88,7 @@ const Item = ({ race }) => {
 
           <Stack.Item grow={0} shrink={0}>
             <Stack horizontal alignItems="center" gap={Space * 2}>
-              <img height={100} src={'http://localhost:3000/assets/images/races/100x100/gray.webp'} width={100} />
+              <img height={100} src={'/assets/images/races/100x100/gray.webp'} width={100} />
               <RaceButton to={``}>投票</RaceButton>
             </Stack>
           </Stack.Item>
