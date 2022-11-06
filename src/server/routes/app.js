@@ -19,6 +19,11 @@ export const appRoute = async (fastify) => {
   fastify.register(fastifyStatic, {
     prefix: "/assets/",
     root: join(__dirname, "public/assets"),
+    setHeaders: [
+      {
+        "Cache-Control": " private, max-age=31536000",
+      },
+    ],
     wildcard: false,
   });
 
