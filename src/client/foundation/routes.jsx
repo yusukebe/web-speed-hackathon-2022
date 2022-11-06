@@ -1,7 +1,8 @@
 import React, { lazy, Suspense } from "react"
 import { Route, Routes as RouterRoutes } from "react-router-dom"
 
-import { CommonLayout } from "./layouts/CommonLayout"
+
+const CommonLayout = lazy(() => import("./layouts/CommonLayout"))
 
 const Top = lazy(() => import('./pages/Top'))
 const Odds = lazy(() => import('./pages/races/Odds'))
@@ -14,7 +15,6 @@ export const Routes = () => {
 
     <Suspense loading="loading">
       <RouterRoutes>
-
         <Route element={<CommonLayout />} path="/">
           <Route index element={<Top />} />
           <Route element={<Top />} path=":date" />
@@ -24,7 +24,6 @@ export const Routes = () => {
             <Route element={<RaceResult />} path="result" />
           </Route>
         </Route>
-
       </RouterRoutes>
     </Suspense>
   )
