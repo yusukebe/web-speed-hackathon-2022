@@ -21,11 +21,9 @@ const cacheHandler: Handler<{ Bindings: Bindings }> = async (c) => {
     return new Response(response.body);
   }
 
-  const cacheKey = `${c.req.url}`;
   const response = await fetch(c.req, {
     cf: {
       cacheEverything: true,
-      cacheKey: cacheKey,
       cacheTtl: maxAge,
     },
   });
