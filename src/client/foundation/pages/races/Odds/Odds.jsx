@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import React, { useCallback, useRef, useState } from "react"
+import React, { lazy, Suspense, useCallback, useRef, useState } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
@@ -14,8 +14,10 @@ import { formatTime } from "../../../utils/DateUtils"
 import { jsonFetcher } from "../../../utils/HttpUtils"
 
 import { OddsRankingList } from "./internal/OddsRankingList"
-import { OddsTable } from "./internal/OddsTable"
+//import { OddsTable } from "./internal/OddsTable"
 import { TicketVendingModal } from "./internal/TicketVendingModal"
+
+const OddsTable = lazy(() => import("./internal/OddsTable"))
 
 const LiveBadge = styled.span`
   background: ${Color.red};
@@ -136,12 +138,13 @@ export const Odds = () => {
         <Heading as="h2">オッズ表</Heading>
 
         <Spacer mt={Space * 2} />
-        <OddsTable
-          entries={data.entries}
-          isRaceClosed={isRaceClosed}
-          odds={data.trifectaOdds}
-          onClickOdds={handleClickOdds}
-        />
+        <Suspense fallback="loading...">
+          <OddsTable
+            entries={data.entries}
+            isRaceClosed={isRaceClosed}
+            odds={data.trifectaOdds}
+            onClickOdds={handleClickOdds}
+          /></Suspense>
 
         <Spacer mt={Space * 4} />
         <Heading as="h2">人気順</Heading>

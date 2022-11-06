@@ -1,1 +1,1 @@
-export * from "./OddsTable";
+export { OddsTable as default } from "./OddsTable";
