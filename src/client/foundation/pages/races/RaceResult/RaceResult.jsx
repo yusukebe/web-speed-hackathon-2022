@@ -5,7 +5,6 @@ import styled from "styled-components"
 import { Container } from "../../../components/layouts/Container"
 import { Section } from "../../../components/layouts/Section"
 import { Spacer } from "../../../components/layouts/Spacer"
-import { TrimmedImage } from "../../../components/media/TrimmedImage"
 import { TabNav } from "../../../components/navs/TabNav"
 import { Heading } from "../../../components/typographies/Heading"
 import { useAuthorizedFetch } from "../../../hooks/useAuthorizedFetch"
@@ -26,6 +25,8 @@ const LiveBadge = styled.span`
   text-transform: uppercase;
 `
 
+let preData = null
+
 /** @type {React.VFC} */
 export const RaceResult = () => {
   const { raceId } = useParams()
@@ -35,10 +36,8 @@ export const RaceResult = () => {
     authorizedJsonFetcher,
   )
 
-  console.log(data)
-  if (data == null) {
-
-    const preData = {
+  if (data === null && preData === null) {
+    preData = {
       "entries": [
       ],
       "id": "1",
@@ -47,9 +46,8 @@ export const RaceResult = () => {
     }
 
     data = preData
-
-    // return <Container>Loading...</Container>
   }
+  if (data === null) data = preData
 
   const match = data.image.match(/([0-9]+)\.jpg$/)
 

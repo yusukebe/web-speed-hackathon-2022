@@ -6,7 +6,6 @@ import styled from "styled-components"
 import { Container } from "../../../components/layouts/Container"
 import { Section } from "../../../components/layouts/Section"
 import { Spacer } from "../../../components/layouts/Spacer"
-import { TrimmedImage } from "../../../components/media/TrimmedImage"
 import { TabNav } from "../../../components/navs/TabNav"
 import { Heading } from "../../../components/typographies/Heading"
 import { useFetch } from "../../../hooks/useFetch"
@@ -39,10 +38,14 @@ const Callout = styled.aside`
   padding: ${Space * 1}px ${Space * 2}px;
 `
 
+let preData = null
+
 /** @type {React.VFC} */
 export const Odds = () => {
   const { raceId } = useParams()
+
   let { data } = useFetch(`/api/races/${raceId}`, jsonFetcher)
+
   const [oddsKeyToBuy, setOddsKeyToBuy] = useState(null)
   const modalRef = useRef(null)
 
@@ -57,33 +60,37 @@ export const Odds = () => {
     [],
   )
 
-  if (data == null) {
-    const entries = [{
-      "id": "1",
+  // Reactよくわからん
+  if (data === null && preData === null) {
+    const entries = [...Array(12)].map((_, i) => ({
+      "id": `${i}`,
+      "number": `${i}`,
       "player": {
-        "id": "1",
+        "id": `${i}`,
+        "name": `loading...`
       },
-    }]
-    const odds = [{
-      "id": "1",
+    }))
+
+    const odds = [...Array(10)].map((_, i) => ({
+      "id": `${i}`,
       "key": [
-        1,
+        i,
       ],
       "odds": 100,
       "type": "trifecta"
-    }]
-    const preData = {
+    }))
+
+    preData = {
       "entries": entries,
       "image": "/assets/images/races/400x225/gray.webp",
       "name": "loading...",
       "trifectaOdds": odds
     }
-    data = preData
-
-    //return <Container>Loading...</Container>
   }
-  const match = data.image.match(/([0-9]+)\.jpg$/)
+  if (data == null) data = preData
 
+
+  const match = data.image.match(/([0-9]+)\.jpg$/)
   const isRaceClosed = dayjs(data.closeAt).isBefore(new Date())
 
   return (

@@ -1,1 +1,1 @@
-export * from "./PlayerPictureList";
+export { PlayerPictureList as default } from "./PlayerPictureList";

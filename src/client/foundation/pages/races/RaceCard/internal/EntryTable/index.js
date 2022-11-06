@@ -1,1 +1,1 @@
-export * from "./EntryTable";
+export { EntryTable as default } from "./EntryTable";

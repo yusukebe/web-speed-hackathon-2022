@@ -1,4 +1,4 @@
-import React from "react"
+import React, { lazy, Suspense } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
@@ -12,8 +12,10 @@ import { Color, Radius, Space } from "../../../styles/variables"
 import { formatTime } from "../../../utils/DateUtils"
 import { jsonFetcher } from "../../../utils/HttpUtils"
 
-import { EntryTable } from "./internal/EntryTable"
-import { PlayerPictureList } from "./internal/PlayerPictureList"
+//import EntryTable from "./internal/EntryTable"
+import PlayerPictureList from "./internal/PlayerPictureList"
+
+const EntryTable = lazy(() => import('./internal/EntryTable'))
 
 const LiveBadge = styled.span`
   background: ${Color.red};
@@ -79,6 +81,7 @@ export const RaceCard = () => {
         </TabNav>
 
         <Spacer mt={Space * 2} />
+
         <PlayerPictureList>
           {data.entries.map((entry) => (
             <PlayerPictureList.Item
@@ -91,7 +94,10 @@ export const RaceCard = () => {
         </PlayerPictureList>
 
         <Spacer mt={Space * 4} />
-        {data.entries && data.entries[0]['first'] ? <EntryTable entries={data.entries} /> : <></>}
+
+        <Suspense fallback="">
+          {data.entries && data.entries[0]['first'] ? <EntryTable entries={data.entries} /> : <></>}
+        </Suspense>
       </Section>
     </Container>
   )
