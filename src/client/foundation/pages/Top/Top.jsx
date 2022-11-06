@@ -57,7 +57,6 @@ export const Top = () => {
   )
 
   const location = useLocation()
-  console.log(location.pathname)
 
   const match = location.pathname.match(/^\/([0-9]{4}-[0-9]{2}-[0-9]{2})$/)
 

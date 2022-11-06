@@ -64,8 +64,6 @@ export const apiRoute = async (fastify) => {
 
     const repo = (await createConnection()).getRepository(Race);
 
-    console.log(since.utc().format("YYYY-MM-DD HH:mm:ss"));
-
     const where = {};
     if (since != null && until != null) {
       Object.assign(where, {
