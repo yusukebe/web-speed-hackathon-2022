@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import React, { Suspense, useCallback, useRef } from "react"
+import React, { Suspense, useCallback, useMemo, useRef } from "react"
 import { useLocation, useParams } from "react-router-dom"
 import styled from "styled-components"
 
@@ -43,7 +43,13 @@ const lastUnixTime = (d) => {
   return Math.floor(d.getTime() / 1000)
 }
 
-let preData = null
+const preData = [...Array(10)].map((_, i) => ({
+  id: `${i}`,
+  name: "loading..."
+}))
+/* API叩かなくてもいいのだろうか */
+const heroImageUrl = "/assets/images/hero.webp" // useHeroImage(todayRaces)
+const heroSmallImageUrl = "/assets/images/hero-small.webp"
 
 /** @type {React.VFC} */
 export const Top = () => {
@@ -57,17 +63,15 @@ export const Top = () => {
   )
 
   const location = useLocation()
-
-  const match = location.pathname.match(/^\/([0-9]{4}-[0-9]{2}-[0-9]{2})$/)
-
-  const d = match ? new Date(match[1]) : new Date()
-
-  const searchParam = new URLSearchParams({
-    since: todayUnixTime(d),
-    until: lastUnixTime(d),
-  })
-
-  const url = `/api/races?${searchParam.toString()}`
+  const url = useMemo(() => {
+    const match = location.pathname.match(/^\/([0-9]{4}-[0-9]{2}-[0-9]{2})$/)
+    const d = match ? new Date(match[1]) : new Date()
+    const searchParams = new URLSearchParams({
+      since: todayUnixTime(d),
+      until: lastUnixTime(d),
+    })
+    return `/api/races?${searchParams.toString()}`
+  }, [location])
 
   const { data: raceData } = useFetch(url, jsonFetcher)
 
@@ -96,21 +100,17 @@ export const Top = () => {
       : []
 
   if (todayRaces.length === 0) {
-    preData = [...Array(10)].map((_, i) => ({
-      id: `${i}`,
-      name: "loading..."
-    }))
     todayRaces = preData
   }
 
-  /* API叩かなくてもいいのだろうか */
-  const heroImageUrl = "/assets/images/hero.webp" // useHeroImage(todayRaces)
-  const heroSmallImageUrl = "/assets/images/hero-small.webp"
+  const hero = useMemo(() => {
+    return < HeroImage url={heroImageUrl} urlSmall={heroSmallImageUrl} />
+  }, [])
 
   return (
     <Container>
-      <HeroImage url={heroImageUrl} urlSmall={heroSmallImageUrl} />
 
+      {hero}
       <Spacer mt={Space * 2} />
       {userData && (
         <>

@@ -15,15 +15,6 @@ export const RecentRaceList = ({ children }) => {
   )
 }
 
-/*
-const ItemWrapper = styled.li`
-  background: ${Color.mono[0]};
-  border-radius: ${Radius.MEDIUM};
-  opacity: ${({ $opacity }) => $opacity};
-  padding: ${Space * 3}px;
-`
-*/
-
 const ItemWrapper = styled.li.attrs(() => ({
   style: {
   }
