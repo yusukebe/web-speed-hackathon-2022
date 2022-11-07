@@ -11,11 +11,17 @@ type Bindings = {
   CACHE_KEY_KV: KVNamespace;
 };
 
+type Variables = {
+  path: string;
+};
+
+type Env = { Bindings: Bindings; Variables: Variables };
+
 const queryReg = new RegExp(/\?.+=.+/);
 
-const app = new Hono<{ Bindings: Bindings }>();
+const app = new Hono<Env>();
 
-const cacheHandler: Handler<{ Bindings: Bindings }> = async (c) => {
+const cacheHandler: Handler<Env> = async (c) => {
   if (queryReg.test(c.req.url)) {
     const response = await fetch(c.req);
     return new Response(response.body);
@@ -28,25 +34,14 @@ const cacheHandler: Handler<{ Bindings: Bindings }> = async (c) => {
     },
   });
 
-  const headers = response.headers;
-  const kv: Record<string, string> = {};
-  for (const [k, v] of headers.entries()) {
-    if (k === "cache-control") {
-      kv[k] = `max-age=${maxAge}`;
-    } else {
-      kv[k] = v;
-    }
-  }
-  const newResponse = new Response(response.body, {
-    headers: {
-      ...kv,
-    },
-  });
+  const newResponse = new Response(response.body, response);
+  newResponse.headers.delete("cache-control");
+  newResponse.headers.append("cache-control", `max-age=${maxAge}`);
+
   return newResponse;
 };
 
 app.get("*", cacheHandler);
-app.get("/assets/*", cacheHandler);
 app.get(
   "/api/*",
   async (c, next) => {
@@ -58,7 +53,6 @@ app.get(
       }),
     );
   },
-
   cacheHandler,
 );
 

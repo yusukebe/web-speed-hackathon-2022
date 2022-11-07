@@ -4,7 +4,6 @@ import styled from "styled-components"
 import { LinkButton } from "../../../../components/buttons/LinkButton"
 import { Spacer } from "../../../../components/layouts/Spacer"
 import { Stack } from "../../../../components/layouts/Stack"
-import { easeOutCubic, useAnimation } from "../../../../hooks/useAnimation"
 import { Color, FontSize, Radius, Space } from "../../../../styles/variables"
 import { formatCloseAt } from "../../../../utils/DateUtils"
 
@@ -89,33 +88,12 @@ const Item = ({ race }) => {
     }
   }, [race.closeAt])
 
-  const {
-    abortAnimation,
-    resetAnimation,
-    startAnimation,
-    value: opacity,
-  } = useAnimation({
-    duration: 500,
-    end: 1,
-    start: 0,
-    timingFunction: easeOutCubic,
-  })
-
-  useEffect(() => {
-    resetAnimation()
-    startAnimation()
-
-    return () => {
-      abortAnimation()
-    }
-  }, [race.id, startAnimation, abortAnimation, resetAnimation])
-
   const match = race.image.match(/([0-9]+)\.jpg/)
   const id = match[1]
   const src = `/assets/images/races/100x100/${id}.webp`
 
   return (
-    <ItemWrapper $opacity={opacity}>
+    <ItemWrapper>
       <Stack horizontal alignItems="center" justifyContent="space-between">
         <Stack gap={Space * 1}>
           <RaceTitle>{race.name}</RaceTitle>
