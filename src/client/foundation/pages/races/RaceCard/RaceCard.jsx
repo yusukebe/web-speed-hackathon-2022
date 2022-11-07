@@ -26,27 +26,26 @@ const LiveBadge = styled.span`
   text-transform: uppercase;
 `
 
+const entries = [...Array(10)].map((_, i) => ({
+  id: i,
+  "player": {
+    "id": i,
+    "image": "data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==",
+    "name": "loading...",
+  },
+}))
+const preData = {
+  "entries": entries,
+  "image": "/assets/images/races/400x225/gray.webp",
+  "name": "loading...",
+}
+
 /** @type {React.VFC} */
 export const RaceCard = () => {
   const { raceId } = useParams()
   let { data } = useFetch(`/api/races/${raceId}`, jsonFetcher)
 
   if (data == null) {
-
-    const entries = [...Array(10)].map((_, i) => ({
-      id: i,
-      "player": {
-        "id": i,
-        "image": "data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==",
-        "name": "loading...",
-      },
-    }))
-    const preData = {
-      "entries": entries,
-      "image": "/assets/images/races/400x225/gray.webp",
-      "name": "loading...",
-    }
-
     data = preData
   }
 
