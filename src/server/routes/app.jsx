@@ -129,6 +129,7 @@ export const appRoute = async (fastify) => {
     const imageURL = `https://wsh2022-cdn.yusukebe.com/assets/images/races/400x225/${match[1]}.webp`
     const hero = `<link rel="preload" href="${imageURL}" as="image" />`
       + `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" as="script" />`
+      + `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="font" crossorigin>`
     res.raw.setHeader("Link", `<${imageURL}>; rel="preload"`)
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
 
@@ -156,7 +157,6 @@ const getHead = (hero) => {
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       ${hero}
-      <link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="font" crossorigin>
       <title>CyberTicket</title>
       <style>${getCSS()}</style>
     </head>`
