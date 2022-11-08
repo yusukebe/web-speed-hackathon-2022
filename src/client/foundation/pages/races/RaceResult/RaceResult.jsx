@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, SuspenseList, useMemo } from "react"
+import React from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
@@ -56,7 +56,9 @@ export const RaceResult = ({ serverData }) => {
         data = preData
       }
     }
-  } else if (data == null) {
+  }
+
+  if (data === null) {
     data = serverData
   }
 
@@ -107,9 +109,7 @@ export const RaceResult = ({ serverData }) => {
 
         <Spacer mt={Space * 2} />
 
-        <Suspense fallback="" >
-          <RaceResultSection />
-        </Suspense>
+        <RaceResultSection />
       </Section>
     </Container>
   )

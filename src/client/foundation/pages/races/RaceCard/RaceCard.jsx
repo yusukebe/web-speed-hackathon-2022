@@ -1,4 +1,4 @@
-import React, { Suspense, useMemo } from "react"
+import React from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
@@ -49,6 +49,7 @@ export const RaceCard = ({ serverData }) => {
 
   let { data } = useFetch(`/api/races/${raceId}`, jsonFetcher)
 
+
   if (typeof document !== "undefined") {
     if (data === null) {
       const elem = document.getElementById("root")
@@ -61,9 +62,10 @@ export const RaceCard = ({ serverData }) => {
         data = preData
       }
     }
-  } else if (data == null) {
+  }
+
+  if (data === null) {
     data = serverData
-    data.entries = entries
   }
 
   const match = data.image.match(/([0-9]+)\.jpg$/)

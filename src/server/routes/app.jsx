@@ -3,7 +3,6 @@ import { join } from "path"
 import fastifyStatic from "@fastify/static"
 import dayjs from 'dayjs'
 import React from 'react'
-import { render } from 'react-dom'
 import { renderToNodeStream, renderToString } from 'react-dom/server'
 import { ServerStyleSheet } from 'styled-components'
 import { Between, LessThanOrEqual, MoreThanOrEqual } from "typeorm"
@@ -49,7 +48,6 @@ export const appRoute = async (fastify) => {
   })
 
   fastify.get("/", async (req, res) => {
-
     const d = new Date()
     const since = todaySince(d)
     const until = todayUntil(d)
@@ -85,14 +83,10 @@ export const appRoute = async (fastify) => {
 
   fastify.get("/:date", async (req, res) => {
     const match = req.params.date.match(/^([0-9]{4}-[0-9]{2}-[0-9]{2})$/)
-    console.log(match)
     const d = new Date(match[1])
-    console.log(d)
 
     const since = todaySince(d)
     const until = todayUntil(d)
-
-    console.log(since, until)
 
     const repo = (await createConnection()).getRepository(Race)
 
@@ -124,17 +118,26 @@ export const appRoute = async (fastify) => {
   fastify.get("/races/:raceId/*", async (req, res) => {
     const repo = (await createConnection()).getRepository(Race)
 
-    const race = await repo.findOne(req.params.raceId)
+
+    const race = await repo.findOne(req.params.raceId, {
+      relations: ["entries", "entries.player", "trifectaOdds"],
+    })
+    /*const race = await repo.findOne(req.params.raceId, {
+  relations: ["entries", "entries.player", "trifectaOdds"],
+})*/
 
     const match = race.image.match(/([0-9]+)\.jpg$/)
     const imageURL = `/assets/images/races/400x225/${match[1]}.webp`
     const hero = `<link rel="preload" href="${imageURL}" as="image" />`
       + `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
     res.raw.setHeader("Link", `<${imageURL}>; rel="preload"`)
-
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
+
     const sheet = new ServerStyleSheet()
     const jsx = sheet.collectStyles(<App location={req.url.toString()} serverData={race} />)
+
+    //const html = renderToString(jsx)
+    //res.send(html)
     const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
 
     const top = `${getHead(hero)}<body><div id="root" data-react=${JSON.stringify(race)}>`

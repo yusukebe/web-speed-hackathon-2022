@@ -106,10 +106,10 @@ export const Odds = ({ serverData }) => {
         data = preData
       }
     }
-  } else if (data == null) {
+  }
+
+  if (data === null) {
     data = serverData
-    data.entries = entries
-    data.trifectaOdds = odds
   }
 
   console.log(data)
