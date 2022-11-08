@@ -23,8 +23,11 @@ export const Routes = ({ serverData }) => {
     <Suspense fallback="loading...">
       <RouterRoutes>
         <Route element={<CommonLayout />} path="/">
+
           <Route index element={<Top serverData={serverData} />} />
+
           <Route element={<Top />} path=":date" />
+
           <Route path="races/:raceId">
             <Route element={<RaceCard serverData={serverData} />} path="race-card" />
             <Route element={<Odds serverData={serverData} />} path="odds" />

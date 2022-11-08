@@ -1,4 +1,4 @@
-import React from "react"
+import React, { lazy } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
@@ -16,9 +16,9 @@ import { authorizedJsonFetcher, jsonFetcher } from "../../../utils/HttpUtils"
 
 
 import { BettingTicketList } from "./internal/BettingTicketList"
-import RaceResultSection from "./internal/RaceResultSection"
+//import RaceResultSection from "./internal/RaceResultSection"
 
-//const RaceResultSection = lazy(() => import("./internal/RaceResultSection"))
+const RaceResultSection = lazy(() => import("./internal/RaceResultSection"))
 
 const LiveBadge = styled.span`
   background: ${Color.red};

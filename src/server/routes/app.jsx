@@ -72,18 +72,22 @@ export const appRoute = async (fastify) => {
 
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
 
-    const sheet = new ServerStyleSheet()
-    const jsx = sheet.collectStyles(<App location={req.url.toString()} />)
-    const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
+    //const sheet = new ServerStyleSheet()
+    //const jsx = sheet.collectStyles(<App location={req.url.toString()} />)
+    //const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
 
-    const top = `${getHead('')}<body><div id="root">`
-    res.raw.write(top)
-    stream.on('end', () => res.raw.end(getBottom()))
+    const hero = `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/images/hero.webp" as="image" />`
+      + `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" as="script" />`
 
-    res.send(stream)
+    const top = `${getHead(hero)}<body><div id="root">`
+    //res.raw.write(top)
+    //stream.on('end', () => res.raw.end(getBottom()))
+
+    res.send(top + getBottom())
   })
 
   fastify.get("/:date", async (req, res) => {
+    /*
     const match = req.params.date.match(/^([0-9]{4}-[0-9]{2}-[0-9]{2})$/)
     const d = new Date(match[1])
 
@@ -103,18 +107,23 @@ export const appRoute = async (fastify) => {
     const races = await repo.find({
       where,
     })
+    */
 
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
 
+    /*
     const sheet = new ServerStyleSheet()
-    const jsx = sheet.collectStyles(<App location={req.url.toString()} serverData={races} />)
+    const jsx = sheet.collectStyles(<App location={req.url.toString()} />)
     const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
+*/
+    const hero = `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/images/hero.webp" as="image" />`
+      + `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" as="script" />`
 
-    const top = `${getHead('')}<body><div id="root" data-react=${JSON.stringify(races)}>`
-    res.raw.write(top)
-    stream.on('end', () => res.raw.end(getBottom()))
+    const top = `${getHead(hero)}<body><div id="root">`
+    //res.raw.write(top)
+    //  stream.on('end', () => res.raw.end(getBottom()))
 
-    res.send(stream)
+    res.send(top + getBottom())
   })
 
   fastify.get("/races/:raceId/*", async (req, res) => {
@@ -165,7 +174,7 @@ const getHead = (hero) => {
 }
 
 const getBottom = () => {
-  return `</div><script src="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" defer></script></body></html>`
+  return IS_PRODUCTION ? `</div><script src="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" defer></script></body></html>` : `</div><script src="/assets/js/main.bundle.js" defer></script></body></html>`
 }
 
 
