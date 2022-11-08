@@ -1,8 +1,10 @@
 import dayjs from 'dayjs'
-import React, { useCallback, useMemo, useRef } from "react"
+import _ from 'lodash'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useLocation, useParams } from "react-router-dom"
 import styled from "styled-components"
 
+import { difference } from '../../../../../common/utils'
 import { Container } from "../../components/layouts/Container"
 import { Spacer } from "../../components/layouts/Spacer"
 import { Stack } from "../../components/layouts/Stack"
@@ -16,6 +18,59 @@ import { authorizedJsonFetcher, jsonFetcher } from "../../utils/HttpUtils"
 //import ChargeDialog from './internal/ChargeDialog'
 import { HeroImage } from "./internal/HeroImage"
 import { RecentRaceList } from "./internal/RecentRaceList"
+
+function useTodayRacesWithAnimation(races) {
+  const [isRacesUpdate, setIsRacesUpdate] = useState(false)
+  const [racesToShow, setRacesToShow] = useState([])
+  const numberOfRacesToShow = useRef(0)
+  const prevRaces = useRef(races)
+  const timer = useRef(null)
+
+  useEffect(() => {
+    const a = races.map((e) => e.id)
+    const b = prevRaces.current.map((e) => e.id)
+    const isRacesUpdate =
+      _.difference(a, b).length !== 0
+    prevRaces.current = races
+    setIsRacesUpdate(isRacesUpdate)
+  }, [races])
+
+  useEffect(() => {
+    if (!isRacesUpdate) {
+      return
+    }
+    // 視覚効果 off のときはアニメーションしない
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setRacesToShow(races)
+      return
+    }
+
+    numberOfRacesToShow.current = 0
+    if (timer.current !== null) {
+      clearInterval(timer.current)
+    }
+
+    timer.current = setInterval(() => {
+      if (numberOfRacesToShow.current >= races.length) {
+        clearInterval(timer.current)
+        return
+      }
+
+      numberOfRacesToShow.current++
+      setRacesToShow(_.slice(races, 0, numberOfRacesToShow.current))
+    }, 100)
+  }, [isRacesUpdate, races])
+
+  useEffect(() => {
+    return () => {
+      if (timer.current !== null) {
+        clearInterval(timer.current)
+      }
+    }
+  }, [])
+
+  return racesToShow
+}
 
 
 const ChargeDialog = React.lazy(() => import("./internal/ChargeDialog"))
@@ -77,21 +132,6 @@ export const Top = ({ serverData }) => {
 
   let { data: raceData } = useFetch(url, jsonFetcher)
 
-  /*
-  if (typeof document !== "undefined") {
-    if (raceData == null) {
-      const dataPool = (document.getElementById("root")).dataset
-        .react
-      const elem = document.getElementById("root")
-      const initialData = dataPool ? JSON.parse(dataPool) : null
-      elem.dataset.react = ""
-      raceData = initialData
-    }
-  } else if (raceData == null) {
-    raceData = serverData
-  }
-  */
-
   const handleClickChargeButton = useCallback(() => {
     if (chargeDialogRef.current === null) {
       return
@@ -115,9 +155,9 @@ export const Top = ({ serverData }) => {
         )
       : []
 
-  if (todayRaces.length === 0) {
-    todayRaces = preData
-  }
+
+  const todayRacesToShow = useTodayRacesWithAnimation(todayRaces)
+
 
   const hero = useMemo(() => {
     return <HeroImage url={heroImageUrl} urlSmall={heroSmallImageUrl} />
@@ -149,7 +189,7 @@ export const Top = ({ serverData }) => {
         <Heading as="h1">本日のレース</Heading>
 
         <RecentRaceList>
-          {todayRaces.map((race, _) => (
+          {todayRacesToShow.map((race, _) => (
             <RecentRaceList.Item key={race.id} race={race} />
           ))}
         </RecentRaceList>

@@ -4,6 +4,7 @@ import styled from "styled-components"
 import { LinkButton } from "../../../../components/buttons/LinkButton"
 import { Spacer } from "../../../../components/layouts/Spacer"
 import { Stack } from "../../../../components/layouts/Stack"
+import { easeOutCubic, useAnimation } from "../../../../hooks/useAnimation"
 import { Color, FontSize, Radius, Space } from "../../../../styles/variables"
 import { formatCloseAt } from "../../../../utils/DateUtils"
 
@@ -15,12 +16,10 @@ export const RecentRaceList = ({ children }) => {
   )
 }
 
-const ItemWrapper = styled.li.attrs(() => ({
-  style: {
-  }
-}))`
+const ItemWrapper = styled.li`
   background: ${Color.mono[0]};
   border-radius: ${Radius.MEDIUM};
+  opacity: ${({ $opacity }) => $opacity};
   padding: ${Space * 3}px;
 `
 
@@ -34,6 +33,7 @@ const RaceButton = styled(LinkButton)`
     background: ${Color.mono[800]};
   }
 `
+
 const RaceTitle = styled.h2`
   font-size: ${FontSize.LARGE};
   font-weight: bold;
@@ -46,25 +46,6 @@ const RaceTitle = styled.h2`
 
 /** @type {React.VFC<ItemProps>} */
 const Item = ({ race }) => {
-
-  if (!race || typeof race['closeAt'] === 'undefined') {
-    return (
-      <ItemWrapper>
-        <Stack horizontal alignItems="center" justifyContent="space-between">
-          <Stack gap={Space * 1}>
-          </Stack>
-
-          <Spacer mr={Space * 2} />
-
-          <Stack.Item grow={0} shrink={0}>
-            <Stack horizontal alignItems="center" gap={Space * 2}>
-              <img height={100} src={'/assets/images/races/100x100/gray.webp'} width={100} />
-              <RaceButton to={``}>投票</RaceButton>
-            </Stack>
-          </Stack.Item>
-        </Stack>
-      </ItemWrapper>)
-  }
 
   const [closeAtText, setCloseAtText] = useState(formatCloseAt(race.closeAt))
 
@@ -79,12 +60,32 @@ const Item = ({ race }) => {
     }
   }, [race.closeAt])
 
+  const {
+    abortAnimation,
+    resetAnimation,
+    startAnimation,
+    value: opacity,
+  } = useAnimation({
+    duration: 500,
+    end: 1,
+    start: 0,
+    timingFunction: easeOutCubic,
+  })
+
+  useEffect(() => {
+    resetAnimation()
+    startAnimation()
+
+    return () => {
+      abortAnimation()
+    }
+  }, [race.id, startAnimation, abortAnimation, resetAnimation])
+
   const match = race.image.match(/([0-9]+)\.jpg/)
-  const id = match[1]
-  const src = `/assets/images/races/100x100/${id}.webp`
+  const url = match ? `/assets/images/races/100x100/${match[1]}.webp` : `/assets/images/races/100x100/gray.webp`
 
   return (
-    <ItemWrapper>
+    <ItemWrapper $opacity={opacity}>
       <Stack horizontal alignItems="center" justifyContent="space-between">
         <Stack gap={Space * 1}>
           <RaceTitle>{race.name}</RaceTitle>
@@ -95,7 +96,7 @@ const Item = ({ race }) => {
 
         <Stack.Item grow={0} shrink={0}>
           <Stack horizontal alignItems="center" gap={Space * 2}>
-            <img height={100} loading={'lazy'} src={src} width={100} />
+            <img height={100} loading={'lazy'} src={url} width={100} />
             <RaceButton to={`/races/${race.id}/race-card`}>投票</RaceButton>
           </Stack>
         </Stack.Item>

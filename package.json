@@ -87,6 +87,8 @@
     "hono": "^2.4.1",
     "lodash": "^4.17.21",
     "modern-css-reset": "^1.4.0",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.38",
     "pino-pretty": "^7.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

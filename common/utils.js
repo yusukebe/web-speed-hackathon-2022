@@ -10,7 +10,11 @@ export const sample = (arr) => {
 };
 
 export const difference = (arrays) => {
-  return arrays.reduce((a, b) => a.filter((c) => !b.includes(c)));
+  return arrays.reduce((a, b) => {
+    if (a && b) {
+      return a.filter((c) => !b.includes(c));
+    }
+  });
 };
 
 export const without = (array, key) => {
