@@ -3,28 +3,28 @@ import { join } from "path"
 import fastifyStatic from "@fastify/static"
 import dayjs from 'dayjs'
 import React from 'react'
-import { renderToNodeStream } from 'react-dom/server'
+import { render } from 'react-dom'
+import { renderToNodeStream, renderToString } from 'react-dom/server'
 import { ServerStyleSheet } from 'styled-components'
-import { LessThanOrEqual, MoreThanOrEqual } from "typeorm"
-
+import { Between, LessThanOrEqual, MoreThanOrEqual } from "typeorm"
 
 import { Race } from "../../model/index.js"
 import { App } from '../App.jsx'
 import { IS_PRODUCTION } from "../index.js"
 import { createConnection } from "../typeorm/connection.js"
 
-const todayUnixTime = (d) => {
+const todaySince = (d) => {
   d.setHours(0)
   d.setMinutes(0)
   d.setSeconds(0)
-  return Math.floor(d.getTime() / 1000)
+  return d
 }
 
-const lastUnixTime = (d) => {
+const todayUntil = (d) => {
   d.setHours(23)
   d.setMinutes(59)
   d.setSeconds(59)
-  return Math.floor(d.getTime() / 1000)
+  return d
 }
 
 
@@ -48,20 +48,18 @@ export const appRoute = async (fastify) => {
     throw fastify.httpErrors.notFound()
   })
 
-
-
   fastify.get("/", async (req, res) => {
 
     const d = new Date()
-    const since = dayjs.unix(todayUnixTime(d))
-    const until = dayjs.unix(lastUnixTime(d))
+    const since = todaySince(d)
+    const until = todayUntil(d)
 
     const where = {}
     Object.assign(where, {
-      startAt: MoreThanOrEqual(since.utc().format("YYYY-MM-DD HH:mm:ss")),
+      startAt: MoreThanOrEqual(dayjs(since).utc().format("YYYY-MM-DD HH:mm:ss")),
     })
     Object.assign(where, {
-      startAt: LessThanOrEqual(until.utc().format("YYYY-MM-DD HH:mm:ss")),
+      startAt: LessThanOrEqual(dayjs(until).utc().format("YYYY-MM-DD HH:mm:ss")),
     })
 
     const repo = (await createConnection()).getRepository(Race)
@@ -73,6 +71,7 @@ export const appRoute = async (fastify) => {
     }
 
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
+
     const sheet = new ServerStyleSheet()
     const jsx = sheet.collectStyles(<App location={req.url.toString()} serverData={races} />)
     const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
@@ -85,24 +84,52 @@ export const appRoute = async (fastify) => {
   })
 
   fastify.get("/:date", async (req, res) => {
+    const match = req.params.date.match(/^([0-9]{4}-[0-9]{2}-[0-9]{2})$/)
+    console.log(match)
+    const d = new Date(match[1])
+    console.log(d)
+
+    const since = todaySince(d)
+    const until = todayUntil(d)
+
+    console.log(since, until)
+
+    const repo = (await createConnection()).getRepository(Race)
+
+    const where = {}
+    Object.assign(where, {
+      startAt: Between(
+        dayjs(since).utc().format("YYYY-MM-DD HH:mm:ss"),
+        dayjs(until).utc().format("YYYY-MM-DD HH:mm:ss"),
+      ),
+    })
+
+    const races = await repo.find({
+      where,
+    })
+
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
-    res.raw.setHeader("Link", `</assets/images/hero-small.webp>; rel="preload"`)
-    res.raw.write(getHead(`<link rel="preload" href="/assets/images/hero-small.webp" as="image" />`))
-    const stream = getStream(req.url.toString())
+
+    const sheet = new ServerStyleSheet()
+    const jsx = sheet.collectStyles(<App location={req.url.toString()} serverData={races} />)
+    const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
+
+    const top = `${getHead('')}<body><div id="root" data-react=${JSON.stringify(races)}>`
+    res.raw.write(top)
     stream.on('end', () => res.raw.end(getBottom()))
+
     res.send(stream)
   })
 
   fastify.get("/races/:raceId/*", async (req, res) => {
     const repo = (await createConnection()).getRepository(Race)
 
-    const race = await repo.findOne(req.params.raceId, {
-      relations: ["entries", "entries.player", "trifectaOdds"],
-    })
+    const race = await repo.findOne(req.params.raceId)
 
     const match = race.image.match(/([0-9]+)\.jpg$/)
     const imageURL = `/assets/images/races/400x225/${match[1]}.webp`
     const hero = `<link rel="preload" href="${imageURL}" as="image" />`
+      + `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
     res.raw.setHeader("Link", `<${imageURL}>; rel="preload"`)
 
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
@@ -119,13 +146,6 @@ export const appRoute = async (fastify) => {
 
 }
 
-const getStream = (location) => {
-  const sheet = new ServerStyleSheet()
-  const jsx = sheet.collectStyles(<App location={location} />)
-  const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
-  return stream
-}
-
 const getHead = (hero) => {
   return `<!DOCTYPE html>
   <html lang="ja">
@@ -140,7 +160,7 @@ const getHead = (hero) => {
 }
 
 const getBottom = () => {
-  return `</div><script src="/assets/js/main.bundle.js"></script></body></html>`
+  return `</div><script src="/assets/js/main.bundle.js" defer></script></body></html>`
 }
 
 

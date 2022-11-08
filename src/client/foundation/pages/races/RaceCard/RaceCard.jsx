@@ -2,6 +2,7 @@ import React, { Suspense, useMemo } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
+import { RaceImage } from '../../../components/RaceImage'
 import { Container } from "../../../components/layouts/Container"
 import { Section } from "../../../components/layouts/Section"
 import { Spacer } from "../../../components/layouts/Spacer"
@@ -11,6 +12,7 @@ import { useFetch } from "../../../hooks/useFetch"
 import { Color, Radius, Space } from "../../../styles/variables"
 import { formatTime } from "../../../utils/DateUtils"
 import { jsonFetcher } from "../../../utils/HttpUtils"
+
 
 //import EntryTable from "./internal/EntryTable"
 import EntryTable from './internal/EntryTable'
@@ -49,15 +51,19 @@ export const RaceCard = ({ serverData }) => {
 
   if (typeof document !== "undefined") {
     if (data === null) {
-      const dataPool = (document.getElementById("root")).dataset
-        .react
       const elem = document.getElementById("root")
-      const initialData = dataPool ? JSON.parse(dataPool) : null
-      elem.dataset.react = ""
-      data = initialData
+      const dataPool = elem.dataset.react
+      if (dataPool) {
+        const initialData = dataPool ? JSON.parse(dataPool) : null
+        elem.dataset.react = ""
+        data = initialData
+      } else {
+        data = preData
+      }
     }
   } else if (data == null) {
     data = serverData
+    data.entries = entries
   }
 
   const match = data.image.match(/([0-9]+)\.jpg$/)
@@ -76,7 +82,7 @@ export const RaceCard = ({ serverData }) => {
       <Section dark shrink>
         <LiveBadge>Live</LiveBadge>
         <Spacer mt={Space * 2} />
-        <img height={225} src={match ? `/assets/images/races/400x225/${match[1]}.webp` : "/assets/images/races/400x225/gray.webp"} style={{ aspectRatio: '400 / 225', height: 'auto', width: '100%' }} width={400} />
+        <RaceImage src={match ? `/assets/images/races/400x225/${match[1]}.webp` : "/assets/images/races/400x225/gray.webp"} />
       </Section>
 
       <Spacer mt={Space * 2} />
@@ -104,9 +110,7 @@ export const RaceCard = ({ serverData }) => {
         </PlayerPictureList>
 
         <Spacer mt={Space * 4} />
-
-        {data.entries && data.entries[0]['first'] ? <EntryTable entries={data.entries} /> : <Spacer mt={Space * 10} />}
-
+        {data.entries && data.entries[0]['first'] ? <EntryTable entries={data.entries} /> : <img height={275} src="/assets/images/races/400x225/gray.webp" width={100} />}
       </Section>
 
     </Container >

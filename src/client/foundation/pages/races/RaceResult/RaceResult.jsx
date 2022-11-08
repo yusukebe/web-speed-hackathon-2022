@@ -1,7 +1,8 @@
-import React from "react"
+import React, { lazy, Suspense, SuspenseList, useMemo } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
+import { RaceImage } from '../../../components/RaceImage'
 import { Container } from "../../../components/layouts/Container"
 import { Section } from "../../../components/layouts/Section"
 import { Spacer } from "../../../components/layouts/Spacer"
@@ -12,6 +13,7 @@ import { useFetch } from "../../../hooks/useFetch"
 import { Color, Radius, Space } from "../../../styles/variables"
 import { formatTime } from "../../../utils/DateUtils"
 import { authorizedJsonFetcher, jsonFetcher } from "../../../utils/HttpUtils"
+
 
 import { BettingTicketList } from "./internal/BettingTicketList"
 import RaceResultSection from "./internal/RaceResultSection"
@@ -27,7 +29,10 @@ const LiveBadge = styled.span`
   text-transform: uppercase;
 `
 
-let preData = null
+const preData = {
+  "image": "/assets/images/races/400x225/gray.webp",
+  "name": "loading...",
+}
 
 /** @type {React.VFC} */
 export const RaceResult = ({ serverData }) => {
@@ -40,11 +45,17 @@ export const RaceResult = ({ serverData }) => {
   )
 
   if (typeof document !== "undefined") {
-    const dataPool = (document.getElementById("root")).dataset
-      .react
-    const initialData = dataPool ? JSON.parse(dataPool) : null
-      (document.getElementById("root")).dataset.react = ""
-    data = initialData
+    if (data === null) {
+      const elem = document.getElementById("root")
+      const dataPool = elem.dataset.react
+      if (dataPool) {
+        const initialData = dataPool ? JSON.parse(dataPool) : null
+        elem.dataset.react = ""
+        data = initialData
+      } else {
+        data = preData
+      }
+    }
   } else if (data == null) {
     data = serverData
   }
@@ -53,6 +64,7 @@ export const RaceResult = ({ serverData }) => {
 
   return (
     <Container>
+
       <Spacer mt={Space * 2} />
       <Heading as="h1">{data.name}</Heading>
       <p>
@@ -61,11 +73,13 @@ export const RaceResult = ({ serverData }) => {
 
       <Spacer mt={Space * 2} />
 
+
       <Section dark shrink>
         <LiveBadge>Live</LiveBadge>
         <Spacer mt={Space * 2} />
-        <img height={225} src={match ? `/assets/images/races/400x225/${match[1]}.webp` : "/assets/images/races/400x225/gray.webp"} style={{ aspectRatio: '400 / 225', height: 'auto', width: '100%' }} width={400} />
+        <RaceImage src={match ? `/assets/images/races/400x225/${match[1]}.webp` : "/assets/images/races/400x225/gray.webp"} />
       </Section>
+
 
       <Spacer mt={Space * 2} />
 
@@ -93,7 +107,9 @@ export const RaceResult = ({ serverData }) => {
 
         <Spacer mt={Space * 2} />
 
-        <RaceResultSection />
+        <Suspense fallback="" >
+          <RaceResultSection />
+        </Suspense>
       </Section>
     </Container>
   )
