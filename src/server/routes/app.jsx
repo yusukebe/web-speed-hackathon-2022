@@ -75,8 +75,9 @@ export const appRoute = async (fastify) => {
     //const jsx = sheet.collectStyles(<App location={req.url.toString()} />)
     //const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
 
-    const hero = `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/images/hero.webp" as="image" />`
-      + `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" as="script" />`
+    let hero = `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/images/hero.webp" as="image" />`
+    const jsHero = IS_PRODUCTION ? `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" as="script" />` : `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
+    hero = hero + jsHero
 
     const top = `${getHead(hero)}<body><div id="root">`
     //res.raw.write(top)
@@ -115,8 +116,9 @@ export const appRoute = async (fastify) => {
     const jsx = sheet.collectStyles(<App location={req.url.toString()} />)
     const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
 */
-    const hero = `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/images/hero.webp" as="image" />`
-      + `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" as="script" />`
+    let hero = `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/images/hero.webp" as="image" />`
+    const jsHero = IS_PRODUCTION ? `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" as="script" />` : `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
+    hero = hero + jsHero
 
     const top = `${getHead(hero)}<body><div id="root">`
     //res.raw.write(top)
@@ -137,9 +139,10 @@ export const appRoute = async (fastify) => {
 
     const match = race.image.match(/([0-9]+)\.jpg$/)
     const imageURL = `https://wsh2022-cdn.yusukebe.com/assets/images/races/400x225/${match[1]}.webp`
-    const hero = `<link rel="preload" href="${imageURL}" as="image" />`
-      + `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" as="script" />`
+    let hero = `<link rel="preload" href="${imageURL}" as="image" />`
       + `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="font" crossorigin>`
+    const jsHero = IS_PRODUCTION ? `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" as="script" />` : `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
+    hero = hero + jsHero
     res.raw.setHeader("Link", `<${imageURL}>; rel="preload"`)
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
 

@@ -50,6 +50,7 @@ module.exports = {
   },
   name: "client",
   output: {
+    chunkFormat: "module",
     filename: "[name].bundle.js",
     path: DIST_JS_PUBLIC,
   },
@@ -60,6 +61,7 @@ module.exports = {
   ],
   resolve: {
     extensions: [".js", ".jsx"],
+    fallback: { stream: false },
   },
-  target: "web",
+  target: "es2022",
 };
