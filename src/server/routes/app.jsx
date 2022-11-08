@@ -1,7 +1,6 @@
 import { join } from "path"
 
 import fastifyStatic from "@fastify/static"
-import dayjs from 'dayjs'
 import React from 'react'
 import { renderToNodeStream } from 'react-dom/server'
 import { ServerStyleSheet } from 'styled-components'
@@ -174,7 +173,7 @@ const getHead = (hero) => {
 }
 
 const getBottom = () => {
-  return IS_PRODUCTION ? `</div><script src="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" defer></script></body></html>` : `</div><script src="/assets/js/main.bundle.js" defer></script></body></html>`
+  return IS_PRODUCTION ? `</div><script src="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" defer></script></body></html>` : `</div><script src="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" defer></script></body></html>`
 }
 
 
