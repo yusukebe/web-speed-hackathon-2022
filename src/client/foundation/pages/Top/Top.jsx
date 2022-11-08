@@ -51,8 +51,8 @@ const preData = [...Array(10)].map((_, i) => ({
   name: "loading..."
 }))
 /* API叩かなくてもいいのだろうか */
-const heroImageUrl = "/assets/images/hero.webp" // useHeroImage(todayRaces)
-const heroSmallImageUrl = "/assets/images/hero-small.webp"
+const heroImageUrl = "https://wsh2022-cdn.yusukebe.com/assets/images/hero.webp" // useHeroImage(todayRaces)
+const heroSmallImageUrl = "https://wsh2022-cdn.yusukebe.com/assets/images/hero-small.webp"
 
 /** @type {React.VFC} */
 export const Top = ({ serverData }) => {

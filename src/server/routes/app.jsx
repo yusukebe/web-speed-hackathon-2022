@@ -125,9 +125,9 @@ export const appRoute = async (fastify) => {
 
 
     const match = race.image.match(/([0-9]+)\.jpg$/)
-    const imageURL = `/assets/images/races/400x225/${match[1]}.webp`
+    const imageURL = `https://wsh2022-cdn.yusukebe.com/assets/images/races/400x225/${match[1]}.webp`
     const hero = `<link rel="preload" href="${imageURL}" as="image" />`
-      + `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
+      + `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" as="script" />`
     res.raw.setHeader("Link", `<${imageURL}>; rel="preload"`)
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
 
@@ -161,7 +161,7 @@ const getHead = (hero) => {
 }
 
 const getBottom = () => {
-  return `</div><script src="/assets/js/main.bundle.js" defer></script></body></html>`
+  return `</div><script src="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" defer></script></body></html>`
 }
 
 
