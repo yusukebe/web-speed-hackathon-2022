@@ -20,7 +20,6 @@ import { RecentRaceList } from "./internal/RecentRaceList"
 
 const ChargeDialog = React.lazy(() => import("./internal/ChargeDialog"))
 
-
 const ChargeButton = styled.button`
 background: ${Color.mono[700]};
 border-radius: ${Radius.MEDIUM};
@@ -51,8 +50,8 @@ const preData = [...Array(10)].map((_, i) => ({
   name: "loading..."
 }))
 /* API叩かなくてもいいのだろうか */
-const heroImageUrl = "https://wsh2022-cdn.yusukebe.com/assets/images/hero.webp" // useHeroImage(todayRaces)
-const heroSmallImageUrl = "https://wsh2022-cdn.yusukebe.com/assets/images/hero-small.webp"
+const heroImageUrl = "/assets/images/hero.webp" // useHeroImage(todayRaces)
+const heroSmallImageUrl = "/assets/images/hero-small.webp"
 
 /** @type {React.VFC} */
 export const Top = ({ serverData }) => {
@@ -78,6 +77,7 @@ export const Top = ({ serverData }) => {
 
   let { data: raceData } = useFetch(url, jsonFetcher)
 
+  /*
   if (typeof document !== "undefined") {
     if (raceData == null) {
       const dataPool = (document.getElementById("root")).dataset
@@ -90,6 +90,8 @@ export const Top = ({ serverData }) => {
   } else if (raceData == null) {
     raceData = serverData
   }
+  */
+
 
   const handleClickChargeButton = useCallback(() => {
     if (chargeDialogRef.current === null) {

@@ -31,7 +31,7 @@ const Item = ({ image, name, number }) => {
       <img
         alt={`${name}選手のプロフィール写真`}
         height={100}
-        src={match ? `https://wsh2022-cdn.yusukebe.com/assets/images/players/${match[1]}.webp` : image}
+        src={match ? `/assets/images/players/${match[1]}.webp` : image}
         width={100}
       />
 

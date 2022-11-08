@@ -4,31 +4,13 @@ import fastifyStatic from "@fastify/static"
 import React from 'react'
 import { renderToNodeStream } from 'react-dom/server'
 import { ServerStyleSheet } from 'styled-components'
-import { Between, LessThanOrEqual, MoreThanOrEqual } from "typeorm"
 
 import { Race } from "../../model/index.js"
 import { App } from '../App.jsx'
 import { IS_PRODUCTION } from "../index.js"
 import { createConnection } from "../typeorm/connection.js"
 
-const todaySince = (d) => {
-  d.setHours(0)
-  d.setMinutes(0)
-  d.setSeconds(0)
-  return d
-}
 
-const todayUntil = (d) => {
-  d.setHours(23)
-  d.setMinutes(59)
-  d.setSeconds(59)
-  return d
-}
-
-
-/**
- * @type {import('fastify').FastifyPluginCallback}
- */
 export const appRoute = async (fastify) => {
   if (!IS_PRODUCTION) {
     fastify.register(import("@fastify/compress"), {
@@ -47,110 +29,55 @@ export const appRoute = async (fastify) => {
   })
 
   fastify.get("/", async (req, res) => {
-    /*
-    const d = new Date()
-    const since = todaySince(d)
-    const until = todayUntil(d)
-
-    const where = {}
-    Object.assign(where, {
-      startAt: MoreThanOrEqual(dayjs(since).utc().format("YYYY-MM-DD HH:mm:ss")),
-    })
-    Object.assign(where, {
-      startAt: LessThanOrEqual(dayjs(until).utc().format("YYYY-MM-DD HH:mm:ss")),
-    })
-
-    const repo = (await createConnection()).getRepository(Race)
-
-    const races = {
-      races: await repo.find({
-        where,
-      })
-    }
-    */
-
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
 
-    //const sheet = new ServerStyleSheet()
-    //const jsx = sheet.collectStyles(<App location={req.url.toString()} />)
-    //const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
-
-    let hero = `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/images/hero.webp" as="image" />`
-    const jsHero = IS_PRODUCTION ? `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" as="script" />` : `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
-    hero = hero + jsHero
-
-    const top = `${getHead(hero)}<body><div id="root">`
-    //res.raw.write(top)
-    //stream.on('end', () => res.raw.end(getBottom()))
-
-    res.send(top + getBottom())
-  })
-
-  fastify.get("/:date", async (req, res) => {
-    /*
-    const match = req.params.date.match(/^([0-9]{4}-[0-9]{2}-[0-9]{2})$/)
-    const d = new Date(match[1])
-
-    const since = todaySince(d)
-    const until = todayUntil(d)
-
-    const repo = (await createConnection()).getRepository(Race)
-
-    const where = {}
-    Object.assign(where, {
-      startAt: Between(
-        dayjs(since).utc().format("YYYY-MM-DD HH:mm:ss"),
-        dayjs(until).utc().format("YYYY-MM-DD HH:mm:ss"),
-      ),
-    })
-
-    const races = await repo.find({
-      where,
-    })
-    */
-
-    res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
-
-    /*
     const sheet = new ServerStyleSheet()
     const jsx = sheet.collectStyles(<App location={req.url.toString()} />)
     const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
-*/
-    let hero = `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/images/hero.webp" as="image" />`
-    const jsHero = IS_PRODUCTION ? `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" as="script" />` : `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
+
+    let hero = `<link rel="preload" href="/assets/images/hero.webp" as="image" />`
+    const jsHero = `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
     hero = hero + jsHero
 
     const top = `${getHead(hero)}<body><div id="root">`
-    //res.raw.write(top)
-    //  stream.on('end', () => res.raw.end(getBottom()))
+    res.raw.write(top)
+    stream.on('end', () => res.raw.end(getBottom()))
 
-    res.send(top + getBottom())
+    res.send(stream)
+  })
+
+  fastify.get("/:date", async (req, res) => {
+    res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
+
+    const sheet = new ServerStyleSheet()
+    const jsx = sheet.collectStyles(<App location={req.url.toString()} />)
+    const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
+
+    let hero = `<link rel="preload" href="/assets/images/hero.webp" as="image" />`
+    const jsHero = `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
+    hero = hero + jsHero
+
+    const top = `${getHead(hero)}<body><div id="root">`
+    res.raw.write(top)
+    stream.on('end', () => res.raw.end(getBottom()))
+
+    res.send(stream)
   })
 
   fastify.get("/races/:raceId/*", async (req, res) => {
     const repo = (await createConnection()).getRepository(Race)
-
-    /*
-        const race = await repo.findOne(req.params.raceId, {
-          relations: ["entries", "entries.player", "trifectaOdds"],
-        })*/
     const race = await repo.findOne(req.params.raceId)
-
-
     const match = race.image.match(/([0-9]+)\.jpg$/)
-    const imageURL = `https://wsh2022-cdn.yusukebe.com/assets/images/races/400x225/${match[1]}.webp`
+    const imageURL = `https://wsh2022.yusukebe.com/assets/images/races/400x225/${match[1]}.webp`
     let hero = `<link rel="preload" href="${imageURL}" as="image" />`
-      + `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="font" crossorigin>`
-    const jsHero = IS_PRODUCTION ? `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" as="script" />` : `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
+      + `<link rel="preload" href="/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="font" crossorigin>`
+    const jsHero = `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
     hero = hero + jsHero
     res.raw.setHeader("Link", `<${imageURL}>; rel="preload"`)
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
 
     const sheet = new ServerStyleSheet()
     const jsx = sheet.collectStyles(<App location={req.url.toString()} serverData={race} />)
-
-    //const html = renderToString(jsx)
-    //res.send(html)
     const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
 
     const top = `${getHead(hero)}<body><div id="root" data-react=${JSON.stringify(race)}>`
@@ -176,13 +103,13 @@ const getHead = (hero) => {
 }
 
 const getBottom = () => {
-  return IS_PRODUCTION ? `</div><script src="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" defer></script></body></html>` : `</div><script src="/assets/js/main.bundle.js" defer></script></body></html>`
+  return `</div><script src="/assets/js/main.bundle.js" defer></script></body></html>`
 }
 
 
 const getCSS = () => {
   return (
     '*,*::before,*::after{box-sizing:border-box}body,h1,h2,h3,h4,p,figure,blockquote,dl,dd{margin:0}ul[role="list"],ol[role="list"]{list-style:none}html:focus-within{scroll-behavior:smooth}body{min-height:100vh;text-rendering:optimizeSpeed;line-height:1.5}a:not([class]){text-decoration-skip-ink:auto}img,picture{max-width:100%;display:block}input,button,textarea,select{font:inherit}@media(prefers-reduced-motion:reduce){html:focus-within{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}}' +
-    `body{color:#1c1917;background:#f5f5f4;font-family:sans-serif}a{color:inherit;text-decoration:none}ol,ul{padding:0;list-style:none;margin:0}@font-face{font-family:Senobi-Gothic;font-weight:400;font-display:block;src:url("/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Regular.woff") format("woff")}@font-face{font-family:Senobi-Gothic;font-weight:700;font-display:block;src:url("https://wsh2022-cdn.yusukebe.com/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff") format("woff")}`
+    `body{color:#1c1917;background:#f5f5f4;font-family:sans-serif}a{color:inherit;text-decoration:none}ol,ul{padding:0;list-style:none;margin:0}@font-face{font-family:Senobi-Gothic;font-weight:400;font-display:block;src:url("/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Regular.woff") format("woff")}@font-face{font-family:Senobi-Gothic;font-weight:700;font-display:block;src:url("/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff") format("woff")}`
   )
 }
