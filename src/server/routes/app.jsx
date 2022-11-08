@@ -3,7 +3,7 @@ import { join } from "path"
 import fastifyStatic from "@fastify/static"
 import dayjs from 'dayjs'
 import React from 'react'
-import { renderToNodeStream, renderToString } from 'react-dom/server'
+import { renderToNodeStream } from 'react-dom/server'
 import { ServerStyleSheet } from 'styled-components'
 import { Between, LessThanOrEqual, MoreThanOrEqual } from "typeorm"
 
@@ -119,12 +119,11 @@ export const appRoute = async (fastify) => {
     const repo = (await createConnection()).getRepository(Race)
 
 
-    const race = await repo.findOne(req.params.raceId, {
-      relations: ["entries", "entries.player", "trifectaOdds"],
-    })
-    /*const race = await repo.findOne(req.params.raceId, {
-  relations: ["entries", "entries.player", "trifectaOdds"],
-})*/
+    const race = await repo.findOne(req.params.raceId)
+    //, {
+    //      relations: ["entries", "entries.player", "trifectaOdds"],
+    //    })
+
 
     const match = race.image.match(/([0-9]+)\.jpg$/)
     const imageURL = `/assets/images/races/400x225/${match[1]}.webp`

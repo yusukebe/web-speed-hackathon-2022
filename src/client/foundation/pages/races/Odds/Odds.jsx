@@ -99,9 +99,9 @@ export const Odds = ({ serverData }) => {
       const elem = document.getElementById("root")
       const dataPool = elem.dataset.react
       if (dataPool) {
-        //const initialData = JSON.parse(dataPool)
-        //elem.dataset.react = ""
-        //data = initialData
+        const initialData = JSON.parse(dataPool)
+        elem.dataset.react = ""
+        data = initialData
       } else {
         data = preData
       }
@@ -110,6 +110,8 @@ export const Odds = ({ serverData }) => {
 
   if (data === null) {
     data = serverData
+    data.entries = entries
+    data.trifectaOdds = odds
   }
 
   const match = data ? data.image.match(/([0-9]+)\.jpg$/) : null
