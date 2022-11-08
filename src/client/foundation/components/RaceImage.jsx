@@ -1,6 +1,7 @@
 import React from 'react'
 
-export const RaceImage = ({ src }) => {
+// eslint-disable-next-line react/display-name
+export const RaceImage = React.memo(({ src }) => {
   return (
     <figure>
       <img height={225} src={src} style={{
@@ -10,4 +11,4 @@ export const RaceImage = ({ src }) => {
       }} width={400} />
     </figure>
   )
-}
+})

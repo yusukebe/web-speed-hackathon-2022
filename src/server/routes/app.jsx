@@ -68,7 +68,7 @@ export const appRoute = async (fastify) => {
     const repo = (await createConnection()).getRepository(Race)
     const race = await repo.findOne(req.params.raceId)
     const match = race.image.match(/([0-9]+)\.jpg$/)
-    const imageURL = `https://wsh2022.yusukebe.com/assets/images/races/400x225/${match[1]}.webp`
+    const imageURL = `/assets/images/races/400x225/${match[1]}.webp`
     let hero = `<link rel="preload" href="${imageURL}" as="image" />`
     const jsHero = `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
     const fontHero = req.url.toString().match(/.+odds$/) ? `<link rel="preload" href="/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="font" crossorigin>` : ''

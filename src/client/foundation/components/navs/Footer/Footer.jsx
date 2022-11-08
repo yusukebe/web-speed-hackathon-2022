@@ -51,7 +51,8 @@ const WarningText = styled.p`
 `
 
 /** @type {React.VFC} */
-export const Footer = () => {
+// eslint-disable-next-line react/display-name
+export const Footer = React.memo(() => {
   return (
     <Wrapper>
       <List>
@@ -73,4 +74,4 @@ export const Footer = () => {
       </WarningText>
     </Wrapper>
   )
-}
+})

@@ -1,10 +1,10 @@
-import React, { useCallback } from "react";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
+import React, { useCallback } from "react"
+import { Link } from "react-router-dom"
+import styled from "styled-components"
 
-import { useAuth, useRegister } from "../../../contexts/AuthContext";
-import { Color, FontSize, Radius, Space } from "../../../styles/variables";
-import { BaseButton } from "../../buttons/BaseButton";
+import { useAuth, useRegister } from "../../../contexts/AuthContext"
+import { Color, FontSize, Radius, Space } from "../../../styles/variables"
+import { BaseButton } from "../../buttons/BaseButton"
 
 const Wrapper = styled.div`
   align-items: center;
@@ -14,7 +14,7 @@ const Wrapper = styled.div`
   height: 80px;
   justify-content: space-between;
   padding: 0 ${Space * 2}px;
-`;
+`
 
 const NameText = styled.h1`
   color: ${Color.green[400]};
@@ -25,7 +25,7 @@ const NameText = styled.h1`
     color: inherit;
     text-decoration: none;
   }
-`;
+`
 
 const LoginButton = styled(BaseButton)`
   background: ${Color.mono[0]};
@@ -36,16 +36,17 @@ const LoginButton = styled(BaseButton)`
   &:hover {
     background: ${Color.mono[200]};
   }
-`;
+`
 
 /** @type {React.VFC} */
-export const Header = () => {
-  const { loggedIn } = useAuth();
-  const register = useRegister();
+// eslint-disable-next-line react/display-name
+export const Header = React.memo(() => {
+  const { loggedIn } = useAuth()
+  const register = useRegister()
 
   const handleClickLoginButton = useCallback(() => {
-    register();
-  }, [register]);
+    register()
+  }, [register])
 
   return (
     <Wrapper>
@@ -59,5 +60,5 @@ export const Header = () => {
         <LoginButton onClick={handleClickLoginButton}>ログイン</LoginButton>
       )}
     </Wrapper>
-  );
-};
+  )
+})
