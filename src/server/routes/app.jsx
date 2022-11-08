@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import React from 'react'
 import { renderToNodeStream } from 'react-dom/server'
 import { ServerStyleSheet } from 'styled-components'
-import { Between } from "typeorm"
+import { Between, LessThanOrEqual, MoreThanOrEqual } from "typeorm"
 
 import { Race } from "../../model/index.js"
 import { App } from '../App.jsx'

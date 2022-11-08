@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import React, { Suspense, useCallback, useMemo, useRef } from "react"
+import React, { useCallback, useMemo, useRef } from "react"
 import { useLocation, useParams } from "react-router-dom"
 import styled from "styled-components"
 
@@ -13,12 +13,12 @@ import { Color, Radius, Space } from "../../styles/variables"
 import { isSameDay } from "../../utils/DateUtils"
 import { authorizedJsonFetcher, jsonFetcher } from "../../utils/HttpUtils"
 
-//import ChargeDialog from './internal/ChargeDialog'
+import ChargeDialog from './internal/ChargeDialog'
 import { HeroImage } from "./internal/HeroImage"
 import { RecentRaceList } from "./internal/RecentRaceList"
 
 
-const ChargeDialog = React.lazy(() => import("./internal/ChargeDialog"))
+//const ChargeDialog = React.lazy(() => import("./internal/ChargeDialog"))
 
 
 const ChargeButton = styled.button`
@@ -133,11 +133,10 @@ export const Top = ({ serverData }) => {
               <p>ポイント残高: {userData.balance}pt</p>
               <p>払戻金: {userData.payoff}Yeen</p>
             </div>
-            <Suspense fallback="loading...">
-              <ChargeButton onClick={handleClickChargeButton}>
-                チャージ
-              </ChargeButton>
-            </Suspense>
+
+            <ChargeButton onClick={handleClickChargeButton}>
+              チャージ
+            </ChargeButton>
           </Stack>
 
           <ChargeDialog ref={chargeDialogRef} onComplete={handleCompleteCharge} />
