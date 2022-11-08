@@ -48,6 +48,7 @@ export const appRoute = async (fastify) => {
   })
 
   fastify.get("/", async (req, res) => {
+    /*
     const d = new Date()
     const since = todaySince(d)
     const until = todayUntil(d)
@@ -67,14 +68,15 @@ export const appRoute = async (fastify) => {
         where,
       })
     }
+    */
 
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
 
     const sheet = new ServerStyleSheet()
-    const jsx = sheet.collectStyles(<App location={req.url.toString()} serverData={races} />)
+    const jsx = sheet.collectStyles(<App location={req.url.toString()} />)
     const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
 
-    const top = `${getHead('')}<body><div id="root" data-react=${JSON.stringify(races)}>`
+    const top = `${getHead('')}<body><div id="root">`
     res.raw.write(top)
     stream.on('end', () => res.raw.end(getBottom()))
 
