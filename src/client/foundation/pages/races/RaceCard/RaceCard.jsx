@@ -54,16 +54,21 @@ export const RaceCard = ({ serverData }) => {
     if (data === null) {
       const elem = document.getElementById("root")
       const dataPool = elem.dataset.react
-      const initialData = dataPool ? JSON.parse(dataPool) : null
-      elem.dataset.react = ""
-      data = initialData
+      if (dataPool) {
+        const initialData = JSON.parse(dataPool)
+        elem.dataset.react = ""
+        data = initialData
+      } else {
+        data = preData
+      }
     }
   }
   if (data === null) {
     data = serverData
   }
 
-  const match = data.image.match(/([0-9]+)\.jpg$/)
+
+  const match = data ? data.image.match(/([0-9]+)\.jpg$/) : null
 
   return (
     <Container>
