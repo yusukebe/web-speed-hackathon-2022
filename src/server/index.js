@@ -5,7 +5,7 @@ import fastifySensible from "fastify-sensible";
 import { User } from "../model/index.js";
 
 import { apiRoute } from "./routes/api.js";
-import { appRoute } from "./routes/app.js";
+import { appRoute } from "./routes/app.jsx";
 import { createConnection } from "./typeorm/connection.js";
 
 export const IS_PRODUCTION = process.env.NODE_ENV === "production";

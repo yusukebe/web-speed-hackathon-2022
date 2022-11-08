@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react"
+import React, { Suspense, useMemo } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
@@ -13,9 +13,9 @@ import { formatTime } from "../../../utils/DateUtils"
 import { jsonFetcher } from "../../../utils/HttpUtils"
 
 //import EntryTable from "./internal/EntryTable"
+import EntryTable from './internal/EntryTable'
 import PlayerPictureList from "./internal/PlayerPictureList"
-
-const EntryTable = lazy(() => import('./internal/EntryTable'))
+//const EntryTable = lazy(() => import('./internal/EntryTable'))
 
 const LiveBadge = styled.span`
   background: ${Color.red};
@@ -26,11 +26,11 @@ const LiveBadge = styled.span`
   text-transform: uppercase;
 `
 
-const entries = [...Array(10)].map((_, i) => ({
+const entries = [...Array(6)].map((_, i) => ({
   id: i,
   "player": {
     "id": i,
-    "image": "data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==",
+    "image": "/assets/images/races/100x100/gray.webp",
     "name": "loading...",
   },
 }))
@@ -41,12 +41,23 @@ const preData = {
 }
 
 /** @type {React.VFC} */
-export const RaceCard = () => {
+export const RaceCard = ({ serverData }) => {
+
   const { raceId } = useParams()
+
   let { data } = useFetch(`/api/races/${raceId}`, jsonFetcher)
 
-  if (data == null) {
-    data = preData
+  if (typeof document !== "undefined") {
+    if (data === null) {
+      const dataPool = (document.getElementById("root")).dataset
+        .react
+      const elem = document.getElementById("root")
+      const initialData = dataPool ? JSON.parse(dataPool) : null
+      elem.dataset.react = ""
+      data = initialData
+    }
+  } else if (data == null) {
+    data = serverData
   }
 
   const match = data.image.match(/([0-9]+)\.jpg$/)
@@ -54,9 +65,10 @@ export const RaceCard = () => {
   return (
     <Container>
       <Spacer mt={Space * 2} />
-      <Heading as="h1">{data.name}</Heading>
+
+      <Heading as="h1">{data ? data.name : serverData.name}</Heading>
       <p>
-        開始 {formatTime(data.startAt)} 締切 {formatTime(data.closeAt)}
+        開始 {formatTime(data ? data.startAt : serverData.startAt)} 締切 {formatTime(data ? data.closeAt : serverData.closeAt)}
       </p>
 
       <Spacer mt={Space * 2} />
@@ -64,7 +76,7 @@ export const RaceCard = () => {
       <Section dark shrink>
         <LiveBadge>Live</LiveBadge>
         <Spacer mt={Space * 2} />
-        <img height={225} src={match ? `/assets/images/races/400x225/${match[1]}.webp` : "/assets/images/races/400x225/gray.webp"} style={{ height: 'auto', width: '100%' }} width={400} />
+        <img height={225} src={match ? `/assets/images/races/400x225/${match[1]}.webp` : "/assets/images/races/400x225/gray.webp"} style={{ aspectRatio: '400 / 225', height: 'auto', width: '100%' }} width={400} />
       </Section>
 
       <Spacer mt={Space * 2} />
@@ -81,7 +93,7 @@ export const RaceCard = () => {
         <Spacer mt={Space * 2} />
 
         <PlayerPictureList>
-          {data.entries.map((entry) => (
+          {data && data.entries.map((entry) => (
             <PlayerPictureList.Item
               key={entry.id}
               image={entry.player.image}
@@ -93,10 +105,10 @@ export const RaceCard = () => {
 
         <Spacer mt={Space * 4} />
 
-        <Suspense fallback="">
-          {data.entries && data.entries[0]['first'] ? <EntryTable entries={data.entries} /> : <></>}
-        </Suspense>
+        {data.entries && data.entries[0]['first'] ? <EntryTable entries={data.entries} /> : <Spacer mt={Space * 10} />}
+
       </Section>
-    </Container>
+
+    </Container >
   )
 }

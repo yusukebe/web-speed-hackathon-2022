@@ -42,24 +42,14 @@ const cacheHandler: Handler<Env> = async (c) => {
 };
 
 app.get("*", cacheHandler);
-app.get(
-  "/api/*",
-  async (c, next) => {
-    await next();
-    const path = getPathFromURL(c.req.url);
-    c.executionCtx.waitUntil(
-      c.env.CACHE_KEY_KV.put(`${prefix}${path}`, "true", {
-        metadata: { path: path },
-      }),
-    );
-  },
-  cacheHandler,
-);
+app.all("/api/*", async (c) => {
+  const response = await fetch(c.req);
+  const newResponse = new Response(response.body, response);
+  return newResponse;
+});
 
 const purgeHandler: Handler<{ Bindings: Bindings }> = async (c) => {
   const { keys } = await c.env.CACHE_KEY_KV.list<{ path: string }>({ prefix });
-
-  console.log(keys);
 
   const files: string[] = [];
   keys.map((k) => {
@@ -75,8 +65,6 @@ const purgeHandler: Handler<{ Bindings: Bindings }> = async (c) => {
   const data = {
     files: files,
   };
-
-  console.log(data);
 
   const fetchResponse = await fetch(apiURL, {
     body: JSON.stringify(data),
@@ -99,9 +87,5 @@ app.onError((err, c) => {
   console.log(err);
   return c.text("internal server error", 500);
 });
-
-app.post("/api/*", purgeHandler);
-app.put("/api/*", purgeHandler);
-app.delete("/api/*", purgeHandler);
 
 export default app;

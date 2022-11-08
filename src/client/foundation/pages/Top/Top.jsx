@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import React, { Suspense, useCallback, useMemo, useRef } from "react"
+import React, { useCallback, useMemo, useRef } from "react"
 import { useLocation, useParams } from "react-router-dom"
 import styled from "styled-components"
 
@@ -13,11 +13,14 @@ import { Color, Radius, Space } from "../../styles/variables"
 import { isSameDay } from "../../utils/DateUtils"
 import { authorizedJsonFetcher, jsonFetcher } from "../../utils/HttpUtils"
 
+import ChargeDialog from './internal/ChargeDialog'
 import { HeroImage } from "./internal/HeroImage"
 import { RecentRaceList } from "./internal/RecentRaceList"
 
 
-const ChargeDialog = React.lazy(() => import("./internal/ChargeDialog"))
+//const ChargeDialog = React.lazy(() => import("./internal/ChargeDialog"))
+
+
 const ChargeButton = styled.button`
 background: ${Color.mono[700]};
 border-radius: ${Radius.MEDIUM};
@@ -52,7 +55,7 @@ const heroImageUrl = "/assets/images/hero.webp" // useHeroImage(todayRaces)
 const heroSmallImageUrl = "/assets/images/hero-small.webp"
 
 /** @type {React.VFC} */
-export const Top = () => {
+export const Top = ({ serverData }) => {
   const { date = dayjs().format("YYYY-MM-DD") } = useParams()
 
   const chargeDialogRef = useRef(null)
@@ -73,7 +76,20 @@ export const Top = () => {
     return `/api/races?${searchParams.toString()}`
   }, [location])
 
-  const { data: raceData } = useFetch(url, jsonFetcher)
+  let { data: raceData } = useFetch(url, jsonFetcher)
+
+  if (typeof document !== "undefined") {
+    if (raceData == null) {
+      const dataPool = (document.getElementById("root")).dataset
+        .react
+      const elem = document.getElementById("root")
+      const initialData = dataPool ? JSON.parse(dataPool) : null
+      elem.dataset.react = ""
+      raceData = initialData
+    }
+  } else if (raceData == null) {
+    raceData = serverData
+  }
 
   const handleClickChargeButton = useCallback(() => {
     if (chargeDialogRef.current === null) {
@@ -85,7 +101,6 @@ export const Top = () => {
   const handleCompleteCharge = useCallback(() => {
     revalidate()
   }, [revalidate])
-
 
   let todayRaces =
     raceData != null
@@ -104,12 +119,11 @@ export const Top = () => {
   }
 
   const hero = useMemo(() => {
-    return < HeroImage url={heroImageUrl} urlSmall={heroSmallImageUrl} />
+    return <HeroImage url={heroImageUrl} urlSmall={heroSmallImageUrl} />
   }, [])
 
   return (
     <Container>
-
       {hero}
       <Spacer mt={Space * 2} />
       {userData && (
@@ -125,9 +139,7 @@ export const Top = () => {
             </ChargeButton>
           </Stack>
 
-          <Suspense fallback="">
-            <ChargeDialog ref={chargeDialogRef} onComplete={handleCompleteCharge} />
-          </Suspense>
+          <ChargeDialog ref={chargeDialogRef} onComplete={handleCompleteCharge} />
         </>
       )}
 

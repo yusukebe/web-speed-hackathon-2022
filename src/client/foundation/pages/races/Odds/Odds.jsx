@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import React, { lazy, memo, Suspense, useCallback, useRef, useState } from "react"
+import React, { useCallback, useRef, useState } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
@@ -14,10 +14,11 @@ import { formatTime } from "../../../utils/DateUtils"
 
 //import { OddsRankingList } from "./internal/OddsRankingList"
 //import { OddsTable } from "./internal/OddsTable"
+
+import OddsRankingList from './internal/OddsRankingList'
+import OddsTable from './internal/OddsTable'
 import { TicketVendingModal } from "./internal/TicketVendingModal"
 
-const OddsTable = lazy(() => import("./internal/OddsTable"))
-const OddsRankingList = lazy(() => import("./internal/OddsRankingList"))
 
 const LiveBadge = styled.span`
   background: ${Color.red};
@@ -40,7 +41,7 @@ const Callout = styled.aside`
   padding: ${Space * 1}px ${Space * 2}px;
 `
 
-const entries = [...Array(12)].map((_, i) => ({
+const entries = [...Array(6)].map((_, i) => ({
   "id": `${i}`,
   "number": `${i}`,
   "player": {
@@ -72,7 +73,7 @@ const SVG = () => <svg aria-hidden="true" className="svg-inline--fa fa-info-circ
 
 
 /** @type {React.VFC} */
-export const Odds = () => {
+export const Odds = ({ serverData }) => {
   const { raceId } = useParams()
 
   let { data } = useFetch(`/api/races/${raceId}`)
@@ -91,9 +92,20 @@ export const Odds = () => {
     [],
   )
 
-  if (!data) {
-    data = preData
+  if (typeof document !== "undefined") {
+    if (data === null) {
+      const dataPool = (document.getElementById("root")).dataset
+        .react
+      const elem = document.getElementById("root")
+      const initialData = dataPool ? JSON.parse(dataPool) : null
+      elem.dataset.react = ""
+      data = initialData
+    }
+  } else if (data == null) {
+    data = serverData
   }
+
+  console.log(data)
 
   const match = data.image.match(/([0-9]+)\.jpg$/)
   const isRaceClosed = dayjs(data.closeAt).isBefore(new Date())
@@ -111,7 +123,7 @@ export const Odds = () => {
       <Section dark shrink>
         <LiveBadge>Live</LiveBadge>
         <Spacer mt={Space * 2} />
-        <img height={225} src={match ? `/assets/images/races/400x225/${match[1]}.webp` : "/assets/images/races/400x225/gray.webp"} style={{ height: 'auto', width: '100%' }} width={400} />
+        <img height={225} src={match ? `/assets/images/races/400x225/${match[1]}.webp` : "/assets/images/races/400x225/gray.webp"} style={{ aspectRatio: '400 / 225', height: 'auto', width: '100%' }} width={400} />
       </Section>
 
       <Spacer mt={Space * 2} />
@@ -138,26 +150,22 @@ export const Odds = () => {
         <Heading as="h2">オッズ表</Heading>
 
         <Spacer mt={Space * 2} />
-        <Suspense fallback="loading...">
-          <OddsTable
-            entries={data.entries}
-            isRaceClosed={isRaceClosed}
-            odds={data.trifectaOdds}
-            onClickOdds={handleClickOdds}
-          />
-        </Suspense>
+        <OddsTable
+          entries={data.entries}
+          isRaceClosed={isRaceClosed}
+          odds={data.trifectaOdds}
+          onClickOdds={handleClickOdds}
+        />
 
         <Spacer mt={Space * 4} />
         <Heading as="h2">人気順</Heading>
 
         <Spacer mt={Space * 2} />
-        <Suspense fallback="loading...">
-          <OddsRankingList
-            isRaceClosed={isRaceClosed}
-            odds={data.trifectaOdds}
-            onClickOdds={handleClickOdds}
-          />
-        </Suspense>
+        <OddsRankingList
+          isRaceClosed={isRaceClosed}
+          odds={data.trifectaOdds}
+          onClickOdds={handleClickOdds}
+        />
       </Section>
 
       <TicketVendingModal ref={modalRef} odds={oddsKeyToBuy} raceId={raceId} />

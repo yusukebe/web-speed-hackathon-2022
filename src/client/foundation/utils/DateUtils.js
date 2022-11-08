@@ -15,7 +15,7 @@ export const isSameDay = (dateLeft, dateRight) => {
  * @returns {string}
  */
 export const formatTime = (ts) => {
-  if (!ts) return "00:00";
+  if (!ts) return "0:00";
   return dayjs(ts).format("H:mm");
 };
 

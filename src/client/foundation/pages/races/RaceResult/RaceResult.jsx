@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react"
+import React from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
@@ -14,9 +14,9 @@ import { formatTime } from "../../../utils/DateUtils"
 import { authorizedJsonFetcher, jsonFetcher } from "../../../utils/HttpUtils"
 
 import { BettingTicketList } from "./internal/BettingTicketList"
-//import { RaceResultSection } from "./internal/RaceResultSection"
+import RaceResultSection from "./internal/RaceResultSection"
 
-const RaceResultSection = lazy(() => import("./internal/RaceResultSection"))
+//const RaceResultSection = lazy(() => import("./internal/RaceResultSection"))
 
 const LiveBadge = styled.span`
   background: ${Color.red};
@@ -30,26 +30,24 @@ const LiveBadge = styled.span`
 let preData = null
 
 /** @type {React.VFC} */
-export const RaceResult = () => {
+export const RaceResult = ({ serverData }) => {
   const { raceId } = useParams()
   let { data } = useFetch(`/api/races/${raceId}`, jsonFetcher)
+
   const { data: ticketData } = useAuthorizedFetch(
     `/api/races/${raceId}/betting-tickets`,
     authorizedJsonFetcher,
   )
 
-  if (data === null && preData === null) {
-    preData = {
-      "entries": [
-      ],
-      "id": "1",
-      "image": "/assets/images/races/400x225/gray.webp",
-      "name": "loading...",
-    }
-
-    data = preData
+  if (typeof document !== "undefined") {
+    const dataPool = (document.getElementById("root")).dataset
+      .react
+    const initialData = dataPool ? JSON.parse(dataPool) : null
+      (document.getElementById("root")).dataset.react = ""
+    data = initialData
+  } else if (data == null) {
+    data = serverData
   }
-  if (data === null) data = preData
 
   const match = data.image.match(/([0-9]+)\.jpg$/)
 
@@ -66,7 +64,7 @@ export const RaceResult = () => {
       <Section dark shrink>
         <LiveBadge>Live</LiveBadge>
         <Spacer mt={Space * 2} />
-        <img height={225} src={match ? `/assets/images/races/400x225/${match[1]}.webp` : "/assets/images/races/400x225/gray.webp"} style={{ height: 'auto', width: '100%' }} width={400} />
+        <img height={225} src={match ? `/assets/images/races/400x225/${match[1]}.webp` : "/assets/images/races/400x225/gray.webp"} style={{ aspectRatio: '400 / 225', height: 'auto', width: '100%' }} width={400} />
       </Section>
 
       <Spacer mt={Space * 2} />
@@ -94,9 +92,8 @@ export const RaceResult = () => {
         <Heading as="h2">勝負結果</Heading>
 
         <Spacer mt={Space * 2} />
-        <Suspense>
-          <RaceResultSection />
-        </Suspense>
+
+        <RaceResultSection />
       </Section>
     </Container>
   )
