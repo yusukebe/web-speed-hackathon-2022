@@ -110,6 +110,8 @@ export const Odds = ({ serverData }) => {
 
   if (data === null) {
     data = serverData
+    data.entries = entries
+    data.trifectaOdds = odds
   }
 
   const match = data ? data.image.match(/([0-9]+)\.jpg$/) : null

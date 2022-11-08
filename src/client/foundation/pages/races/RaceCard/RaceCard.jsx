@@ -1,4 +1,4 @@
-import React from "react"
+import React, { lazy, Suspense } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
@@ -14,9 +14,10 @@ import { formatTime } from "../../../utils/DateUtils"
 import { jsonFetcher } from "../../../utils/HttpUtils"
 
 
-//import EntryTable from "./internal/EntryTable"
 import EntryTable from './internal/EntryTable'
 import PlayerPictureList from "./internal/PlayerPictureList"
+
+//const PlayerPictureList = lazy(() => import("./internal/PlayerPictureList"))
 //const EntryTable = lazy(() => import('./internal/EntryTable'))
 
 const LiveBadge = styled.span`
@@ -65,6 +66,7 @@ export const RaceCard = ({ serverData }) => {
   }
   if (data === null) {
     data = serverData
+    data.entries = entries
   }
 
   const match = data ? data.image.match(/([0-9]+)\.jpg$/) : null
@@ -99,6 +101,7 @@ export const RaceCard = ({ serverData }) => {
 
         <Spacer mt={Space * 2} />
 
+
         <PlayerPictureList>
           {data && data.entries.map((entry) => (
             <PlayerPictureList.Item
@@ -110,8 +113,11 @@ export const RaceCard = ({ serverData }) => {
           ))}
         </PlayerPictureList>
 
+
+
         <Spacer mt={Space * 4} />
         {data.entries && data.entries[0]['first'] ? <EntryTable entries={data.entries} /> : <></>}
+
       </Section>
 
     </Container >
