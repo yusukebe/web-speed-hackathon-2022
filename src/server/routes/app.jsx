@@ -30,38 +30,40 @@ export const appRoute = async (fastify) => {
 
   fastify.get("/", async (req, res) => {
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
-
+    /*
     const sheet = new ServerStyleSheet()
     const jsx = sheet.collectStyles(<App location={req.url.toString()} />)
     const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
-
+*/
     let hero = `<link rel="preload" href="/assets/images/hero.webp" as="image" />`
     const jsHero = `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
     hero = hero + jsHero
 
     const top = `${getHead(hero)}<body><div id="root">`
-    res.raw.write(top)
-    stream.on('end', () => res.raw.end(getBottom()))
+    //  res.raw.write(top)
+    //    stream.on('end', () => res.raw.end(getBottom()))
 
-    res.send(stream)
+    res.send(top + getBottom())
+
   })
 
   fastify.get("/:date", async (req, res) => {
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
 
+    /*
     const sheet = new ServerStyleSheet()
     const jsx = sheet.collectStyles(<App location={req.url.toString()} />)
     const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
-
+*/
     let hero = `<link rel="preload" href="/assets/images/hero.webp" as="image" />`
     const jsHero = `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
     hero = hero + jsHero
 
     const top = `${getHead(hero)}<body><div id="root">`
-    res.raw.write(top)
-    stream.on('end', () => res.raw.end(getBottom()))
+    //  res.raw.write(top)
+    //    stream.on('end', () => res.raw.end(getBottom()))
 
-    res.send(stream)
+    res.send(top + getBottom())
   })
 
   fastify.get("/races/:raceId/*", async (req, res) => {
@@ -77,15 +79,15 @@ export const appRoute = async (fastify) => {
     res.raw.setHeader("Link", `<${imageURL}>; rel="preload"`)
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
 
-    const sheet = new ServerStyleSheet()
-    const jsx = sheet.collectStyles(<App location={req.url.toString()} serverData={race} />)
-    const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
+    //const sheet = new ServerStyleSheet()
+    //const jsx = sheet.collectStyles(<App location={req.url.toString()} serverData={race} />)
+    //const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
 
-    const top = `${getHead(hero)}<body><div id="root" data-react=${JSON.stringify(race)}>`
-    res.raw.write(top)
-    stream.on('end', () => res.raw.end(getBottom()))
+    const top = `${getHead(hero)}<body><div id="root">`
+    //res.raw.write(top)
+    //stream.on('end', () => res.raw.end(getBottom()))
 
-    res.send(stream)
+    res.send(top + getBottom())
   })
 
 }

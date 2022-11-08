@@ -44,6 +44,7 @@ export const RaceResult = ({ serverData }) => {
     authorizedJsonFetcher,
   )
 
+  /*
   if (typeof document !== "undefined") {
     if (data === null) {
       const elem = document.getElementById("root")
@@ -60,6 +61,10 @@ export const RaceResult = ({ serverData }) => {
 
   if (data === null) {
     data = serverData
+  }*/
+
+  if (data === null) {
+    data = preData
   }
 
 

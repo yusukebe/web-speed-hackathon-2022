@@ -94,6 +94,7 @@ export const Odds = ({ serverData }) => {
     [],
   )
 
+  /*
   if (typeof document !== "undefined") {
     if (data === null) {
       const elem = document.getElementById("root")
@@ -113,6 +114,12 @@ export const Odds = ({ serverData }) => {
     data.entries = entries
     data.trifectaOdds = odds
   }
+  */
+
+  if (data === null) {
+    data = preData
+  }
+
 
   const match = data ? data.image.match(/([0-9]+)\.jpg$/) : null
 

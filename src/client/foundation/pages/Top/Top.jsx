@@ -92,7 +92,6 @@ export const Top = ({ serverData }) => {
   }
   */
 
-
   const handleClickChargeButton = useCallback(() => {
     if (chargeDialogRef.current === null) {
       return

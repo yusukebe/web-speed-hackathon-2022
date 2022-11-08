@@ -51,6 +51,7 @@ export const RaceCard = ({ serverData }) => {
 
   let { data } = useFetch(`/api/races/${raceId}`, jsonFetcher)
 
+  /*
   if (typeof document !== "undefined") {
     if (data === null) {
       const elem = document.getElementById("root")
@@ -67,6 +68,11 @@ export const RaceCard = ({ serverData }) => {
   if (data === null) {
     data = serverData
     data.entries = entries
+  }
+  */
+
+  if (data === null) {
+    data = preData
   }
 
   const match = data ? data.image.match(/([0-9]+)\.jpg$/) : null
