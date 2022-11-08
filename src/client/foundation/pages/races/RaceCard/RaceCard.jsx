@@ -112,7 +112,7 @@ export const RaceCard = ({ serverData }) => {
         </PlayerPictureList>
 
         <Spacer mt={Space * 4} />
-        {data.entries && data.entries[0]['first'] ? <EntryTable entries={data.entries} /> : <img height={275} src="/assets/images/races/400x225/gray.webp" width={100} />}
+        {data.entries && data.entries[0]['first'] ? <EntryTable entries={data.entries} /> : <></>}
       </Section>
 
     </Container >
