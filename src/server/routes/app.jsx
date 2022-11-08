@@ -173,7 +173,7 @@ const getHead = (hero) => {
 }
 
 const getBottom = () => {
-  return IS_PRODUCTION ? `</div><script src="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" defer></script></body></html>` : `</div><script src="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" defer></script></body></html>`
+  return IS_PRODUCTION ? `</div><script src="https://wsh2022-cdn.yusukebe.com/assets/js/main.bundle.js" defer></script></body></html>` : `</div><script src="/assets/js/main.bundle.js" defer></script></body></html>`
 }
 
 
