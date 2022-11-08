@@ -55,9 +55,9 @@ export const RaceCard = ({ serverData }) => {
       const elem = document.getElementById("root")
       const dataPool = elem.dataset.react
       if (dataPool) {
-        const initialData = JSON.parse(dataPool)
-        elem.dataset.react = ""
-        data = initialData
+        //const initialData = JSON.parse(dataPool)
+        //elem.dataset.react = ""
+        //data = initialData
       } else {
         data = preData
       }
