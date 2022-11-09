@@ -81,7 +81,7 @@ export const appRoute = async (fastify) => {
     hero = hero + jsHero
     res.raw.setHeader("Link", `<${grayURL}>; rel="preload"; as="image", <${imageURL}>; rel="preload"; as="image"`)
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
-    const top = `${getHead(hero)}<body><div id="root">`
+    const top = `${getHead(hero)}<body><div id="root" data-react=${JSON.stringify(race)}>`
 
     res.send(top + getBottom())
   })
