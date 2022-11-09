@@ -58,7 +58,7 @@ const RaceTitle = styled.h2`
 /** @type {React.VFC<ItemProps>} */
 const Item = React.memo(({ race }) => {
 
-  const formatCloseAt = useCallback((closeAt, now = new Date()) => {
+  const formatCloseAt = useCallback((closeAt, now) => {
     if (dayjs(closeAt).isBefore(now)) {
       return "投票締切"
     }
@@ -72,10 +72,11 @@ const Item = React.memo(({ race }) => {
 
   const [closeAtText, setCloseAtText] = useState(formatCloseAt(race.closeAt))
 
+
   // 締切はリアルタイムで表示したい
   useEffect(() => {
     const timer = setInterval(() => {
-      setCloseAtText(formatCloseAt(race.closeAt))
+      setCloseAtText(formatCloseAt(race.closeAt, new Date()))
     }, 1000) //
     return () => {
       clearInterval(timer)
