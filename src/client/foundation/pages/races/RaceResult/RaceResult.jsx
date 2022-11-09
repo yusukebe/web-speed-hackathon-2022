@@ -14,7 +14,6 @@ import { Color, Radius, Space } from "../../../styles/variables"
 import { formatTime } from "../../../utils/DateUtils"
 import { authorizedJsonFetcher, jsonFetcher } from "../../../utils/HttpUtils"
 
-
 import { BettingTicketList } from "./internal/BettingTicketList"
 //import RaceResultSection from "./internal/RaceResultSection"
 

@@ -4,7 +4,6 @@ import _ from 'lodash'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useLocation, useParams } from "react-router-dom"
 import styled from "styled-components"
-import { whyDidYouUpdate } from 'why-did-you-update'
 
 import { difference } from '../../../../../common/utils'
 import { Container } from "../../components/layouts/Container"
@@ -21,7 +20,7 @@ import { authorizedJsonFetcher, jsonFetcher } from "../../utils/HttpUtils"
 import { HeroImage } from "./internal/HeroImage"
 import { BlankItem, RecentRaceList } from "./internal/RecentRaceList"
 
-whyDidYouUpdate(React)
+
 
 function useTodayRacesWithAnimation(races) {
   const [isRacesUpdate, setIsRacesUpdate] = useState(false)
@@ -142,18 +141,6 @@ export const Top = () => {
   const handleCompleteCharge = useCallback(() => {
     revalidate()
   }, [revalidate])
-
-  const formatCloseAt = (closeAt, now = new Date()) => {
-    if (dayjs(closeAt).isBefore(now)) {
-      return "投票締切"
-    }
-
-    if (dayjs(closeAt).isAfter(dayjs(now).add(2, "hours"))) {
-      return "投票受付中"
-    }
-
-    return `締切${dayjs(closeAt).diff(now, "minutes")}分前`
-  }
 
 
   let todayRaces =

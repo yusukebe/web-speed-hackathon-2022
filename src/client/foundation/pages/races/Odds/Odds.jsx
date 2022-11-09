@@ -3,6 +3,7 @@ import React, { useCallback, useRef, useState } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
+
 import { RaceImage } from '../../../components/RaceImage'
 import { Container } from "../../../components/layouts/Container"
 import { Section } from "../../../components/layouts/Section"
@@ -20,6 +21,7 @@ import { formatTime } from "../../../utils/DateUtils"
 import OddsRankingList from './internal/OddsRankingList'
 import OddsTable from './internal/OddsTable'
 import { TicketVendingModal } from "./internal/TicketVendingModal"
+
 
 
 const LiveBadge = styled.span`

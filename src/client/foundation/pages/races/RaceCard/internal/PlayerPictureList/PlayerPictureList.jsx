@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import React from "react"
 import styled from "styled-components"
 
@@ -24,7 +25,7 @@ const PlayerName = styled.span`
  */
 
 /** @type {React.VFC<ItemProps>} */
-const Item = ({ image, name, number }) => {
+const Item = React.memo(({ image, name, number }) => {
   const match = image.match(/([0-9]+)\.jpg$/)
   return (
     <Stack gap={Space * 1}>
@@ -41,7 +42,7 @@ const Item = ({ image, name, number }) => {
       </Stack>
     </Stack>
   )
-}
+})
 
 export const PlayerPictureList = ({ children }) => {
   return (
