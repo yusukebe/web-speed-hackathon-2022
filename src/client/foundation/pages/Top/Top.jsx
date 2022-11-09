@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
@@ -189,20 +190,19 @@ export const Top = ({ serverData }) => {
         <Heading as="h1">本日のレース</Heading>
 
         <RecentRaceList>
-          <Lists races={todayRacesToShow} />
+          {<Lists races={todayRacesToShow} />}
         </RecentRaceList>
 
       </section>
-
-      <BlankItem />
 
     </Container>
   )
 }
 
 const Lists = ({ races }) => {
+  console.log(races)
   return [...Array(24)].map((_, i) => {
-    const race = races[i]
+    const race = races ? races[i] : null
     if (race) {
       return <RecentRaceList.Item key={`list-${i}`} race={race} />
     } else {
@@ -210,4 +210,12 @@ const Lists = ({ races }) => {
     }
   })
 }
+
+
+// eslint-disable-next-line react/display-name
+const BlankList = React.memo(() => {
+  return [...Array(23)].map((_, i) => {
+    return <BlankItem key={`fake-${i}`} />
+  })
+})
 

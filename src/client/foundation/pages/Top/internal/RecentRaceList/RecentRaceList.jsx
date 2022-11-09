@@ -113,8 +113,8 @@ export const BlankItem = () => {
     <ItemWrapper $opacity={10}>
       <Stack horizontal alignItems="center" justifyContent="space-between">
         <Stack gap={Space * 1}>
-          <RaceTitle></RaceTitle>
-          <p></p>
+          <RaceTitle>&nbsp;</RaceTitle>
+          <p>&nbsp;</p>
         </Stack>
 
         <Spacer mr={Space * 2} />
