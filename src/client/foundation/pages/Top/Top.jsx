@@ -117,14 +117,18 @@ export const Top = () => {
 
   const location = useLocation()
   const url = useMemo(() => {
-    const match = location.pathname.match(/^\/([0-9]{4}-[0-9]{2}-[0-9]{2})$/)
-    const d = match ? new Date(match[1]) : new Date()
-    const searchParams = new URLSearchParams({
-      since: todayUnixTime(d),
-      until: lastUnixTime(d),
-    })
-    return `/api/races?${searchParams.toString()}`
-  }, [location])
+    let dateStr = date
+    if (!dateStr) {
+      const match = location.pathname.match(/^\/([0-9]{4}-[0-9]{2}-[0-9]{2})$/)
+      const d = match ? new Date(match[1]) : new Date()
+      const searchParams = new URLSearchParams({
+        since: todayUnixTime(d),
+        until: lastUnixTime(d),
+      })
+      dateStr = searchParams.toString()
+    }
+    return `/api/races?${dateStr}`
+  }, [location, date])
 
   let { data: raceData } = useFetch(url, jsonFetcher)
 
@@ -138,7 +142,6 @@ export const Top = () => {
   const handleCompleteCharge = useCallback(() => {
     revalidate()
   }, [revalidate])
-
 
   let todayRaces =
     raceData != null

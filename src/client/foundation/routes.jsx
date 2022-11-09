@@ -22,9 +22,9 @@ export const Routes = ({ serverData }) => {
   return (
     <Suspense fallback="">
       <RouterRoutes>
-        <Route element={<CommonLayout />} path="/">
+        <Route element={<CommonLayout />}>
           <Route index element={<Top serverData={serverData} />} />
-          <Route element={<Top />} path=":date" />
+          <Route element={<Top serverData={serverData} />} path=":date" />
           <Route path="races/:raceId">
             <Route element={<RaceCard serverData={serverData} />} path="race-card" />
             <Route element={<Odds serverData={serverData} />} path="odds" />
