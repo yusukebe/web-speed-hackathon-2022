@@ -1,7 +1,8 @@
-import React from "react";
-import styled from "styled-components";
+/* eslint-disable react/display-name */
+import React from "react"
+import styled from "styled-components"
 
-import { BreakPoint, Space } from "../../../styles/variables";
+import { BreakPoint, Space } from "../../../styles/variables"
 
 const Wrapper = styled.div`
   margin-left: auto;
@@ -15,9 +16,9 @@ const Wrapper = styled.div`
     padding-left: ${Space * 5}px;
     padding-right: ${Space * 5}px;
   }
-`;
+`
 
 /** @type {React.FC} */
-export const Container = ({ children }) => {
-  return <Wrapper>{children}</Wrapper>;
-};
+export const Container = React.memo(({ children }) => {
+  return <Wrapper>{children}</Wrapper>
+})
