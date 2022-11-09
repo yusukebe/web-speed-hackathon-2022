@@ -17,7 +17,7 @@ import { authorizedJsonFetcher, jsonFetcher } from "../../utils/HttpUtils"
 
 //import ChargeDialog from './internal/ChargeDialog'
 import { HeroImage } from "./internal/HeroImage"
-import { RecentRaceList } from "./internal/RecentRaceList"
+import { BlankItem, RecentRaceList } from "./internal/RecentRaceList"
 
 function useTodayRacesWithAnimation(races) {
   const [isRacesUpdate, setIsRacesUpdate] = useState(false)
@@ -189,13 +189,25 @@ export const Top = ({ serverData }) => {
         <Heading as="h1">本日のレース</Heading>
 
         <RecentRaceList>
-          {todayRacesToShow.map((race, _) => (
-            <RecentRaceList.Item key={race.id} race={race} />
-          ))}
+          <Lists races={todayRacesToShow} />
         </RecentRaceList>
 
       </section>
 
+      <BlankItem />
+
     </Container>
   )
 }
+
+const Lists = ({ races }) => {
+  return [...Array(24)].map((_, i) => {
+    const race = races[i]
+    if (race) {
+      return <RecentRaceList.Item key={`list-${i}`} race={race} />
+    } else {
+      return <BlankItem key={`list-${i}`} ></BlankItem>
+    }
+  })
+}
+

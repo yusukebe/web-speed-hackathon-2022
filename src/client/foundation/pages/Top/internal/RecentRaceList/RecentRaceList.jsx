@@ -21,6 +21,7 @@ const ItemWrapper = styled.li`
   border-radius: ${Radius.MEDIUM};
   opacity: ${({ $opacity }) => $opacity};
   padding: ${Space * 3}px;
+  list-style-type: none;
 `
 
 const RaceButton = styled(LinkButton)`
@@ -105,3 +106,25 @@ const Item = ({ race }) => {
   )
 }
 RecentRaceList.Item = Item
+
+
+export const BlankItem = () => {
+  return (
+    <ItemWrapper $opacity={10}>
+      <Stack horizontal alignItems="center" justifyContent="space-between">
+        <Stack gap={Space * 1}>
+          <RaceTitle></RaceTitle>
+          <p></p>
+        </Stack>
+
+        <Spacer mr={Space * 2} />
+
+        <Stack.Item grow={0} shrink={0}>
+          <Stack horizontal alignItems="center" gap={Space * 2}>
+            <img height={100} src={'data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7'} width={100} />
+          </Stack>
+        </Stack.Item>
+      </Stack>
+    </ItemWrapper>
+  )
+}
