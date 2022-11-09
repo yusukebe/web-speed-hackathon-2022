@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import dayjs from 'dayjs'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useLocation, useParams } from "react-router-dom"
 import styled from "styled-components"
 
@@ -175,7 +175,9 @@ export const Top = () => {
             </ChargeButton>
           </Stack>
 
-          <ChargeDialog ref={chargeDialogRef} onComplete={handleCompleteCharge} />
+          <Suspense fallback="">
+            <ChargeDialog ref={chargeDialogRef} onComplete={handleCompleteCharge} />
+          </Suspense>
         </>
       )}
 

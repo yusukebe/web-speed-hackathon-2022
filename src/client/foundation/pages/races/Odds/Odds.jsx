@@ -1,8 +1,8 @@
+/* eslint-disable react/display-name */
 import dayjs from 'dayjs'
 import React, { useCallback, useRef, useState } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
-
 
 import { RaceImage } from '../../../components/RaceImage'
 import { Container } from "../../../components/layouts/Container"
@@ -14,15 +14,12 @@ import { useFetch } from "../../../hooks/useFetch"
 import { Color, Radius, Space } from "../../../styles/variables"
 import { formatTime } from "../../../utils/DateUtils"
 
-
 //import { OddsRankingList } from "./internal/OddsRankingList"
 //import { OddsTable } from "./internal/OddsTable"
 
 import OddsRankingList from './internal/OddsRankingList'
 import OddsTable from './internal/OddsTable'
 import { TicketVendingModal } from "./internal/TicketVendingModal"
-
-
 
 const LiveBadge = styled.span`
   background: ${Color.red};
@@ -77,7 +74,7 @@ const SVG = () => <svg aria-hidden="true" className="svg-inline--fa fa-info-circ
 
 
 /** @type {React.VFC} */
-export const Odds = ({ serverData }) => {
+export const Odds = React.memo(({ serverData }) => {
   const { raceId } = useParams()
 
   let { data } = useFetch(`/api/races/${raceId}`)
@@ -121,7 +118,6 @@ export const Odds = ({ serverData }) => {
   if (data === null) {
     data = preData
   }
-
 
   const match = data ? data.image.match(/([0-9]+)\.jpg$/) : null
 
@@ -188,4 +184,4 @@ export const Odds = ({ serverData }) => {
       <TicketVendingModal ref={modalRef} odds={oddsKeyToBuy} raceId={raceId} />
     </Container>
   )
-}
+})
