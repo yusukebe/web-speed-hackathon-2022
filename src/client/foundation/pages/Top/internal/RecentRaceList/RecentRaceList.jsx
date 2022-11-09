@@ -76,8 +76,7 @@ const Item = React.memo(({ race }) => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCloseAtText(formatCloseAt(race.closeAt))
-    }, 0)
-
+    }, 1000) //
     return () => {
       clearInterval(timer)
     }
