@@ -143,6 +143,19 @@ export const Top = () => {
     revalidate()
   }, [revalidate])
 
+  const formatCloseAt = (closeAt, now = new Date()) => {
+    if (dayjs(closeAt).isBefore(now)) {
+      return "投票締切"
+    }
+
+    if (dayjs(closeAt).isAfter(dayjs(now).add(2, "hours"))) {
+      return "投票受付中"
+    }
+
+    return `締切${dayjs(closeAt).diff(now, "minutes")}分前`
+  }
+
+
   let todayRaces =
     raceData != null
       ? [...raceData.races]

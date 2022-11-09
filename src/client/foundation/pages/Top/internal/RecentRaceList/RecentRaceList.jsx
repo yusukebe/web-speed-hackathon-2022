@@ -1,5 +1,6 @@
 /* eslint-disable react/display-name */
-import React, { useEffect, useState } from "react"
+import dayjs from 'dayjs'
+import React, { useCallback, useEffect, useState } from "react"
 import styled from "styled-components"
 
 import { LinkButton } from "../../../../components/buttons/LinkButton"
@@ -7,7 +8,7 @@ import { Spacer } from "../../../../components/layouts/Spacer"
 import { Stack } from "../../../../components/layouts/Stack"
 import { easeOutCubic, useAnimation } from "../../../../hooks/useAnimation"
 import { Color, FontSize, Radius, Space } from "../../../../styles/variables"
-import { formatCloseAt } from "../../../../utils/DateUtils"
+//import { formatCloseAt } from "../../../../utils/DateUtils"
 
 export const RecentRaceList = React.memo(({ children }) => {
   return (
@@ -49,6 +50,18 @@ const RaceTitle = styled.h2`
 /** @type {React.VFC<ItemProps>} */
 const Item = React.memo(({ race }) => {
 
+  const formatCloseAt = useCallback((closeAt, now = new Date()) => {
+    if (dayjs(closeAt).isBefore(now)) {
+      return "投票締切"
+    }
+
+    if (dayjs(closeAt).isAfter(dayjs(now).add(2, "hours"))) {
+      return "投票受付中"
+    }
+
+    return `締切${dayjs(closeAt).diff(now, "minutes")}分前`
+  }, [])
+
   const [closeAtText, setCloseAtText] = useState(formatCloseAt(race.closeAt))
 
   // 締切はリアルタイムで表示したい
@@ -60,7 +73,7 @@ const Item = React.memo(({ race }) => {
     return () => {
       clearInterval(timer)
     }
-  }, [race.closeAt])
+  }, [formatCloseAt, race.closeAt])
 
   const {
     abortAnimation,
