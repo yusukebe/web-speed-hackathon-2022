@@ -78,7 +78,7 @@ export const appRoute = async (fastify) => {
     const jsHero = `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
 
     hero = hero + jsHero
-    res.raw.setHeader("Link", `<${imageURL}>; rel="preload"`)
+    res.raw.setHeader("Link", `<${imageURL}>; rel="preload"; as="image"`)
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
     const top = `${getHead(hero)}<body><div id="root">`
 
