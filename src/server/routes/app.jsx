@@ -2,8 +2,9 @@ import { join } from "path"
 
 import fastifyStatic from "@fastify/static"
 
+import { Race } from "../../model/index.js"
 import { IS_PRODUCTION } from "../index.js"
-
+import { createConnection } from "../typeorm/connection.js"
 
 
 export const appRoute = async (fastify) => {
@@ -68,21 +69,18 @@ export const appRoute = async (fastify) => {
   })
 
   fastify.get("/races/:raceId/*", async (req, res) => {
-    let hero = `<link rel="preload" href="/assets/images/races/400x225/gray.webp" as="image" />`
+    const repo = (await createConnection()).getRepository(Race)
+    const race = await repo.findOne(req.params.raceId)
+    const match = race.image.match(/([0-9]+)\.jpg$/)
+    const imageURL = `/assets/images/races/400x225/${match[1]}.webp`
+
+    let hero = `<link rel="preload" href="${imageURL}" as="image" />`
     const jsHero = `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
-    const fontHero = req.url.toString().match(/.+odds$/) ? `<link rel="preload" href="/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="font" crossorigin>` : ''
 
-    hero = hero + jsHero + fontHero
-    res.raw.setHeader("Link", `</assets/images/races/400x225/gray.webp>; rel="preload"`)
+    hero = hero + jsHero
+    res.raw.setHeader("Link", `<${imageURL}>; rel="preload"`)
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
-
-    //const sheet = new ServerStyleSheet()
-    //const jsx = sheet.collectStyles(<App location={req.url.toString()} serverData={race} />)
-    //const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
-
     const top = `${getHead(hero)}<body><div id="root">`
-    //res.raw.write(top)
-    //stream.on('end', () => res.raw.end(getBottom()))
 
     res.send(top + getBottom())
   })
