@@ -18,13 +18,21 @@ export const RecentRaceList = React.memo(({ children }) => {
   )
 })
 
-const ItemWrapper = styled.li`
+//const ItemWrapper = 
+
+const ItemWrapper = styled.div.attrs((props) => ({
+  style: {
+    opacity: props.opacity
+  }
+}
+))`
   background: ${Color.mono[0]};
   border-radius: ${Radius.MEDIUM};
-  opacity: ${({ $opacity }) => $opacity};
   padding: ${Space * 3}px;
   list-style-type: none;
 `
+
+//opacity: ${({ $opacity }) => $opacity};
 
 const RaceButton = styled(LinkButton)`
   background: ${Color.mono[700]};
@@ -100,7 +108,7 @@ const Item = React.memo(({ race }) => {
   const url = match ? `/assets/images/races/100x100/${match[1]}.webp` : `/assets/images/races/100x100/gray.webp`
 
   return (
-    <ItemWrapper $opacity={opacity}>
+    <ItemWrapper opacity={opacity}>
       <Stack horizontal alignItems="center" justifyContent="space-between">
         <Stack gap={Space * 1}>
           <RaceTitle>{race.name}</RaceTitle>

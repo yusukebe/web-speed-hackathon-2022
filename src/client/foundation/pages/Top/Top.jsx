@@ -1,6 +1,5 @@
 /* eslint-disable react/display-name */
 import dayjs from 'dayjs'
-import _ from 'lodash'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useLocation, useParams } from "react-router-dom"
 import styled from "styled-components"
@@ -20,8 +19,6 @@ import { authorizedJsonFetcher, jsonFetcher } from "../../utils/HttpUtils"
 import { HeroImage } from "./internal/HeroImage"
 import { BlankItem, RecentRaceList } from "./internal/RecentRaceList"
 
-
-
 function useTodayRacesWithAnimation(races) {
   const [isRacesUpdate, setIsRacesUpdate] = useState(false)
   const [racesToShow, setRacesToShow] = useState([])
@@ -33,7 +30,7 @@ function useTodayRacesWithAnimation(races) {
     const a = races.map((e) => e.id)
     const b = prevRaces.current.map((e) => e.id)
     const isRacesUpdate =
-      _.difference(a, b).length !== 0
+      difference([a, b]).length !== 0
     prevRaces.current = races
     setIsRacesUpdate(isRacesUpdate)
   }, [races])
@@ -60,7 +57,7 @@ function useTodayRacesWithAnimation(races) {
       }
 
       numberOfRacesToShow.current++
-      setRacesToShow(_.slice(races, 0, numberOfRacesToShow.current))
+      setRacesToShow(races.slice(0, numberOfRacesToShow.current))
     }, 100)
   }, [isRacesUpdate, races])
 
