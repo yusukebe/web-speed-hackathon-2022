@@ -1,5 +1,6 @@
-import React from "react";
-import styled from "styled-components";
+/* eslint-disable react/display-name */
+import React from "react"
+import styled from "styled-components"
 
 const Wrapper = styled.div`
   align-items: ${({ $alignItems }) => $alignItems};
@@ -8,7 +9,7 @@ const Wrapper = styled.div`
   flex-wrap: ${({ $wrap }) => $wrap};
   gap: ${({ $gap }) => ($gap ? `${$gap}px` : undefined)};
   justify-content: ${({ $justifyContent }) => $justifyContent};
-`;
+`
 
 /**
  * @typedef Props
@@ -20,7 +21,7 @@ const Wrapper = styled.div`
  * @property {import('csstype').Property.FlexWrap=} wrap
  */
 
-export const Stack = (
+export const Stack = React.memo((
   /** @type {React.PropsWithChildren<Props>} */
   { alignItems, as, children, gap, horizontal, justifyContent, wrap },
 ) => {
@@ -35,14 +36,14 @@ export const Stack = (
     >
       {children}
     </Wrapper>
-  );
-};
+  )
+})
 
 const ItemWrapper = styled.div`
   flex-basis: ${({ $basis }) => $basis};
   flex-grow: ${({ $grow }) => $grow};
   flex-shrink: ${({ $shrink }) => $shrink};
-`;
+`
 
 /**
  * @typedef ItemProps
@@ -53,11 +54,11 @@ const ItemWrapper = styled.div`
  */
 
 /** @type {React.FC<ItemProps>} */
-const Item = ({ as, basis, children, grow, shrink }) => {
+const Item = React.memo(({ as, basis, children, grow, shrink }) => {
   return (
     <ItemWrapper $basis={basis} $grow={grow} $shrink={shrink} as={as}>
       {children}
     </ItemWrapper>
-  );
-};
-Stack.Item = Item;
+  )
+})
+Stack.Item = Item

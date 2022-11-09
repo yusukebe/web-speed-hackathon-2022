@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import React, { useEffect, useState } from "react"
 import styled from "styled-components"
 
@@ -8,13 +9,13 @@ import { easeOutCubic, useAnimation } from "../../../../hooks/useAnimation"
 import { Color, FontSize, Radius, Space } from "../../../../styles/variables"
 import { formatCloseAt } from "../../../../utils/DateUtils"
 
-export const RecentRaceList = ({ children }) => {
+export const RecentRaceList = React.memo(({ children }) => {
   return (
     <Stack as="ul" gap={Space * 2}>
       {children}
     </Stack>
   )
-}
+})
 
 const ItemWrapper = styled.li`
   background: ${Color.mono[0]};
@@ -46,7 +47,7 @@ const RaceTitle = styled.h2`
  */
 
 /** @type {React.VFC<ItemProps>} */
-const Item = ({ race }) => {
+const Item = React.memo(({ race }) => {
 
   const [closeAtText, setCloseAtText] = useState(formatCloseAt(race.closeAt))
 
@@ -104,11 +105,12 @@ const Item = ({ race }) => {
       </Stack>
     </ItemWrapper>
   )
-}
+})
+
 RecentRaceList.Item = Item
 
 
-export const BlankItem = () => {
+export const BlankItem = React.memo(() => {
   return (
     <ItemWrapper $opacity={10}>
       <Stack horizontal alignItems="center" justifyContent="space-between">
@@ -127,4 +129,4 @@ export const BlankItem = () => {
       </Stack>
     </ItemWrapper>
   )
-}
+})

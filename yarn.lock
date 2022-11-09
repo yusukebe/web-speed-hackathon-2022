@@ -8440,6 +8440,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-fast-compare@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "react-fast-compare@npm:2.0.4"
+  checksum: 06046595f90a4e3e3a56f40a8078c00aa71bdb064ddb98343f577f546aa22e888831fd45f009c93b34707cc842b4c637737e956fd13d6f80607ee92fb9cf9a1c
+  languageName: node
+  linkType: hard
+
 "react-fast-compare@npm:^3.1.1":
   version: 3.2.0
   resolution: "react-fast-compare@npm:3.2.0"
@@ -10788,6 +10795,7 @@ __metadata:
     webpack-cli: ^4.9.1
     webpack-merge: ^5.8.0
     webpack-node-externals: ^3.0.0
+    why-did-you-update: ^1.0.8
     wrangler: ^2.1.15
     zengin-code: ^1.0.0-p20220130
   languageName: unknown
@@ -10955,6 +10963,18 @@ __metadata:
   bin:
     node-which: ./bin/node-which
   checksum: 1a5c563d3c1b52d5f893c8b61afe11abc3bab4afac492e8da5bde69d550de701cf9806235f20a47b5c8fa8a1d6a9135841de2596535e998027a54589000e66d1
+  languageName: node
+  linkType: hard
+
+"why-did-you-update@npm:^1.0.8":
+  version: 1.0.8
+  resolution: "why-did-you-update@npm:1.0.8"
+  dependencies:
+    lodash: ^4.17.11
+    react-fast-compare: ^2.0.4
+  peerDependencies:
+    react: ">=16"
+  checksum: 04627648b7110d3e0899f62f0ff1a4af2cfff1e5b0cde51f9790d78055e0b9f3d17ae3b4a81a5937e94b8d1057e53f9da20b2c5462cde861e7158c79ca366cac
   languageName: node
   linkType: hard
 

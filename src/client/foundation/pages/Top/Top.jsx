@@ -4,6 +4,7 @@ import _ from 'lodash'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useLocation, useParams } from "react-router-dom"
 import styled from "styled-components"
+import { whyDidYouUpdate } from 'why-did-you-update'
 
 import { difference } from '../../../../../common/utils'
 import { Container } from "../../components/layouts/Container"
@@ -19,6 +20,8 @@ import { authorizedJsonFetcher, jsonFetcher } from "../../utils/HttpUtils"
 //import ChargeDialog from './internal/ChargeDialog'
 import { HeroImage } from "./internal/HeroImage"
 import { BlankItem, RecentRaceList } from "./internal/RecentRaceList"
+
+whyDidYouUpdate(React)
 
 function useTodayRacesWithAnimation(races) {
   const [isRacesUpdate, setIsRacesUpdate] = useState(false)
@@ -101,16 +104,12 @@ const lastUnixTime = (d) => {
   return Math.floor(d.getTime() / 1000)
 }
 
-const preData = [...Array(10)].map((_, i) => ({
-  id: `${i}`,
-  name: "loading..."
-}))
 /* API叩かなくてもいいのだろうか */
 const heroImageUrl = "/assets/images/hero.webp" // useHeroImage(todayRaces)
 const heroSmallImageUrl = "/assets/images/hero-small.webp"
 
 /** @type {React.VFC} */
-export const Top = ({ serverData }) => {
+export const Top = () => {
   const { date = dayjs().format("YYYY-MM-DD") } = useParams()
 
   const chargeDialogRef = useRef(null)
@@ -156,9 +155,7 @@ export const Top = ({ serverData }) => {
         )
       : []
 
-
   const todayRacesToShow = useTodayRacesWithAnimation(todayRaces)
-
 
   const hero = useMemo(() => {
     return <HeroImage url={heroImageUrl} urlSmall={heroSmallImageUrl} />
@@ -199,8 +196,7 @@ export const Top = ({ serverData }) => {
   )
 }
 
-const Lists = ({ races }) => {
-  console.log(races)
+const Lists = React.memo(({ races }) => {
   return [...Array(24)].map((_, i) => {
     const race = races ? races[i] : null
     if (race) {
@@ -209,13 +205,6 @@ const Lists = ({ races }) => {
       return <BlankItem key={`list-${i}`} ></BlankItem>
     }
   })
-}
-
-
-// eslint-disable-next-line react/display-name
-const BlankList = React.memo(() => {
-  return [...Array(23)].map((_, i) => {
-    return <BlankItem key={`fake-${i}`} />
-  })
 })
+
 
