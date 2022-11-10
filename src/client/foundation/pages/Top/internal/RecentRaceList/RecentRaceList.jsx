@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import dayjs from 'dayjs'
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 
 import { LinkButton } from "../../../../components/buttons/LinkButton"
@@ -55,11 +55,18 @@ const RaceTitle = styled.h2`
  * @property {Model.Race} race
  */
 
+
 /** @type {React.VFC<ItemProps>} */
 const Item = React.memo(({ race }) => {
 
+  const timer = useRef(null)
+
+  const [closeAtText, setCloseAtText] = useState('loading...')
+
   const formatCloseAt = useCallback((closeAt, now) => {
+    if (!now) return
     if (dayjs(closeAt).isBefore(now)) {
+      clearInterval(timer.current)
       return "投票締切"
     }
 
@@ -70,16 +77,13 @@ const Item = React.memo(({ race }) => {
     return `締切${dayjs(closeAt).diff(now, "minutes")}分前`
   }, [])
 
-  const [closeAtText, setCloseAtText] = useState(formatCloseAt(race.closeAt))
-
-
   // 締切はリアルタイムで表示したい
   useEffect(() => {
-    const timer = setInterval(() => {
+    timer.current = setInterval(() => {
       setCloseAtText(formatCloseAt(race.closeAt, new Date()))
-    }, 1000) //
+    }, 0) //
     return () => {
-      clearInterval(timer)
+      clearInterval(timer.current)
     }
   }, [formatCloseAt, race.closeAt])
 
