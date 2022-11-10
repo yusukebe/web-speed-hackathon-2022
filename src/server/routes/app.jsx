@@ -75,11 +75,12 @@ export const appRoute = async (fastify) => {
     const grayURL = `/assets/images/races/400x225/gray.webp`
     const imageURL = `/assets/images/races/400x225/${match[1]}.webp`
 
-    let hero = `<link rel="preload" href="${grayURL}" as="image" />` + `<link rel="preload" href="${imageURL}" as="image" />`
+    let hero = `<link rel="preload" href="${grayURL}" as="image" />`// + `<link rel="preload" href="${imageURL}" as="image" />`
     const jsHero = `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
 
     hero = hero + jsHero
-    res.raw.setHeader("Link", `<${grayURL}>; rel="preload"; as="image", <${imageURL}>; rel="preload"; as="image"`)
+    //res.raw.setHeader("Link", `<${grayURL}>; rel="preload"; as="image", <${imageURL}>; rel="preload"; as="image"`)
+    res.raw.setHeader("Link", `<${imageURL}>; rel="preload"; as="image"`)
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
     const top = `${getHead(hero)}<body><div id="root" data-react=${JSON.stringify(race)}>`
 

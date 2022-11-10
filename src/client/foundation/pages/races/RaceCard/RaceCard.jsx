@@ -47,35 +47,28 @@ const preData = {
   "name": "loading...",
 }
 
+let data = null
+
 /** @type {React.VFC} */
 export const RaceCard = ({ serverData }) => {
 
   const { raceId } = useParams()
 
-  let { data } = useFetch(`/api/races/${raceId}`, jsonFetcher)
+  let { data: fetchData } = useFetch(`/api/races/${raceId}`, jsonFetcher)
 
-  /*
-  if (typeof document !== "undefined") {
-    if (data === null) {
-      const elem = document.getElementById("root")
-      const dataPool = elem.dataset.react
-      if (dataPool) {
-        const initialData = JSON.parse(dataPool)
-        elem.dataset.react = ""
-        data = initialData
-      } else {
-        data = preData
-      }
+  if (fetchData) data = fetchData
+
+  if (!data) {
+    const elem = document.getElementById("root")
+    const dataPool = elem.dataset.react
+    if (dataPool) {
+      const initialData = JSON.parse(dataPool)
+      elem.dataset.react = ""
+      data = initialData
+      data.entries = entries
+    } else {
+      data = preData
     }
-  }
-  if (data === null) {
-    data = serverData
-    data.entries = entries
-  }
-  */
-
-  if (data === null) {
-    data = preData
   }
 
   const match = data ? data.image.match(/([0-9]+)\.jpg$/) : null
