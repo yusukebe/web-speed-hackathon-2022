@@ -69,6 +69,7 @@ function useTodayRacesWithAnimation(races) {
     }
   }, [])
 
+
   return racesToShow
 }
 

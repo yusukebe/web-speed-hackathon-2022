@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import React from "react"
 import { Outlet } from "react-router-dom"
 
@@ -10,7 +11,7 @@ export const CommonLayout = () => {
     <div>
       <Header />
       <main>
-        <Outlet />
+        <Outlet key="outlet" />
       </main>
       <Footer />
     </div>
