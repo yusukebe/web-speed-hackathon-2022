@@ -2,10 +2,9 @@ import { join } from "path"
 
 import fastifyStatic from "@fastify/static"
 
-//import { Race } from "../../model/index.js"
+import { Race } from "../../model/index.js"
 import { IS_PRODUCTION } from "../index.js"
-//import { createConnection } from "../typeorm/connection.js"
-
+import { createConnection } from "../typeorm/connection.js"
 
 export const appRoute = async (fastify) => {
   if (!IS_PRODUCTION) {
@@ -69,22 +68,19 @@ export const appRoute = async (fastify) => {
   })
 
   fastify.get("/races/:raceId/*", async (req, res) => {
-    /*
     const repo = (await createConnection()).getRepository(Race)
     const race = await repo.findOne(req.params.raceId)
     const match = race.image.match(/([0-9]+)\.jpg$/)
-    const imageURL = `/assets/images/races/400x225/${match[1]}.webp`
-    */
     const grayURL = `/assets/images/races/400x225/gray.webp`
+    const imageURL = `/assets/images/races/400x225/${match[1]}.webp`
 
-    let hero = `<link rel="preload" href="${grayURL}" as="image" />` // + `<link rel="preload" href="${imageURL}" as="image" />` // 
+    let hero = `<link rel="preload" href="${grayURL}" as="image" />` + `<link rel="preload" href="${imageURL}" as="image" />`
     const jsHero = `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
 
     hero = hero + jsHero
-    //res.raw.setHeader("Link", `<${grayURL}>; rel="preload"; as="image", <${imageURL}>; rel="preload"; as="image"`)
-    res.raw.setHeader("Link", `<${grayURL}>; rel="preload"; as="image"`)
+    res.raw.setHeader("Link", `<${grayURL}>; rel="preload"; as="image", <${imageURL}>; rel="preload"; as="image"`)
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
-    const top = `${getHead(hero)}<body><div id="root">`
+    const top = `${getHead(hero)}<body><div id="root" data-react=${JSON.stringify(race)}>`
 
     res.send(top + getBottom())
   })
