@@ -1,4 +1,4 @@
-import React from "react"
+import React, { lazy, Suspense } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
@@ -17,7 +17,6 @@ import { jsonFetcher } from "../../../utils/HttpUtils"
 
 import EntryTable from './internal/EntryTable'
 import PlayerPictureList from "./internal/PlayerPictureList"
-
 
 
 //const PlayerPictureList = lazy(() => import("./internal/PlayerPictureList"))
@@ -41,7 +40,7 @@ const entries = [...Array(6)].map((_, i) => ({
   },
 }))
 
-const preData = {
+let preData = {
   "entries": entries,
   "image": "/assets/images/races/400x225/gray.webp",
   "name": "loading...",
@@ -54,16 +53,22 @@ export const RaceCard = ({ serverData }) => {
 
   let { data } = useFetch(`/api/races/${raceId}`, jsonFetcher)
 
-  if (!data) {
-    const elem = document.getElementById("root")
-    const dataPool = elem.dataset.react
-    if (dataPool) {
-      const initialData = JSON.parse(dataPool)
-      elem.dataset.react = ""
-      data = initialData
-      data.entries = entries
-    } else {
-      data = preData
+  if (typeof document !== "undefined") {
+    if (data === null) {
+      const elem = document.getElementById("root")
+      const dataPool = elem.dataset.react
+      if (dataPool) {
+        const initialData = JSON.parse(dataPool)
+        data = initialData
+        preData = data
+      } else {
+        elem.dataset.react = ""
+        data = preData
+      }
+    }
+  } else {
+    if (serverData) {
+      data = serverData
     }
   }
 

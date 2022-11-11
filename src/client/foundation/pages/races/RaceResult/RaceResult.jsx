@@ -12,7 +12,7 @@ import { useAuthorizedFetch } from "../../../hooks/useAuthorizedFetch"
 import { useFetch } from "../../../hooks/useFetch"
 import { Color, Radius, Space } from "../../../styles/variables"
 import { formatTime } from "../../../utils/DateUtils"
-import { authorizedJsonFetcher, jsonFetcher } from "../../../utils/HttpUtils"
+import { authorizedJsonFetcher } from "../../../utils/HttpUtils"
 
 import { BettingTicketList } from "./internal/BettingTicketList"
 //import RaceResultSection from "./internal/RaceResultSection"
@@ -28,30 +28,38 @@ const LiveBadge = styled.span`
   text-transform: uppercase;
 `
 
-const preData = {
+let preData = {
   "image": "/assets/images/races/400x225/gray.webp",
   "name": "loading...",
 }
 
 /** @type {React.VFC} */
-export const RaceResult = () => {
+export const RaceResult = ({ serverData }) => {
   const { raceId } = useParams()
-  let { data } = useFetch(`/api/races/${raceId}`, jsonFetcher)
+
+  let { data } = useFetch(`/api/races/${raceId}`)
 
   const { data: ticketData } = useAuthorizedFetch(
     `/api/races/${raceId}/betting-tickets`,
     authorizedJsonFetcher,
   )
 
-  if (!data) {
-    const elem = document.getElementById("root")
-    const dataPool = elem.dataset.react
-    if (dataPool) {
-      const initialData = JSON.parse(dataPool)
-      elem.dataset.react = ""
-      data = initialData
-    } else {
-      data = preData
+  if (typeof document !== "undefined") {
+    if (data === null) {
+      const elem = document.getElementById("root")
+      const dataPool = elem.dataset.react
+      if (dataPool) {
+        const initialData = JSON.parse(dataPool)
+        data = initialData
+        preData = data
+      } else {
+        elem.dataset.react = ""
+        data = preData
+      }
+    }
+  } else {
+    if (serverData) {
+      data = serverData
     }
   }
 
@@ -59,7 +67,6 @@ export const RaceResult = () => {
 
   return (
     <Container>
-
       <Spacer mt={Space * 2} />
       <Heading as="h1">{data.name}</Heading>
       <p>
