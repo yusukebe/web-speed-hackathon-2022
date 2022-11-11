@@ -64,6 +64,8 @@ export const RaceCard = ({ serverData }) => {
           const initialData = JSON.parse(dataPool)
           data = initialData
           data.entries = entries
+        } else {
+          data = preData
         }
       } else {
         data = preData
@@ -82,9 +84,9 @@ export const RaceCard = ({ serverData }) => {
     <Container>
       <Spacer mt={Space * 2} />
 
-      <Heading as="h1">{data ? data.name : serverData.name}</Heading>
+      <Heading as="h1">{data.name}</Heading>
       <p>
-        開始 {formatTime(data ? data.startAt : serverData.startAt)} 締切 {formatTime(data ? data.closeAt : serverData.closeAt)}
+        開始 {formatTime(data.startAt)} 締切 {formatTime(data.closeAt)}
       </p>
 
       <Spacer mt={Space * 2} />

@@ -104,6 +104,8 @@ export const Odds = React.memo(({ serverData }) => {
           data = initialData
           data.entries = entries
           data.trifectaOdds = odds
+        } else {
+          data = preData
         }
       } else {
         data = preData
