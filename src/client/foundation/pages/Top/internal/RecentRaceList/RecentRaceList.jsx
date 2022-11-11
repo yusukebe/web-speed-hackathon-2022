@@ -79,13 +79,16 @@ const Item = React.memo(({ race }) => {
 
   // 締切はリアルタイムで表示したい
   useEffect(() => {
-    timer.current = setInterval(() => {
-      setCloseAtText(formatCloseAt(race.closeAt, new Date()))
-    }, 0) //
+    if (!timer.current) {
+      timer.current = setInterval(() => {
+        setCloseAtText(formatCloseAt(race.closeAt, new Date()))
+      }, 100)
+    }
     return () => {
       clearInterval(timer.current)
     }
   }, [formatCloseAt, race.closeAt])
+
 
   const {
     abortAnimation,
