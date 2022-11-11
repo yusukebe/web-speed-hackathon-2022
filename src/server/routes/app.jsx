@@ -1,12 +1,8 @@
 import { join } from "path"
 
 import fastifyStatic from "@fastify/static"
-import React from 'react'
-import { renderToNodeStream } from 'react-dom/server'
-import { ServerStyleSheet } from 'styled-components'
 
 import { Race } from "../../model/index.js"
-import { App } from '../App.jsx'
 import { IS_PRODUCTION } from "../index.js"
 import { createConnection } from "../typeorm/connection.js"
 
@@ -30,10 +26,11 @@ export const appRoute = async (fastify) => {
   fastify.get("/", async (req, res) => {
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
 
+    /*
     const sheet = new ServerStyleSheet()
     const jsx = sheet.collectStyles(<App location={req.url.toString()} />)
     const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
-
+*/
     res.raw.setHeader("Link", `</assets/images/hero-small.webp>; rel="preload; as="image", </assets/js/main.bundle.js>; rel="preload; as="script"`)
 
     let hero = `<link rel="preload" href="/assets/images/hero-small.webp" as="image" />`
@@ -41,12 +38,12 @@ export const appRoute = async (fastify) => {
     hero = hero + jsHero
 
     const top = `${getHead(hero)}<body><div id="root">`
-    res.raw.write(top)
-    stream.on('end', () => res.raw.end(getBottom()))
+    //res.raw.write(top)
+    //stream.on('end', () => res.raw.end(getBottom()))
 
-    res.send(stream)
+    //res.send(stream)
 
-    //res.send(top + getBottom())
+    res.send(top + getBottom())
 
   })
 
@@ -76,10 +73,11 @@ export const appRoute = async (fastify) => {
     const repo = (await createConnection()).getRepository(Race)
     const race = await repo.findOne(req.params.raceId)
 
+    /*
     const sheet = new ServerStyleSheet()
     const jsx = sheet.collectStyles(<App location={req.url.toString()} serverData={race} />)
     const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
-
+*/
     //    const race = await repo.findOne(req.params.raceId)
     const match = race.image.match(/([0-9]+)\.jpg$/)
     //const grayURL = `/assets/images/races/400x225/gray.webp`
@@ -94,11 +92,11 @@ export const appRoute = async (fastify) => {
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
     const top = `${getHead(hero)}<body><div id="root" data-react=${JSON.stringify(race)}>`
 
-    res.raw.write(top)
-    stream.on('end', () => res.raw.end(getBottom()))
-    res.send(stream)
+    //res.raw.write(top)
+    //stream.on('end', () => res.raw.end(getBottom()))
+    //res.send(stream)
 
-    //res.send(top + getBottom())
+    res.send(top + getBottom())
   })
 
 }
