@@ -63,6 +63,7 @@ export const RaceCard = ({ serverData }) => {
         if (dataPool) {
           const initialData = JSON.parse(dataPool)
           data = initialData
+          data.entries = entries
         }
       } else {
         data = preData
