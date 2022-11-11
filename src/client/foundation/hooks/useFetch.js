@@ -26,6 +26,6 @@ export function useFetch(apiPath) {
     };
     fetchData();
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [apiPath]);
   return result;
 }

@@ -117,20 +117,17 @@ export const Top = () => {
 
   const location = useLocation()
   const url = useMemo(() => {
-    let dateStr = date
-    if (!dateStr) {
-      const match = location.pathname.match(/^\/([0-9]{4}-[0-9]{2}-[0-9]{2})$/)
-      const d = match ? new Date(match[1]) : new Date()
-      const searchParams = new URLSearchParams({
-        since: todayUnixTime(d),
-        until: lastUnixTime(d),
-      })
-      dateStr = searchParams.toString()
-    }
+    const match = location.pathname.match(/^\/([0-9]{4}-[0-9]{2}-[0-9]{2})$/)
+    const d = match ? new Date(match[1]) : new Date()
+    const searchParams = new URLSearchParams({
+      since: todayUnixTime(d),
+      until: lastUnixTime(d),
+    })
+    const dateStr = searchParams.toString()
     return `/api/races?${dateStr}`
-  }, [location, date])
+  }, [location])
 
-  let { data: raceData } = useFetch(url, jsonFetcher)
+  let { data: raceData } = useFetch(url)
 
   const handleClickChargeButton = useCallback(() => {
     if (chargeDialogRef.current === null) {
