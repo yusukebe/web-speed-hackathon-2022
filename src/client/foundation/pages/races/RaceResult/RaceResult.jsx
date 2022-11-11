@@ -33,19 +33,15 @@ const preData = {
   "name": "loading...",
 }
 
-let data = null
-
 /** @type {React.VFC} */
 export const RaceResult = () => {
   const { raceId } = useParams()
-  let { data: fetchData } = useFetch(`/api/races/${raceId}`, jsonFetcher)
+  let { data } = useFetch(`/api/races/${raceId}`, jsonFetcher)
 
   const { data: ticketData } = useAuthorizedFetch(
     `/api/races/${raceId}/betting-tickets`,
     authorizedJsonFetcher,
   )
-
-  if (fetchData) data = fetchData
 
   if (!data) {
     const elem = document.getElementById("root")

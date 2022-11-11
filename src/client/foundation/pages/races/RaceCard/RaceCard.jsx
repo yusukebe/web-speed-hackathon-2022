@@ -47,16 +47,12 @@ const preData = {
   "name": "loading...",
 }
 
-let data = null
-
 /** @type {React.VFC} */
 export const RaceCard = ({ serverData }) => {
 
   const { raceId } = useParams()
 
-  let { data: fetchData } = useFetch(`/api/races/${raceId}`, jsonFetcher)
-
-  if (fetchData) data = fetchData
+  let { data } = useFetch(`/api/races/${raceId}`, jsonFetcher)
 
   if (!data) {
     const elem = document.getElementById("root")
