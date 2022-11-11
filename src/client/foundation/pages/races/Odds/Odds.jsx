@@ -111,6 +111,8 @@ export const Odds = React.memo(({ serverData }) => {
     }
   } else {
     data = serverData
+    data.entries = entries
+    data.trifectaOdds = odds
   }
 
   const match = data ? data.image.match(/([0-9]+)\.jpg$/) : null

@@ -72,6 +72,7 @@ export const RaceCard = ({ serverData }) => {
     }
   } else {
     data = serverData
+    data.entries = entries
   }
 
   const match = data ? data.image.match(/([0-9]+)\.jpg$/) : null
