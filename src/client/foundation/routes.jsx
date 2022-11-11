@@ -19,7 +19,7 @@ import RaceResult from './pages/races/RaceResult'
 /** @type {React.VFC} */
 export const Routes = ({ serverData }) => {
   return (
-    <Suspense fallback="loading...">
+    <Suspense fallback="">
       <RouterRoutes>
         <Route element={<CommonLayout />}>
           <Route index element={<Top serverData={serverData} />} />
