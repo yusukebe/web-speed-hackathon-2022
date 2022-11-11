@@ -1,4 +1,4 @@
-import React, { lazy } from "react"
+import React, { lazy, useRef, useState } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
@@ -33,6 +33,9 @@ let preData = {
   "name": "loading...",
 }
 
+//let data = null
+let rendered = false
+
 /** @type {React.VFC} */
 export const RaceResult = ({ serverData }) => {
   const { raceId } = useParams()
@@ -46,21 +49,21 @@ export const RaceResult = ({ serverData }) => {
 
   if (typeof document !== "undefined") {
     if (data === null) {
-      const elem = document.getElementById("root")
-      const dataPool = elem.dataset.react
-      if (dataPool) {
-        const initialData = JSON.parse(dataPool)
-        data = initialData
-        preData = data
+      if (!rendered) {
+        const elem = document.getElementById("root")
+        const dataPool = elem.dataset.react
+        if (dataPool) {
+          const initialData = JSON.parse(dataPool)
+          data = initialData
+        }
       } else {
-        elem.dataset.react = ""
         data = preData
       }
+    } else {
+      rendered = true
     }
   } else {
-    if (serverData) {
-      data = serverData
-    }
+    data = serverData
   }
 
   const match = data ? data.image.match(/([0-9]+)\.jpg$/) : null
