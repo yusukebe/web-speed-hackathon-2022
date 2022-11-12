@@ -78,6 +78,7 @@ const Item = React.memo(({ race }) => {
   }, [])
 
   // 締切はリアルタイムで表示したい
+  /*
   useEffect(() => {
     if (!timer.current) {
       timer.current = setInterval(() => {
@@ -110,6 +111,10 @@ const Item = React.memo(({ race }) => {
       abortAnimation()
     }
   }, [race.id, startAnimation, abortAnimation, resetAnimation])
+
+  */
+
+  const opacity = 100
 
   const match = race.image.match(/([0-9]+)\.jpg/)
   const url = match ? `/assets/images/races/100x100/${match[1]}.webp` : `/assets/images/races/100x100/gray.webp`
