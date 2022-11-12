@@ -3,15 +3,9 @@ import { join } from "path"
 import fastifyStatic from "@fastify/static"
 
 import { Race } from "../../model/index.js"
-import { IS_PRODUCTION } from "../index.js"
 import { createConnection } from "../typeorm/connection.js"
 
 export const appRoute = async (fastify) => {
-  if (!IS_PRODUCTION) {
-    fastify.register(import("@fastify/compress"), {
-      encodings: ["gzip"],
-    })
-  }
 
   fastify.register(fastifyStatic, {
     prefix: "/assets/",

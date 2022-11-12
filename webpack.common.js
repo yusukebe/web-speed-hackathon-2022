@@ -37,7 +37,7 @@ module.exports = {
                 {
                   spec: true,
                   targets: {
-                    browsers: ["chrome 106"],
+                    chrome: "106",
                   },
                 },
               ],

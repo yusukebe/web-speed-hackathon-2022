@@ -1488,16 +1488,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/view@npm:^7.1.1":
-  version: 7.1.1
-  resolution: "@fastify/view@npm:7.1.1"
-  dependencies:
-    fastify-plugin: ^4.0.0
-    hashlru: ^2.3.0
-  checksum: feec29d638499b6d0b14a3eb4a0f86f94d7ea0667c10b2ed564da5805f95c94bc45bf0a987cfa83b94a199a0c50adfb4c36cf7c5de5e00a91b33bba0ec95ce59
-  languageName: node
-  linkType: hard
-
 "@gar/promisify@npm:^1.0.1":
   version: 1.1.3
   resolution: "@gar/promisify@npm:1.1.3"
@@ -5585,24 +5575,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"handlebars@npm:^4.7.7":
-  version: 4.7.7
-  resolution: "handlebars@npm:4.7.7"
-  dependencies:
-    minimist: ^1.2.5
-    neo-async: ^2.6.0
-    source-map: ^0.6.1
-    uglify-js: ^3.1.4
-    wordwrap: ^1.0.0
-  dependenciesMeta:
-    uglify-js:
-      optional: true
-  bin:
-    handlebars: bin/handlebars
-  checksum: 1e79a43f5e18d15742977cb987923eab3e2a8f44f2d9d340982bcb69e1735ed049226e534d7c1074eaddaf37e4fb4f471a8adb71cddd5bc8cf3f894241df5cee
-  languageName: node
-  linkType: hard
-
 "hard-rejection@npm:^2.1.0":
   version: 2.1.0
   resolution: "hard-rejection@npm:2.1.0"
@@ -5667,13 +5639,6 @@ __metadata:
   dependencies:
     function-bind: ^1.1.1
   checksum: b9ad53d53be4af90ce5d1c38331e712522417d017d5ef1ebd0507e07c2fbad8686fffb8e12ddecd4c39ca9b9b47431afbb975b8abf7f3c3b82c98e9aad052792
-  languageName: node
-  linkType: hard
-
-"hashlru@npm:^2.3.0":
-  version: 2.3.0
-  resolution: "hashlru@npm:2.3.0"
-  checksum: 38b3559e6fb9d19fa731edc52d8d7e72cd378f708dcb01cecd4a6ba0c52f06d7d06d6277249f5c43d9915d8dda9be31adad768a379eef188db213c3f2b09278d
   languageName: node
   linkType: hard
 
@@ -7204,29 +7169,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"modern-css-reset@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "modern-css-reset@npm:1.4.0"
-  checksum: b515d1b669251ec767d948304386c74375da694355ae1508db06f2e79e271083925b6181f95ca988f58c6d749cde0648df7826b36e5494c32a623c2fd3b19476
-  languageName: node
-  linkType: hard
-
-"moment-timezone@npm:^0.5.38":
-  version: 0.5.38
-  resolution: "moment-timezone@npm:0.5.38"
-  dependencies:
-    moment: ">= 2.9.0"
-  checksum: ff7077de41f2c41a0026cd2b310154c14df8f918331a4ebe88f5872a599deb5e463b123c96990dc447b7474a81c9f3aef7ac57c3d0dfc3bfb9af2cc5b0bca826
-  languageName: node
-  linkType: hard
-
-"moment@npm:>= 2.9.0, moment@npm:^2.29.4":
-  version: 2.29.4
-  resolution: "moment@npm:2.29.4"
-  checksum: 0ec3f9c2bcba38dc2451b1daed5daded747f17610b92427bebe1d08d48d8b7bdd8d9197500b072d14e326dd0ccf3e326b9e3d07c5895d3d49e39b6803b76e80e
-  languageName: node
-  linkType: hard
-
 "mri@npm:1.1.4":
   version: 1.1.4
   resolution: "mri@npm:1.1.4"
@@ -7321,7 +7263,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"neo-async@npm:^2.6.0, neo-async@npm:^2.6.2":
+"neo-async@npm:^2.6.2":
   version: 2.6.2
   resolution: "neo-async@npm:2.6.2"
   checksum: deac9f8d00eda7b2e5cd1b2549e26e10a0faa70adaa6fdadca701cc55f49ee9018e427f424bac0c790b7c7e2d3068db97f3093f1093975f2acb8f8818b936ed9
@@ -10404,15 +10346,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uglify-js@npm:^3.1.4":
-  version: 3.17.4
-  resolution: "uglify-js@npm:3.17.4"
-  bin:
-    uglifyjs: bin/uglifyjs
-  checksum: 7b3897df38b6fc7d7d9f4dcd658599d81aa2b1fb0d074829dd4e5290f7318dbca1f4af2f45acb833b95b1fe0ed4698662ab61b87e94328eb4c0a0d3435baf924
-  languageName: node
-  linkType: hard
-
 "unbox-primitive@npm:^1.0.1":
   version: 1.0.1
   resolution: "unbox-primitive@npm:1.0.1"
@@ -10734,7 +10667,6 @@ __metadata:
     "@cloudflare/workers-types": ^3.18.0
     "@fastify/compress": ^6.1.1
     "@fastify/static": ^6.5.0
-    "@fastify/view": ^7.1.1
     "@stylelint/postcss-css-in-js": ^0.37.2
     "@types/lodash": ^4.14.178
     "@types/node": ^16.11.68
@@ -10759,12 +10691,7 @@ __metadata:
     fastify: ^4.9.2
     fastify-sensible: ^3.1.2
     framer-motion: ^6.2.8
-    handlebars: ^4.7.7
     hono: ^2.4.1
-    lodash: ^4.17.21
-    modern-css-reset: ^1.4.0
-    moment: ^2.29.4
-    moment-timezone: ^0.5.38
     nodemon: ^2.0.15
     npm-run-all: ^4.1.5
     pino-pretty: ^7.3.0
@@ -11007,13 +10934,6 @@ __metadata:
   version: 1.2.3
   resolution: "word-wrap@npm:1.2.3"
   checksum: 30b48f91fcf12106ed3186ae4fa86a6a1842416df425be7b60485de14bec665a54a68e4b5156647dec3a70f25e84d270ca8bc8cd23182ed095f5c7206a938c1f
-  languageName: node
-  linkType: hard
-
-"wordwrap@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "wordwrap@npm:1.0.0"
-  checksum: 2a44b2788165d0a3de71fd517d4880a8e20ea3a82c080ce46e294f0b68b69a2e49cff5f99c600e275c698a90d12c5ea32aff06c311f0db2eb3f1201f3e7b2a04
   languageName: node
   linkType: hard
 

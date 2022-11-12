@@ -1,0 +1,6 @@
+{
+  "entry": [
+    "src/client/index.jsx",
+    "src/server/index.js"
+  ]
+}
