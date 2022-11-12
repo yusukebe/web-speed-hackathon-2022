@@ -32,8 +32,6 @@ const ItemWrapper = styled.div.attrs((props) => ({
   list-style-type: none;
 `
 
-//opacity: ${({ $opacity }) => $opacity};
-
 const RaceButton = styled(LinkButton)`
   background: ${Color.mono[700]};
   border-radius: ${Radius.MEDIUM};
@@ -78,7 +76,7 @@ const Item = React.memo(({ race }) => {
   }, [])
 
   // 締切はリアルタイムで表示したい
-  /*
+
   useEffect(() => {
     if (!timer.current) {
       timer.current = setInterval(() => {
@@ -89,7 +87,6 @@ const Item = React.memo(({ race }) => {
       clearInterval(timer.current)
     }
   }, [formatCloseAt, race.closeAt])
-
 
   const {
     abortAnimation,
@@ -111,10 +108,6 @@ const Item = React.memo(({ race }) => {
       abortAnimation()
     }
   }, [race.id, startAnimation, abortAnimation, resetAnimation])
-
-  */
-
-  const opacity = 100
 
   const match = race.image.match(/([0-9]+)\.jpg/)
   const url = match ? `/assets/images/races/100x100/${match[1]}.webp` : `/assets/images/races/100x100/gray.webp`

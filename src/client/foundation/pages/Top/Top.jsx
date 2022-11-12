@@ -13,11 +13,13 @@ import { useAuthorizedFetch } from "../../hooks/useAuthorizedFetch"
 import { useFetch } from "../../hooks/useFetch"
 import { Color, Radius, Space } from "../../styles/variables"
 import { isSameDay } from "../../utils/DateUtils"
-import { authorizedJsonFetcher, jsonFetcher } from "../../utils/HttpUtils"
+import { authorizedJsonFetcher } from "../../utils/HttpUtils"
 
 //import ChargeDialog from './internal/ChargeDialog'
 import { HeroImage } from "./internal/HeroImage"
 import { BlankItem, RecentRaceList } from "./internal/RecentRaceList"
+
+const ChargeDialog = React.lazy(() => import("./internal/ChargeDialog"))
 
 function useTodayRacesWithAnimation(races) {
   const [isRacesUpdate, setIsRacesUpdate] = useState(false)
@@ -72,8 +74,6 @@ function useTodayRacesWithAnimation(races) {
 
   return racesToShow
 }
-
-const ChargeDialog = React.lazy(() => import("./internal/ChargeDialog"))
 
 const ChargeButton = styled.button`
 background: ${Color.mono[700]};
@@ -153,9 +153,7 @@ export const Top = () => {
         : [])
     }, [date, raceData])
 
-  const todayRacesToShow = todayRaces
-
-  //const todayRacesToShow = useTodayRacesWithAnimation(todayRaces)
+  const todayRacesToShow = useTodayRacesWithAnimation(todayRaces)
 
   const hero = useMemo(() => {
     return <HeroImage url={heroImageUrl} urlSmall={heroSmallImageUrl} />
