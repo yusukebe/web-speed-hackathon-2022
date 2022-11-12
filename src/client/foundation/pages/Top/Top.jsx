@@ -35,6 +35,7 @@ function useTodayRacesWithAnimation(races) {
     setIsRacesUpdate(isRacesUpdate)
   }, [races])
 
+
   useEffect(() => {
     if (!isRacesUpdate) {
       return
@@ -69,10 +70,8 @@ function useTodayRacesWithAnimation(races) {
     }
   }, [])
 
-
   return racesToShow
 }
-
 
 const ChargeDialog = React.lazy(() => import("./internal/ChargeDialog"))
 
@@ -154,7 +153,9 @@ export const Top = () => {
         : [])
     }, [date, raceData])
 
-  const todayRacesToShow = useTodayRacesWithAnimation(todayRaces)
+  const todayRacesToShow = todayRaces
+
+  //const todayRacesToShow = useTodayRacesWithAnimation(todayRaces)
 
   const hero = useMemo(() => {
     return <HeroImage url={heroImageUrl} urlSmall={heroSmallImageUrl} />
