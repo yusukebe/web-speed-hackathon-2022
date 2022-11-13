@@ -75,16 +75,14 @@ export const appRoute = async (fastify) => {
     const imageURL = `/assets/images/races/400x225/${match[1]}.webp`
 
     let hero = `<link rel="preload" href="${imageURL}" as="image" />` // `<link rel="preload" href="${grayURL}" as="image" />`
-    const jsHero = `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
 
     if (req.url.toString().match(/.+odds$/)) {
       //hero = hero + '<link rel="preload" href="/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="font" crossorigin/>' + jsHero
       //res.raw.setHeader("Link", `<${imageURL}>; rel="preload"; as="image, </assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel="preload"; as="font"`)
-      res.raw.setHeader("Link", `<${imageURL}>; rel="preload"; as="image"`)
-      hero = hero + jsHero
+      res.raw.setHeader("Link", `</assets/js/main.bundle.js>; rel="preload"; as="script", <${imageURL}>; rel="preload"; as="image"`)
     } else {
-      res.raw.setHeader("Link", `<${imageURL}>; rel="preload"; as="image"`)
-      hero = hero + jsHero
+      res.raw.setHeader("Link", `</assets/js/main.bundle.js>; rel="preload"; as="script", <${imageURL}>; rel="preload"; as="image"`)
+      //res.raw.setHeader("Link", `<${imageURL}>; rel="preload"; as="image"`)
     }
 
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")

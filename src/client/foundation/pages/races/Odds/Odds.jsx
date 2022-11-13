@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import dayjs from 'dayjs'
-import React, { useCallback, useRef, useState } from "react"
+import React, { Suspense, useCallback, useRef, useState } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
