@@ -12,7 +12,17 @@ module.exports = merge(common, {
   mode: "production", // 開発モード
   optimization: {
     minimize: true,
-    minimizer: [new TerserPlugin()],
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          mangle: {
+            properties: {
+              regex: /^_/,
+            },
+          },
+        },
+      }),
+    ],
     moduleIds: "size",
     nodeEnv: "production",
   },

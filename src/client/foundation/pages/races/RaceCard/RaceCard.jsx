@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react"
+import React from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
@@ -14,13 +14,9 @@ import { Color, Radius, Space } from "../../../styles/variables"
 import { formatTime } from "../../../utils/DateUtils"
 import { jsonFetcher } from "../../../utils/HttpUtils"
 
-
 import EntryTable from './internal/EntryTable'
 import PlayerPictureList from "./internal/PlayerPictureList"
 
-
-//const PlayerPictureList = lazy(() => import("./internal/PlayerPictureList"))
-//const EntryTable = lazy(() => import('./internal/EntryTable'))
 
 const LiveBadge = styled.span`
   background: ${Color.red};

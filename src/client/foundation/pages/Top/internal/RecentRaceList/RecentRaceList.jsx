@@ -18,8 +18,6 @@ export const RecentRaceList = React.memo(({ children }) => {
   )
 })
 
-//const ItemWrapper = 
-
 const ItemWrapper = styled.div.attrs((props) => ({
   style: {
     opacity: props.opacity

@@ -1,5 +1,5 @@
 import React from "react"
-import * as ReactDOMClient from "react-dom/client"
+import { hydrateRoot } from "react-dom/client"
 
 import { App } from "./foundation/App"
 
@@ -9,7 +9,7 @@ const root = ReactDOMClient.createRoot(container)
 root.render(<App />)
 */
 
-ReactDOMClient.hydrateRoot(
+hydrateRoot(
   document.getElementById('root'),
   <App />
 )
