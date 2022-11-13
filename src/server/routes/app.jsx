@@ -81,6 +81,7 @@ export const appRoute = async (fastify) => {
       //hero = hero + '<link rel="preload" href="/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="font" crossorigin/>' + jsHero
       //res.raw.setHeader("Link", `<${imageURL}>; rel="preload"; as="image, </assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel="preload"; as="font"`)
       res.raw.setHeader("Link", `<${imageURL}>; rel="preload"; as="image"`)
+      hero = hero + jsHero
     } else {
       res.raw.setHeader("Link", `<${imageURL}>; rel="preload"; as="image"`)
       hero = hero + jsHero
