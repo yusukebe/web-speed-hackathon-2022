@@ -15,11 +15,14 @@ module.exports = merge(common, {
     minimizer: [
       new TerserPlugin({
         terserOptions: {
+          ecma: 2022,
           mangle: {
             properties: {
               regex: /^_/,
             },
           },
+          module: true,
+          toplevel: true,
         },
       }),
     ],
