@@ -152,7 +152,7 @@ export const Top = () => {
         : [])
     }, [date, raceData])
 
-  const todayRacesToShow = useTodayRacesWithAnimation(todayRaces)
+  const todayRacesToShow = todayRaces // useTodayRacesWithAnimation(todayRaces)
 
   const hero = useMemo(() => {
     return <HeroImage url={heroImageUrl} urlSmall={heroSmallImageUrl} />
@@ -196,6 +196,11 @@ export const Top = () => {
 }
 
 const Lists = React.memo(({ races }) => {
+  if (races.length < 24) {
+    return [...Array(24)].map((_, i) => {
+      return <BlankItem key={`list-${i}`} ></BlankItem>
+    })
+  }
   return [...Array(24)].map((_, i) => {
     const race = races ? races[i] : null
     if (race) {
@@ -205,5 +210,3 @@ const Lists = React.memo(({ races }) => {
     }
   })
 })
-
-

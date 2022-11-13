@@ -32,12 +32,13 @@ const ItemWrapper = styled.div.attrs((props) => ({
   list-style-type: none;
 `
 
+//opacity: ${({ $opacity }) => $opacity};
+
 const RaceButton = styled(LinkButton)`
   background: ${Color.mono[700]};
   border-radius: ${Radius.MEDIUM};
   color: ${Color.mono[0]};
   padding: ${Space * 1}px ${Space * 2}px;
-
   &:hover {
     background: ${Color.mono[800]};
   }
@@ -62,7 +63,6 @@ const Item = React.memo(({ race }) => {
   const [closeAtText, setCloseAtText] = useState('loading...')
 
   const formatCloseAt = useCallback((closeAt, now) => {
-    if (!now) return
     if (dayjs(closeAt).isBefore(now)) {
       clearInterval(timer.current)
       return "投票締切"
@@ -113,7 +113,7 @@ const Item = React.memo(({ race }) => {
   const url = match ? `/assets/images/races/100x100/${match[1]}.webp` : `/assets/images/races/100x100/gray.webp`
 
   return (
-    <ItemWrapper>
+    <ItemWrapper opacity={opacity}>
       <Stack horizontal alignItems="center" justifyContent="space-between">
         <Stack gap={Space * 1}>
           <RaceTitle>{race.name}</RaceTitle>
@@ -124,7 +124,7 @@ const Item = React.memo(({ race }) => {
 
         <Stack.Item grow={0} shrink={0}>
           <Stack horizontal alignItems="center" gap={Space * 2}>
-            <img height={100} loading={'lazy'} src={url} width={100} />
+            <img height={100} loading="lazy" src={url} width={100} />
             <RaceButton to={`/races/${race.id}/race-card`}>投票</RaceButton>
           </Stack>
         </Stack.Item>
@@ -138,7 +138,7 @@ RecentRaceList.Item = Item
 
 export const BlankItem = React.memo(() => {
   return (
-    <ItemWrapper $opacity={10}>
+    <ItemWrapper>
       <Stack horizontal alignItems="center" justifyContent="space-between">
         <Stack gap={Space * 1}>
           <RaceTitle>&nbsp;</RaceTitle>
