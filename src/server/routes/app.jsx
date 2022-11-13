@@ -39,9 +39,6 @@ export const appRoute = async (fastify) => {
     stream.on('end', () => res.raw.end(getBottom()))
 
     res.send(stream)
-
-    //res.send(top + getBottom())
-
   })
 
   fastify.get("/:date", async (req, res) => {
@@ -64,48 +61,36 @@ export const appRoute = async (fastify) => {
 
     res.send(stream)
 
-    //res.send(top + getBottom())
   })
 
   fastify.get("/races/:raceId/*", async (req, res) => {
     const repo = (await createConnection()).getRepository(Race)
     const race = await repo.findOne(req.params.raceId)
 
-    /*
-    const race = await repo.findOne(req.params.raceId, {
-      relations: ["entries", "entries.player", "trifectaOdds"],
-    })*/
-
     const sheet = new ServerStyleSheet()
     const jsx = sheet.collectStyles(<App location={req.url.toString()} serverData={race} />)
     const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
 
-    //    const race = await repo.findOne(req.params.raceId)
     const match = race.image.match(/([0-9]+)\.jpg$/)
-    //const grayURL = `/assets/images/races/400x225/gray.webp`
     const imageURL = `/assets/images/races/400x225/${match[1]}.webp`
 
     let hero = `<link rel="preload" href="${imageURL}" as="image" />` // `<link rel="preload" href="${grayURL}" as="image" />`
     const jsHero = `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
 
     if (req.url.toString().match(/.+odds$/)) {
-      hero = hero + '<link rel="preload" href="/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="font" />'
+      hero = hero + jsHero + '<link rel="preload" href="/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="font" />'
       res.raw.setHeader("Link", `<${imageURL}>; rel="preload"; as="image, </assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel="preload"; as="font"`)
     } else {
       res.raw.setHeader("Link", `<${imageURL}>; rel="preload"; as="image"`)
+      hero = hero + jsHero
     }
 
-    hero = hero + jsHero
-    //res.raw.setHeader("Link", `<${grayURL}>; rel="preload"; as="image", <${imageURL}>; rel="preload"; as="image"`)
-    //res.raw.setHeader("Link", `<${imageURL}>; rel="preload"; as="image"`)
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
     const top = `${getHead(hero)}<body><div id="root" data-react=${JSON.stringify(race)}>`
 
     res.raw.write(top)
     stream.on('end', () => res.raw.end(getBottom()))
     res.send(stream)
-
-    //res.send(top + getBottom())
   })
 
 }

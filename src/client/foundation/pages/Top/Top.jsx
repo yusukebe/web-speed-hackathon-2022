@@ -15,7 +15,6 @@ import { Color, Radius, Space } from "../../styles/variables"
 import { isSameDay } from "../../utils/DateUtils"
 import { authorizedJsonFetcher } from "../../utils/HttpUtils"
 
-//import ChargeDialog from './internal/ChargeDialog'
 import { HeroImage } from "./internal/HeroImage"
 import { BlankItem, RecentRaceList } from "./internal/RecentRaceList"
 
