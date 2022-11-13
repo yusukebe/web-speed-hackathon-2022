@@ -2,7 +2,6 @@ import React from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
-
 import { RaceImage } from '../../../components/RaceImage'
 import { Container } from "../../../components/layouts/Container"
 import { Section } from "../../../components/layouts/Section"
@@ -16,7 +15,6 @@ import { jsonFetcher } from "../../../utils/HttpUtils"
 
 import EntryTable from './internal/EntryTable'
 import PlayerPictureList from "./internal/PlayerPictureList"
-
 
 const LiveBadge = styled.span`
   background: ${Color.red};

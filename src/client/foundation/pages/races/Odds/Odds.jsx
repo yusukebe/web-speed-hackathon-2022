@@ -14,9 +14,9 @@ import { useFetch } from "../../../hooks/useFetch"
 import { Color, Radius, Space } from "../../../styles/variables"
 import { formatTime } from "../../../utils/DateUtils"
 
-//import OddsRankingList from './internal/OddsRankingList'
+import OddsRankingList from './internal/OddsRankingList'
 
-const OddsRankingList = lazy(() => import('./internal/OddsRankingList'))
+//const OddsRankingList = lazy(() => import('./internal/OddsRankingList'))
 import OddsTable from './internal/OddsTable'
 import { TicketVendingModal } from "./internal/TicketVendingModal"
 
@@ -174,13 +174,11 @@ export const Odds = React.memo(({ serverData }) => {
 
 
         <Spacer mt={Space * 2} />
-        <Suspense fallback="" >
-          <OddsRankingList
-            isRaceClosed={isRaceClosed}
-            odds={data.trifectaOdds}
-            onClickOdds={handleClickOdds}
-          />
-        </Suspense>
+        <OddsRankingList
+          isRaceClosed={isRaceClosed}
+          odds={data.trifectaOdds}
+          onClickOdds={handleClickOdds}
+        />
       </Section>
 
       <TicketVendingModal ref={modalRef} odds={oddsKeyToBuy} raceId={raceId} />
