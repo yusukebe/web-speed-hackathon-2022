@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import dayjs from 'dayjs'
-import React, { Suspense, useCallback, useRef, useState } from "react"
+import React, { lazy, Suspense, useCallback, useRef, useState } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
@@ -14,7 +14,9 @@ import { useFetch } from "../../../hooks/useFetch"
 import { Color, Radius, Space } from "../../../styles/variables"
 import { formatTime } from "../../../utils/DateUtils"
 
-import OddsRankingList from './internal/OddsRankingList'
+//import OddsRankingList from './internal/OddsRankingList'
+
+const OddsRankingList = lazy(() => import('./internal/OddsRankingList'))
 import OddsTable from './internal/OddsTable'
 import { TicketVendingModal } from "./internal/TicketVendingModal"
 
@@ -170,12 +172,15 @@ export const Odds = React.memo(({ serverData }) => {
         <Spacer mt={Space * 4} />
         <Heading as="h2">人気順</Heading>
 
+
         <Spacer mt={Space * 2} />
-        <OddsRankingList
-          isRaceClosed={isRaceClosed}
-          odds={data.trifectaOdds}
-          onClickOdds={handleClickOdds}
-        />
+        <Suspense fallback="" >
+          <OddsRankingList
+            isRaceClosed={isRaceClosed}
+            odds={data.trifectaOdds}
+            onClickOdds={handleClickOdds}
+          />
+        </Suspense>
       </Section>
 
       <TicketVendingModal ref={modalRef} odds={oddsKeyToBuy} raceId={raceId} />
