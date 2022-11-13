@@ -113,7 +113,7 @@ const Item = React.memo(({ race }) => {
   const url = match ? `/assets/images/races/100x100/${match[1]}.webp` : `/assets/images/races/100x100/gray.webp`
 
   return (
-    <ItemWrapper opacity={opacity}>
+    <ItemWrapper>
       <Stack horizontal alignItems="center" justifyContent="space-between">
         <Stack gap={Space * 1}>
           <RaceTitle>{race.name}</RaceTitle>

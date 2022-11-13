@@ -1,5 +1,6 @@
-import React from "react";
-import styled from "styled-components";
+/* eslint-disable react/display-name */
+import React from "react"
+import styled from "styled-components"
 
 const Wrapper = styled.button`
   align-items: center;
@@ -14,7 +15,7 @@ const Wrapper = styled.button`
   &:disabled {
     cursor: initial;
   }
-`;
+`
 
 /**
  * @typedef Props
@@ -22,6 +23,6 @@ const Wrapper = styled.button`
  */
 
 /** @type {React.FC<Props & React.ButtonHTMLAttributes>} */
-export const BaseButton = (props) => {
-  return <Wrapper {...props} />;
-};
+export const BaseButton = React.memo((props) => {
+  return <Wrapper {...props} />
+})

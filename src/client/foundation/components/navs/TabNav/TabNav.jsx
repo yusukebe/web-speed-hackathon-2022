@@ -1,9 +1,10 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
+/* eslint-disable react/display-name */
+import React from "react"
+import { Link } from "react-router-dom"
+import styled from "styled-components"
 
-import { BreakPoint, Color, Radius, Space } from "../../../styles/variables";
-import { Stack } from "../../layouts/Stack";
+import { BreakPoint, Color, Radius, Space } from "../../../styles/variables"
+import { Stack } from "../../layouts/Stack"
 
 /**
  * @typedef ItemProps
@@ -34,7 +35,7 @@ const ItemWrapper = styled.li`
       width: 160px;
     }
   }
-`;
+`
 
 /** @type {React.FC<ItemProps & React.AnchorHTMLAttributes>} */
 const Item = ({ "aria-current": ariaCurrent, children, to, ...rest }) => {
@@ -50,16 +51,17 @@ const Item = ({ "aria-current": ariaCurrent, children, to, ...rest }) => {
         </Link>
       )}
     </ItemWrapper>
-  );
-};
+  )
+}
 
-export const TabNav = ({ children }) => {
+export const TabNav = React.memo(({ children }) => {
   return (
     <nav>
       <Stack horizontal as="ul" gap={Space * 2}>
         {children}
       </Stack>
     </nav>
-  );
-};
-TabNav.Item = Item;
+  )
+})
+
+TabNav.Item = Item
