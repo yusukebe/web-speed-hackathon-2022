@@ -6,7 +6,7 @@ import Footer from "../../components/navs/Footer"
 import Header from "../../components/navs/Header"
 
 
-export const CommonLayout = () => {
+export const CommonLayout = React.memo(() => {
   return (
     <div>
       <Header />
@@ -16,4 +16,4 @@ export const CommonLayout = () => {
       <Footer />
     </div>
   )
-}
+})

@@ -97,7 +97,7 @@ export const OddsTable = ({ entries, isRaceClosed, odds, onClickOdds }) => {
   }, {})
 
   return (
-    <div>
+    <>
       <Stack horizontal>
         <RankLabel>1位軸</RankLabel>
         <select onChange={handleChange} value={firstKey}>
@@ -160,6 +160,6 @@ export const OddsTable = ({ entries, isRaceClosed, odds, onClickOdds }) => {
           </Table>
         </div>
       </ScrollWrapper>
-    </div>
+    </>
   )
 }
