@@ -27,7 +27,7 @@ export const appRoute = async (fastify) => {
     const jsx = sheet.collectStyles(<App location={req.url.toString()} />)
     const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
 
-    res.raw.setHeader("Link", `</assets/images/hero-small.webp>; rel="preload; as="image", </assets/js/main.bundle.js>; rel="preload; as="script"`)
+    res.raw.setHeader("Link", `</assets/images/hero-small.webp>; rel=preload; as=image, </assets/js/main.bundle.js>; rel=preload; as=script`)
 
     let hero = `<link rel="preload" href="/assets/images/hero-small.webp" as="image" />`
     const jsHero = `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
@@ -45,7 +45,7 @@ export const appRoute = async (fastify) => {
     const jsx = sheet.collectStyles(<App location={req.url.toString()} />)
     const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
 
-    res.raw.setHeader("Link", `</assets/images/hero-small.webp>; rel="preload; as="image", </assets/js/main.bundle.js>; rel="preload; as="script"`)
+    res.raw.setHeader("Link", `</assets/images/hero-small.webp>; rel=preload; as=image, </assets/js/main.bundle.js>; rel=preload; as=script`)
 
     let hero = `<link rel="preload" href="/assets/images/hero-small.webp" as="image" />`
     const jsHero = `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
@@ -68,7 +68,7 @@ export const appRoute = async (fastify) => {
     const imageURL = `/assets/images/races/400x225/${match[1]}.webp`
 
     let hero = `<link rel="preload" href="/assets/js/main.bundle.js" as="script" /><link rel="preload" href="${imageURL}" as="image" />` // `<link rel="preload" href="${grayURL}" as="image" />`
-    res.raw.setHeader("Link", `</assets/js/main.bundle.js>; rel="preload"; as="script", <${imageURL}>; rel="preload"; as="image"`)
+    res.raw.setHeader("Link", `</assets/js/main.bundle.js>; rel=preload; as=script, <${imageURL}>; rel=preload; as=image`)
 
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
 
