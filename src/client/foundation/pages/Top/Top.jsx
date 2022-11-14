@@ -58,7 +58,7 @@ function useTodayRacesWithAnimation(races) {
 
       numberOfRacesToShow.current++
       setRacesToShow(races.slice(0, numberOfRacesToShow.current))
-    }, 50)
+    }, 100)
   }, [isRacesUpdate, races])
 
   useEffect(() => {

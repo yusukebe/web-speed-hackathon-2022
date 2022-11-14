@@ -18,19 +18,26 @@ export const RecentRaceList = React.memo(({ children }) => {
   )
 })
 
-const ItemWrapper = styled.div.attrs((props) => ({
-  style: {
-    opacity: props.opacity
+const ItemWrapper = styled.div`
+  @keyframes fadeInOpacity {
+    0% {
+      opacity: 0;
+    }
+  100% {
+		  opacity: 1;
+    }
   }
-}
-))`
+  opacity: 1;
+  animation-name: fadeInOpacity;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
+  animation-duration: 0.5s;
+
   background: ${Color.mono[0]};
   border-radius: ${Radius.MEDIUM};
   padding: ${Space * 3}px;
   list-style-type: none;
 `
-
-//opacity: ${({ $opacity }) => $opacity};
 
 const RaceButton = styled(LinkButton)`
   background: ${Color.mono[700]};
@@ -86,32 +93,12 @@ const Item = React.memo(({ race }) => {
     }
   }, [formatCloseAt, race.closeAt])
 
-  const {
-    abortAnimation,
-    resetAnimation,
-    startAnimation,
-    value: opacity,
-  } = useAnimation({
-    duration: 500,
-    end: 1,
-    start: 0,
-    timingFunction: easeOutCubic,
-  })
-
-  useEffect(() => {
-    resetAnimation()
-    startAnimation()
-
-    return () => {
-      abortAnimation()
-    }
-  }, [race.id, startAnimation, abortAnimation, resetAnimation])
 
   const match = race.image.match(/([0-9]+)\.jpg/)
   const url = match ? `/assets/images/races/100x100/${match[1]}.webp` : `/assets/images/races/100x100/gray.webp`
 
   return (
-    <ItemWrapper opacity={opacity}>
+    <ItemWrapper>
       <Stack horizontal alignItems="center" justifyContent="space-between">
         <Stack gap={Space * 1}>
           <RaceTitle>{race.name}</RaceTitle>
