@@ -60,7 +60,7 @@ function useTodayRacesWithAnimation(races) {
 
       numberOfRacesToShow.current++
       setRacesToShow(races.slice(0, numberOfRacesToShow.current))
-    }, 0)
+    }, 50)
   }, [isRacesUpdate, races])
 
   useEffect(() => {
@@ -152,7 +152,7 @@ export const Top = () => {
         : [])
     }, [date, raceData])
 
-  const todayRacesToShow = todayRaces // useTodayRacesWithAnimation(todayRaces)
+  const todayRacesToShow = useTodayRacesWithAnimation(todayRaces)
 
   const hero = useMemo(() => {
     return <HeroImage url={heroImageUrl} urlSmall={heroSmallImageUrl} />
@@ -196,11 +196,6 @@ export const Top = () => {
 }
 
 const Lists = React.memo(({ races }) => {
-  if (races.length < 24) {
-    return [...Array(24)].map((_, i) => {
-      return <BlankItem key={`list-${i}`} ></BlankItem>
-    })
-  }
   return [...Array(24)].map((_, i) => {
     const race = races ? races[i] : null
     if (race) {
