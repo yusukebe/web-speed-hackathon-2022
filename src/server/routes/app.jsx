@@ -71,6 +71,9 @@ export const appRoute = async (fastify) => {
     res.raw.setHeader("Link", `</assets/js/main.bundle.js>; rel="preload"; as="script", <${imageURL}>; rel="preload"; as="image"`)
 
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
+
+    delete race['entries']
+
     const top = `${getHead(hero)}<body><div id="root" data-react=${JSON.stringify(race)}>`
 
     res.raw.write(top)
