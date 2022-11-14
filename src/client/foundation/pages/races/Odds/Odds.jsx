@@ -173,11 +173,13 @@ export const Odds = React.memo(({ serverData }) => {
         <Heading as="h2">人気順</Heading>
 
         <Spacer mt={Space * 2} />
-        <OddsRankingList
-          isRaceClosed={isRaceClosed}
-          odds={data.trifectaOdds}
-          onClickOdds={handleClickOdds}
-        />
+        {data.trifectaOdds.length > 1 ?
+          <OddsRankingList
+            isRaceClosed={isRaceClosed}
+            odds={data.trifectaOdds}
+            onClickOdds={handleClickOdds}
+          />
+          : <></>}
       </Section>
 
       <TicketVendingModal ref={modalRef} odds={oddsKeyToBuy} raceId={raceId} />
