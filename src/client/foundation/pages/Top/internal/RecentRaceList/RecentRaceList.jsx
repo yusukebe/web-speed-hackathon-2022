@@ -79,7 +79,7 @@ const Item = React.memo(({ race }) => {
     if (!timer.current) {
       timer.current = setInterval(() => {
         setCloseAtText(formatCloseAt(race.closeAt, new Date()))
-      }, 1)
+      }, 500)
     }
     return () => {
       clearInterval(timer.current)

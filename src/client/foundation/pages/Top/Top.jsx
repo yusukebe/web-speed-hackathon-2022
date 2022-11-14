@@ -48,13 +48,11 @@ function useTodayRacesWithAnimation(races) {
     }
 
     numberOfRacesToShow.current = 0
-    if (timer.current !== null) {
-      clearInterval(timer.current)
-    }
 
     timer.current = setInterval(() => {
-      if (numberOfRacesToShow.current >= races.length) {
+      if (numberOfRacesToShow.current === races.length) {
         clearInterval(timer.current)
+        timer.current = null
         return
       }
 
@@ -65,9 +63,7 @@ function useTodayRacesWithAnimation(races) {
 
   useEffect(() => {
     return () => {
-      if (timer.current !== null) {
-        clearInterval(timer.current)
-      }
+      clearInterval(timer.current)
     }
   }, [])
 
