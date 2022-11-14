@@ -83,14 +83,7 @@ export const appRoute = async (fastify) => {
     const imageURL = `/assets/images/races/400x225/${match[1]}.webp`
 
     let hero = `<link rel="preload" href="${imageURL}" as="image" />` // `<link rel="preload" href="${grayURL}" as="image" />`
-
-    if (req.url.toString().match(/.+odds$/)) {
-      hero = hero + '<link rel="preload" href="/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="font" crossorigin/>'
-      res.raw.setHeader("Link", `</assets/js/main.bundle.js>; rel="preload"; as="script", <${imageURL}>; rel="preload"; as="image", </assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel="preload"; as="font"; crossorigin`)
-      //res.raw.setHeader("Link", `</assets/js/main.bundle.js>; rel="preload"; as="script", <${imageURL}>; rel="preload"; as="image"`)
-    } else {
-      res.raw.setHeader("Link", `</assets/js/main.bundle.js>; rel="preload"; as="script", <${imageURL}>; rel="preload"; as="image"`)
-    }
+    res.raw.setHeader("Link", `</assets/js/main.bundle.js>; rel="preload"; as="script", <${imageURL}>; rel="preload"; as="image"`)
 
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
     const top = `${getHead(hero)}<body><div id="root" data-react=${JSON.stringify(race)}>`
