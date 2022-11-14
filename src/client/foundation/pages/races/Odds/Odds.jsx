@@ -41,7 +41,7 @@ const Callout = styled.aside`
   padding: ${Space * 1}px ${Space * 2}px;
 `
 
-const entries = [...Array(6)].map((_, i) => ({
+const entries = [...Array(4)].map((_, i) => ({
   "id": `${i}`,
   "number": `${i}`,
   "player": {
@@ -50,7 +50,7 @@ const entries = [...Array(6)].map((_, i) => ({
   },
 }))
 
-const odds = [...Array(10)].map((_, i) => ({
+const odds = [...Array(1)].map((_, i) => ({
   "id": `${i}`,
   "key": [
     i,
@@ -171,7 +171,6 @@ export const Odds = React.memo(({ serverData }) => {
 
         <Spacer mt={Space * 4} />
         <Heading as="h2">人気順</Heading>
-
 
         <Spacer mt={Space * 2} />
         <OddsRankingList
