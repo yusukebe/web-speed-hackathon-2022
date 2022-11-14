@@ -71,7 +71,7 @@ export const appRoute = async (fastify) => {
 
     if (req.url.toString().match(/.+odds$/)) {
       hero = hero + `<link rel="preload" href="/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="font" />`
-      res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image, </assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=font; crossorigin`)
+      res.raw.setHeader("Link", `</assets/js/main.bundle.js>; rel=preload; as=script, <${imageURL}>; rel=preload; as=image, </assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=font; crossorigin, </assets/js/odds.bundle.js>; rel=preload; as=script`)
     } else {
       res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image`)
     }

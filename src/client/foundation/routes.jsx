@@ -4,7 +4,7 @@ import { Route, Routes as RouterRoutes } from "react-router-dom"
 //const CommonLayout = lazy(() => import('./layouts/CommonLayout'))
 
 const Top = lazy(() => import('./pages/Top'))
-const Odds = lazy(() => import('./pages/races/Odds'))
+const Odds = lazy(() => import(/* webpackChunkName: "odds" */ './pages/races/Odds'))
 const RaceCard = lazy(() => import('./pages/races/RaceCard'))
 const RaceResult = lazy(() => import('./pages/races/RaceResult'))
 
