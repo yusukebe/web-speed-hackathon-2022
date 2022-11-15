@@ -60,6 +60,9 @@ export const appRoute = async (fastify) => {
   fastify.get("/races/:raceId/*", async (req, res) => {
     const repo = (await createConnection()).getRepository(Race)
     const race = await repo.findOne(req.params.raceId)
+
+    delete race['entries']
+
     const sheet = new ServerStyleSheet()
     const jsx = sheet.collectStyles(<App location={req.url.toString()} serverData={race} />)
     const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
@@ -70,15 +73,13 @@ export const appRoute = async (fastify) => {
     let hero = `<link rel="preload" href="${imageURL}" as="image" />`
 
     if (req.url.toString().match(/.+odds$/)) {
-      hero = hero + `<link rel="preload" href="/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="font" />`
+      hero = hero + `<link rel="preload" href="/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="font" crossorigin/>`
       res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image, </assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=font; crossorigin`)
     } else {
       res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image`)
     }
 
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
-
-    delete race['entries']
 
     const top = `${getHead(hero)}<body><div id="root" data-react=${JSON.stringify(race)}>`
 
