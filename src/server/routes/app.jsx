@@ -11,13 +11,20 @@ import { createConnection } from "../typeorm/connection.js"
 
 export const appRoute = async (fastify) => {
 
-  fastify.register(fastifyStatic, {
+  await fastify.register(
+    import('@fastify/compress'),
+    { encodings: ['gzip'] }
+  )
+
+
+  await fastify.register(fastifyStatic, {
     prefix: "/assets/",
     root: join(__dirname, "public/assets"),
     wildcard: false,
   })
 
-  fastify.register(import('@fastify/early-hints'), {
+
+  await fastify.register(import('@fastify/early-hints'), {
     warn: true
   })
 
