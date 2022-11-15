@@ -53,7 +53,11 @@ export const appRoute = async (fastify) => {
 
   fastify.get("/races/:raceId/*", async (req, res) => {
     const repo = (await createConnection()).getRepository(Race)
-    const race = await repo.findOne(req.params.raceId)
+    //const race = await repo.findOne(req.params.raceId)
+
+    const race = await repo.findOne(req.params.raceId, {
+      relations: ["entries", "entries.player", "trifectaOdds"],
+    })
 
     const sheet = new ServerStyleSheet()
     const jsx = sheet.collectStyles(<App location={req.url.toString()} serverData={race} />)
@@ -73,6 +77,7 @@ export const appRoute = async (fastify) => {
 
     res.writeEarlyHints([
       { name: 'Link', value: `<${imageURL}>; rel=preload; as=image` },
+      { name: 'Link', value: `</assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=image; crossorigin` },
     ])
 
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")

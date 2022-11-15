@@ -101,8 +101,8 @@ export const Odds = React.memo(({ serverData }) => {
         if (dataPool) {
           const initialData = JSON.parse(dataPool)
           data = initialData
-          data.entries = entries
-          data.trifectaOdds = odds
+          //data.entries = entries
+          //data.trifectaOdds = odds
         } else {
           data = preData
         }
@@ -114,8 +114,8 @@ export const Odds = React.memo(({ serverData }) => {
     }
   } else {
     data = serverData
-    data.entries = entries
-    data.trifectaOdds = odds
+    //data.entries = entries
+    //data.trifectaOdds = odds
   }
 
   const match = data ? data.image.match(/([0-9]+)\.jpg$/) : null
@@ -158,31 +158,34 @@ export const Odds = React.memo(({ serverData }) => {
             : "オッズをクリックすると拳券が購入できます"}
         </Callout>
 
-        <Spacer mt={Space * 4} />
-        <Heading as="h2">オッズ表</Heading>
+        <Suspense fallback="loading...">
+          <Spacer mt={Space * 4} />
+          <Heading as="h2">オッズ表</Heading>
 
-        <Spacer mt={Space * 2} />
-        <OddsTable
-          entries={data.entries}
-          isRaceClosed={isRaceClosed}
-          odds={data.trifectaOdds}
-          onClickOdds={handleClickOdds}
-        />
-
-        <Spacer mt={Space * 4} />
-        <Heading as="h2">人気順</Heading>
-
-        <Spacer mt={Space * 2} />
-        {data.trifectaOdds.length > 1 ?
-          <OddsRankingList
+          <Spacer mt={Space * 2} />
+          <OddsTable
+            entries={data.entries}
             isRaceClosed={isRaceClosed}
             odds={data.trifectaOdds}
             onClickOdds={handleClickOdds}
           />
-          : <></>}
+
+          <Spacer mt={Space * 4} />
+          <Heading as="h2">人気順</Heading>
+
+          <Spacer mt={Space * 2} />
+          {data.trifectaOdds.length > 1 ?
+            <OddsRankingList
+              isRaceClosed={isRaceClosed}
+              odds={data.trifectaOdds}
+              onClickOdds={handleClickOdds}
+            />
+            : <></>}
+        </Suspense>
       </Section>
 
+
       <TicketVendingModal ref={modalRef} odds={oddsKeyToBuy} raceId={raceId} />
-    </Container>
+    </Container >
   )
 })

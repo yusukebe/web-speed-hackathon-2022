@@ -57,7 +57,7 @@ export const RaceCard = ({ serverData }) => {
         if (dataPool) {
           const initialData = JSON.parse(dataPool)
           data = initialData
-          data.entries = entries
+          //data.entries = entries
         } else {
           data = preData
         }
@@ -69,7 +69,7 @@ export const RaceCard = ({ serverData }) => {
     }
   } else {
     data = serverData
-    data.entries = entries
+    //data.entries = entries
   }
 
   const match = data ? data.image.match(/([0-9]+)\.jpg$/) : null
