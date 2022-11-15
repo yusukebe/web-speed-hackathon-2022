@@ -1,4 +1,7 @@
 import "regenerator-runtime/runtime";
+import * as fs from "fs";
+import * as http2 from "http2";
+
 import fastify from "fastify";
 import fastifySensible from "fastify-sensible";
 
@@ -10,9 +13,22 @@ import { createConnection } from "./typeorm/connection.js";
 
 export const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
-const server = fastify({
-  logger: IS_PRODUCTION ? false : {},
+let server = fastify({
+  logger: true,
 });
+
+if (IS_PRODUCTION) {
+  const certPath = "/etc/letsencrypt/live/wsh2022.yusukebe.com";
+
+  server = fastify({
+    http2: true,
+    https: {
+      cert: fs.readFileSync(`${certPath}/fullchain.pem`),
+      key: fs.readFileSync(`${certPath}/privkey.pem`),
+    },
+  });
+}
+
 server.register(fastifySensible);
 
 server.addHook("onRequest", async (req, res) => {
