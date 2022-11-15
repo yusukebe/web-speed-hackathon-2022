@@ -68,17 +68,19 @@ export const appRoute = async (fastify) => {
 
     let hero = `<link rel="preload" href="${imageURL}" as="image" />`
 
+    const earlyHintsResources = [
+      { name: 'Link', value: `<${imageURL}>; rel=preload; as=image` },
+    ]
+
     if (req.url.toString().match(/.+odds$/)) {
+      earlyHintsResources.push({ name: 'Link', value: `</assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=image; crossorigin` },)
       //hero = hero + `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="font" crossorigin/>`
       //res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image, <https://wsh2022-cdn.yusukebe.com/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=font; crossorigin`)
     } else {
       //res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image`)
     }
 
-    res.writeEarlyHints([
-      { name: 'Link', value: `<${imageURL}>; rel=preload; as=image` },
-      { name: 'Link', value: `</assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=image; crossorigin` },
-    ])
+    res.writeEarlyHints(earlyHintsResources)
 
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
 
