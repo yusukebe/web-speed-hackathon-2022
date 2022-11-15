@@ -29,14 +29,14 @@ const entries = [...Array(6)].map((_, i) => ({
   id: i,
   "player": {
     "id": i,
-    "image": "https://wsh2022-cdn.yusukebe.com/assets/images/races/100x100/gray.webp",
+    "image": "/assets/images/races/100x100/gray.webp",
     "name": "loading...",
   },
 }))
 
 let preData = {
   "entries": entries,
-  "image": "https://wsh2022-cdn.yusukebe.com/assets/images/races/400x225/gray.webp",
+  "image": "/assets/images/races/400x225/gray.webp",
   "name": "loading...",
 }
 

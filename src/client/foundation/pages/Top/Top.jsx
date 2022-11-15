@@ -95,8 +95,8 @@ const lastUnixTime = (d) => {
 }
 
 /* API叩かなくてもいいのだろうか */
-const heroImageUrl = "https://wsh2022-cdn.yusukebe.com/assets/images/hero.webp" // useHeroImage(todayRaces)
-const heroSmallImageUrl = "https://wsh2022-cdn.yusukebe.com/assets/images/hero-small.webp"
+const heroImageUrl = "/assets/images/hero.webp" // useHeroImage(todayRaces)
+const heroSmallImageUrl = "/assets/images/hero-small.webp"
 
 /** @type {React.VFC} */
 export const Top = () => {
