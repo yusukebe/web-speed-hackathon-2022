@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, { Suspense } from "react"
+import React from "react"
 import { Outlet } from "react-router-dom"
 
 import Footer from "../../components/navs/Footer"
@@ -11,9 +11,7 @@ export const CommonLayout = React.memo(() => {
     <div>
       <Header />
       <main>
-        <Suspense fallback="loading...">
-          <Outlet key="outlet" />
-        </Suspense>
+        <Outlet key="outlet" />
       </main>
       <Footer />
     </div>

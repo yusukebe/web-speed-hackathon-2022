@@ -38,6 +38,7 @@ module.exports = {
                   spec: true,
                   targets: {
                     chrome: "106",
+                    safari: "16.0",
                   },
                 },
               ],

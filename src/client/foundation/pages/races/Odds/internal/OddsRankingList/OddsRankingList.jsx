@@ -7,14 +7,14 @@ import { Stack } from "../../../../../components/layouts/Stack"
 import { BreakPoint, Color, Space } from "../../../../../styles/variables"
 import { OddsMarker } from "../OddsMarker"
 
-const Wrapper = styled.ol`
+const Wrapper = styled.div`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: ${Space * 4}px;
   grid-template-columns: repeat(1, 1fr);
   grid-template-rows: repeat(50, auto);
 
-  li {
+  button {
     background: ${Color.mono[0]};
     border-top: 1px solid ${Color.mono[400]};
 
@@ -27,7 +27,7 @@ const Wrapper = styled.ol`
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(25, auto);
 
-    li:nth-child(25) {
+    button:nth-child(25) {
       border-bottom: 1px solid ${Color.mono[400]};
     }
   }
@@ -44,12 +44,13 @@ const BuyButton = styled(BaseButton)`
   }
 `
 
-const InactiveBuyButton = styled.div`
+const InactiveBuyButton = styled(BaseButton)`
   cursor: default;
   font-weight: bold;
   justify-content: left;
   padding: ${Space * 2}px;
   width: 100%;
+  text-align: left;
 `
 
 const RankNo = styled.div`
@@ -72,7 +73,7 @@ export const OddsRankingList = ({ isRaceClosed, odds, onClickOdds }) => {
   return (
     <Wrapper>
       {sortedOdds.map((item, i) => (
-        <li key={item.id}>
+        <React.Fragment key={item.id}>
           {isRaceClosed ? (
             <InactiveBuyButton>
               <Stack horizontal alignItems="center" gap={Space * 2}>
@@ -90,7 +91,7 @@ export const OddsRankingList = ({ isRaceClosed, odds, onClickOdds }) => {
               </Stack>
             </BuyButton>
           )}
-        </li>
+        </React.Fragment>
       ))}
     </Wrapper>
   )

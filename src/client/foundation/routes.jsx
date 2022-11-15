@@ -19,17 +19,19 @@ import RaceResult from './pages/races/RaceResult'
 /** @type {React.VFC} */
 export const Routes = ({ serverData }) => {
   return (
-    <RouterRoutes>
-      <Route element={<CommonLayout />}>
-        <Route index element={<Top serverData={serverData} />} />
-        <Route element={<Top serverData={serverData} />} path=":date" />
-        <Route path="races/:raceId">
-          <Route element={<RaceCard serverData={serverData} />} path="race-card" />
-          <Route element={<Odds serverData={serverData} />} path="odds" />
-          <Route element={<RaceResult serverData={serverData} />} path="result" />
+    <Suspense fallback="">
+      <RouterRoutes>
+        <Route element={<CommonLayout />}>
+          <Route index element={<Top serverData={serverData} />} />
+          <Route element={<Top serverData={serverData} />} path=":date" />
+          <Route path="races/:raceId">
+            <Route element={<RaceCard serverData={serverData} />} path="race-card" />
+            <Route element={<Odds serverData={serverData} />} path="odds" />
+            <Route element={<RaceResult serverData={serverData} />} path="result" />
+          </Route>
         </Route>
-      </Route>
-    </RouterRoutes>
+      </RouterRoutes>
+    </Suspense>
   )
 }
 
