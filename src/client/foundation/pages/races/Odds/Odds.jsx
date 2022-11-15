@@ -135,7 +135,7 @@ export const Odds = React.memo(({ serverData }) => {
       <Section dark shrink>
         <LiveBadge>Live</LiveBadge>
         <Spacer mt={Space * 2} />
-        <RaceImage src={match ? `https://wsh2022-cdn.yusukebe.com/assets/images/races/400x225/${match[1]}.webp` : "https://wsh2022-cdn.yusukebe.com/assets/images/races/400x225/gray.webp"} />
+        <RaceImage src={match ? `/assets/images/races/400x225/${match[1]}.webp` : "/assets/images/races/400x225/gray.webp"} />
       </Section>
 
       <Spacer mt={Space * 2} />

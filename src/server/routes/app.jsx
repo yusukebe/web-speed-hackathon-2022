@@ -68,7 +68,7 @@ export const appRoute = async (fastify) => {
     const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
 
     const match = race.image.match(/([0-9]+)\.jpg$/)
-    const imageURL = `https://wsh2022-cdn.yusukebe.com/assets/images/races/400x225/${match[1]}.webp`
+    const imageURL = `/assets/images/races/400x225/${match[1]}.webp`
 
     let hero = `<link rel="preload" href="${imageURL}" as="image" />`
 

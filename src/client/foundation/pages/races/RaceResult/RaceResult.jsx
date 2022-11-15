@@ -27,7 +27,7 @@ const LiveBadge = styled.span`
 `
 
 let preData = {
-  "image": "https://wsh2022-cdn.yusukebe.com/assets/images/races/400x225/gray.webp",
+  "image": "/assets/images/races/400x225/gray.webp",
   "name": "loading...",
 }
 
