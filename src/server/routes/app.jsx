@@ -53,11 +53,7 @@ export const appRoute = async (fastify) => {
 
   fastify.get("/races/:raceId/*", async (req, res) => {
     const repo = (await createConnection()).getRepository(Race)
-    //const race = await repo.findOne(req.params.raceId)
-
-    const race = await repo.findOne(req.params.raceId, {
-      relations: ["entries", "entries.player", "trifectaOdds"],
-    })
+    const race = await repo.findOne(req.params.raceId)
 
     const sheet = new ServerStyleSheet()
     const jsx = sheet.collectStyles(<App location={req.url.toString()} serverData={race} />)
@@ -70,6 +66,7 @@ export const appRoute = async (fastify) => {
 
     const earlyHintsResources = [
       { name: 'Link', value: `<${imageURL}>; rel=preload; as=image` },
+      { name: 'Link', value: `</assets/js/main.bundle.js>; rel=preload; as=script; crossorigin` },
     ]
 
     if (req.url.toString().match(/.+odds$/)) {
