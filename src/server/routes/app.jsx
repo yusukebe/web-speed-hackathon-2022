@@ -27,11 +27,9 @@ export const appRoute = async (fastify) => {
     const jsx = sheet.collectStyles(<App location={req.url.toString()} />)
     const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
 
-    res.raw.setHeader("Link", `</assets/images/hero-small.webp>; rel=preload; as=image, </assets/js/main.bundle.js>; rel=preload; as=script`)
+    res.raw.setHeader("Link", `<https://wsh2022-cdn.yusukebe.com/assets/images/hero-small.webp>; rel=preload; as=image`)
 
-    let hero = `<link rel="preload" href="/assets/images/hero-small.webp" as="image" />`
-    const jsHero = `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
-    hero = hero + jsHero
+    let hero = `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/images/hero-small.webp" as="image" />`
 
     const top = `${getHead(hero)}<body><div id="root">`
     res.raw.write(top)
@@ -45,11 +43,9 @@ export const appRoute = async (fastify) => {
     const jsx = sheet.collectStyles(<App location={req.url.toString()} />)
     const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
 
-    res.raw.setHeader("Link", `</assets/images/hero-small.webp>; rel=preload; as=image, </assets/js/main.bundle.js>; rel=preload; as=script`)
+    res.raw.setHeader("Link", `<https://wsh2022-cdn.yusukebe.com/assets/images/hero-small.webp>; rel=preload; as=image`)
 
-    let hero = `<link rel="preload" href="/assets/images/hero-small.webp" as="image" />`
-    const jsHero = `<link rel="preload" href="/assets/js/main.bundle.js" as="script" />`
-    hero = hero + jsHero
+    let hero = `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/images/hero-small.webp" as="image" />`
 
     const top = `${getHead(hero)}<body><div id="root">`
     res.raw.write(top)
@@ -68,13 +64,13 @@ export const appRoute = async (fastify) => {
     const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
 
     const match = race.image.match(/([0-9]+)\.jpg$/)
-    const imageURL = `/assets/images/races/400x225/${match[1]}.webp`
+    const imageURL = `https://wsh2022-cdn.yusukebe.com/assets/images/races/400x225/${match[1]}.webp`
 
     let hero = `<link rel="preload" href="${imageURL}" as="image" />`
 
     if (req.url.toString().match(/.+odds$/)) {
-      hero = hero + `<link rel="preload" href="/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="font" crossorigin/>`
-      res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image, </assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=font; crossorigin`)
+      hero = hero + `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="font" crossorigin/>`
+      res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image, <https://wsh2022-cdn.yusukebe.com/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=font; crossorigin`)
     } else {
       res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image`)
     }
