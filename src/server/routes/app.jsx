@@ -17,6 +17,10 @@ export const appRoute = async (fastify) => {
     wildcard: false,
   })
 
+  fastify.register(import('@fastify/early-hints'), {
+    warn: true
+  })
+
   fastify.get("/favicon.ico", () => {
     throw fastify.httpErrors.notFound()
   })
@@ -70,10 +74,14 @@ export const appRoute = async (fastify) => {
 
     if (req.url.toString().match(/.+odds$/)) {
       hero = hero + `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="font" crossorigin/>`
-      res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image, <https://wsh2022-cdn.yusukebe.com/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=font; crossorigin`)
+      //res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image, <https://wsh2022-cdn.yusukebe.com/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=font; crossorigin`)
     } else {
       res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image`)
     }
+
+    res.writeEarlyHints([
+      { name: 'Link', value: `<${imageURL}>; rel=preload; as=image` },
+    ])
 
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
 

@@ -76,6 +76,7 @@
   "dependencies": {
     "@babel/runtime": "^7.17.2",
     "@fastify/compress": "^6.1.1",
+    "@fastify/early-hints": "^1.0.0",
     "@fastify/static": "^6.5.0",
     "bezier-easing": "^2.1.0",
     "core-js": "^3.21.1",

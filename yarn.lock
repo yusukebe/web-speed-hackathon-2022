@@ -1457,6 +1457,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fastify/early-hints@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@fastify/early-hints@npm:1.0.0"
+  dependencies:
+    fastify-plugin: ^4.0.0
+    process-warning: ^2.0.0
+  checksum: 304ea1f7caa7268706aea341cd3b4b4ccade42c95a11ac904d9d9c4065a18206d340ddc9e9bcb1450cfe6c74b3f71766ec412644485da942577f5dfa70ced345
+  languageName: node
+  linkType: hard
+
 "@fastify/error@npm:^3.0.0":
   version: 3.0.0
   resolution: "@fastify/error@npm:3.0.0"
@@ -10666,6 +10676,7 @@ __metadata:
     "@babel/runtime": ^7.17.2
     "@cloudflare/workers-types": ^3.18.0
     "@fastify/compress": ^6.1.1
+    "@fastify/early-hints": ^1.0.0
     "@fastify/static": ^6.5.0
     "@stylelint/postcss-css-in-js": ^0.37.2
     "@types/lodash": ^4.14.178
