@@ -116,6 +116,8 @@ export const Odds = React.memo(({ serverData }) => {
     data.trifectaOdds = odds
   }
 
+  console.log(data)
+
   const match = data ? data.image.match(/([0-9]+)\.jpg$/) : null
 
   const isRaceClosed = dayjs(data.closeAt).isBefore(new Date())
