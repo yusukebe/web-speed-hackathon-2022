@@ -29,14 +29,14 @@ const entries = [...Array(6)].map((_, i) => ({
   id: i,
   "player": {
     "id": i,
-    "image": "/assets/images/races/100x100/gray.webp",
+    "image": "https://wsh2022-cdn.yusukebe.com/assets/images/races/100x100/gray.webp",
     "name": "loading...",
   },
 }))
 
 let preData = {
   "entries": entries,
-  "image": "/assets/images/races/400x225/gray.webp",
+  "image": "https://wsh2022-cdn.yusukebe.com/assets/images/races/400x225/gray.webp",
   "name": "loading...",
 }
 
@@ -88,7 +88,7 @@ export const RaceCard = ({ serverData }) => {
       <Section dark shrink>
         <LiveBadge>Live</LiveBadge>
         <Spacer mt={Space * 2} />
-        <RaceImage src={match ? `/assets/images/races/400x225/${match[1]}.webp` : "/assets/images/races/400x225/gray.webp"} />
+        <RaceImage src={match ? `https://wsh2022-cdn.yusukebe.com/assets/images/races/400x225/${match[1]}.webp` : "https://wsh2022-cdn.yusukebe.com/assets/images/races/400x225/gray.webp"} />
       </Section>
 
       <Spacer mt={Space * 2} />

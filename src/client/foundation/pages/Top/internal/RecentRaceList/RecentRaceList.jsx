@@ -95,7 +95,7 @@ const Item = React.memo(({ race }) => {
 
 
   const match = race.image.match(/([0-9]+)\.jpg/)
-  const url = match ? `/assets/images/races/100x100/${match[1]}.webp` : `/assets/images/races/100x100/gray.webp`
+  const url = match ? `https://wsh2022-cdn.yusukebe.com/assets/images/races/100x100/${match[1]}.webp` : `https://wsh2022-cdn.yusukebe.com/assets/images/races/100x100/gray.webp`
 
   return (
     <ItemWrapper>
