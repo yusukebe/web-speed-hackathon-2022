@@ -27,7 +27,7 @@ export const appRoute = async (fastify) => {
     const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
     */
 
-    const imageURL = 'https://wsh2022-cdn.yusukebe.com/assets/images/hero-small.webp'
+    const imageURL = '/assets/images/hero-small.webp'
 
     let hero = `<link rel="preload" href="${imageURL}" as="image" />`
     res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image`)
@@ -46,7 +46,7 @@ export const appRoute = async (fastify) => {
   fastify.get("/:date", async (req, res) => {
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
 
-    const imageURL = 'https://wsh2022-cdn.yusukebe.com/assets/images/hero-small.webp'
+    const imageURL = '/assets/images/hero-small.webp'
     let hero = `<link rel="preload" href="${imageURL}" as="image" />`
     res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image`)
     res.writeEarlyHints([
@@ -69,7 +69,7 @@ export const appRoute = async (fastify) => {
 
     const match = race.image.match(/([0-9]+)\.jpg$/)
 
-    const imageURL = `https://wsh2022-cdn.yusukebe.com/assets/images/races/400x225/${match[1]}.webp`
+    const imageURL = `/assets/images/races/400x225/${match[1]}.webp`
 
     let hero = `<link rel="preload" href="${imageURL}" as="image" />`
 
@@ -78,9 +78,8 @@ export const appRoute = async (fastify) => {
     ]
 
     if (req.url.toString().match(/.+odds$/)) {
-      earlyHintsResources.push({ name: 'Link', value: `<https://wsh2022-cdn.yusukebe.com/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=image; crossorigin` })
-      hero = hero + `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="image" />`
-      //res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image, </assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=font; crossorigin`)
+      earlyHintsResources.push({ name: 'Link', value: `</assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=image; crossorigin` })
+      hero = hero + `<link rel="preload" href="/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="image" />`
     }
 
     res.writeEarlyHints(earlyHintsResources)
@@ -128,6 +127,6 @@ const getBottom = () => {
 const getCSS = () => {
   return (
     '*,*::before,*::after{box-sizing:border-box}body,h1,h2,h3,h4,p,figure,blockquote,dl,dd{margin:0}ul[role="list"],ol[role="list"]{list-style:none}html:focus-within{scroll-behavior:smooth}body{min-height:100vh;text-rendering:optimizeSpeed;line-height:1.5}a:not([class]){text-decoration-skip-ink:auto}img,picture{max-width:100%;display:block}input,button,textarea,select{font:inherit}@media(prefers-reduced-motion:reduce){html:focus-within{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}}' +
-    `body{color:#1c1917;background:#f5f5f4;font-family:sans-serif}a{color:inherit;text-decoration:none}ol,ul{padding:0;list-style:none;margin:0}@font-face{font-family:Senobi-Gothic;font-weight:400;font-display:block;font-display:block;src:url("https://wsh2022-cdn.yusukebe.com/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff") format("woff")}`
+    `body{color:#1c1917;background:#f5f5f4;font-family:sans-serif}a{color:inherit;text-decoration:none}ol,ul{padding:0;list-style:none;margin:0}@font-face{font-family:Senobi-Gothic;font-weight:400;font-display:block;font-display:block;src:url("/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff") format("woff")}`
   )
 }
