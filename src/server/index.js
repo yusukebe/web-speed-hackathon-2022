@@ -13,21 +13,23 @@ import { createConnection } from "./typeorm/connection.js";
 
 export const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
-let server = fastify({
-  logger: true,
-});
+    const server = fastify({
+	  logger: true,
+    });
 
-if (IS_PRODUCTION) {
+/*
   const certPath = "/etc/letsencrypt/live/wsh2022.yusukebe.com";
 
-  server = fastify({
+    const server = fastify({
+	  logger: true,
     http2: true,
     https: {
-      cert: fs.readFileSync(`${certPath}/fullchain.pem`),
-      key: fs.readFileSync(`${certPath}/privkey.pem`),
+      cert: fs.readFileSync(`/etc/letsencrypt/live/wsh2022.yusukebe.com/fullchain.pem`),
+	key: fs.readFileSync(`/etc/letsencrypt/live/wsh2022.yusukebe.com/privkey.pem`),
+		 allowHTTP1: true
     },
   });
-}
+*/
 
 server.register(fastifySensible);
 
@@ -52,7 +54,7 @@ server.addHook("onRequest", async (_, res) => {
 server.register(appRoute);
 server.register(apiRoute, { prefix: "/api" });
 
-server.listen({ host: "0.0.0.0", port: process.env.PORT || 3000 }, (err) => {
+server.listen({ host: "0.0.0.0", port: process.env.PORT || 80 }, (err) => {
   if (err) {
     console.log(err);
     process.exit(1);

@@ -11,9 +11,10 @@ import { createConnection } from "../typeorm/connection.js"
 
 export const appRoute = async (fastify) => {
 
+    /*
   await fastify.register(import('@fastify/early-hints'), {
     warn: true
-  })
+  })*/
 
   fastify.get("/favicon.ico", () => {
     throw fastify.httpErrors.notFound()
@@ -77,7 +78,7 @@ export const appRoute = async (fastify) => {
       res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image`)
     }
 
-    res.writeEarlyHints(earlyHintsResources)
+//    res.writeEarlyHints(earlyHintsResources)
 
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
 
@@ -96,7 +97,8 @@ export const appRoute = async (fastify) => {
   await fastify.register(fastifyStatic, {
     prefix: "/assets/",
     root: join(__dirname, "public/assets"),
-    wildcard: false,
+      wildcard: false,
+      cacheControl: false
   })
 
 }
