@@ -2,12 +2,14 @@ import { join } from "path"
 
 import fastifyStatic from "@fastify/static"
 import React from 'react'
-import { renderToNodeStream } from 'react-dom/server'
+import { renderToString } from 'react-dom/server'
 import { ServerStyleSheet } from 'styled-components'
 
 import { Race } from "../../model/index.js"
 import { App } from '../App.jsx'
 import { createConnection } from "../typeorm/connection.js"
+
+const SSR = true
 
 export const appRoute = async (fastify) => {
 
@@ -16,11 +18,11 @@ export const appRoute = async (fastify) => {
   })
 
   const topHandler = async (req, res) => {
-    res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
+    res.header("Content-Type", "text/html; charset=utf-8")
 
     const sheet = new ServerStyleSheet()
-    const jsx = sheet.collectStyles(<App location={req.url.toString()} />)
-    const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
+    const html = renderToString(sheet.collectStyles(<App location={req.url.toString()} />))
+    const styleTags = sheet.getStyleTags()
 
     const imageURL = '/assets/images/hero-small.webp'
 
@@ -28,43 +30,33 @@ export const appRoute = async (fastify) => {
     res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image`)
 
     const top = `${getHead(hero)}<body><div id="root">`
-    //res.send(top + getBottom())
-
-    res.raw.write(top)
-    stream.on('end', () => res.raw.end(getBottom()))
-    res.send(stream)
+    res.send(top + styleTags + html + getBottom())
   }
 
   fastify.get("/", topHandler)
   fastify.get("/:date", topHandler)
 
   fastify.get("/races/:raceId/*", async (req, res) => {
+    res.header("Content-Type", "text/html; charset=utf-8")
+
     const repo = (await createConnection()).getRepository(Race)
     const race = await repo.findOne(req.params.raceId)
 
     const sheet = new ServerStyleSheet()
-    const jsx = sheet.collectStyles(<App location={req.url.toString()} serverData={race} />)
-    const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
+    const html = renderToString(sheet.collectStyles(<App location={req.url.toString()} serverData={race} />))
+    const styleTags = sheet.getStyleTags() // or sheet.getStyleElement();
 
     const match = race.image.match(/([0-9]+)\.jpg$/)
     const imageURL = `/assets/images/races/400x225/${match[1]}.webp`
 
-    let hero = `` // `<link rel="preload" href="${imageURL}" as="image" />`
-
     if (req.url.toString().match(/.+odds$/)) {
-      //hero = hero + `<link rel="preload" href="/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="font" crossorigin/>`
       res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image, </assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=font; crossorigin`)
     } else {
       res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image`)
     }
 
-    res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
-    const top = `${getHead(hero)}<body><div id="root" data-react=${JSON.stringify(race)}>`
-
-    res.raw.write(top)
-    stream.on('end', () => res.raw.end(getBottom()))
-    res.send(stream)
-    //res.send(top + getBottom())
+    const top = `${getHead()}<body><div id="root" data-react=${JSON.stringify(race)}>`
+    res.send(top + styleTags + html + getBottom())
   })
 
   await fastify.register(fastifyStatic, {
@@ -77,6 +69,7 @@ export const appRoute = async (fastify) => {
 }
 
 const getHead = (hero) => {
+  if (hero === undefined) hero = ''
   return `<!DOCTYPE html>
   <html lang="ja">
     <head>
