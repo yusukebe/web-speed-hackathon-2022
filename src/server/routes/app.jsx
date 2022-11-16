@@ -67,22 +67,27 @@ export const appRoute = async (fastify) => {
     const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
     */
 
-    const match = race.image.match(/([0-9]+)\.jpg$/)
+    //const match = race.image.match(/([0-9]+)\.jpg$/)
 
-    const imageURL = `/assets/images/races/400x225/${match[1]}.webp`
+    //const imageURL = `/assets/images/races/400x225/${match[1]}.webp`
 
-    let hero = `<link rel="preload" href="${imageURL}" as="image" />`
+    let hero = `` // `<link rel="preload" href="${imageURL}" as="image" />`
 
+    /*
     const earlyHintsResources = [
       { name: 'Link', value: `<${imageURL}>; rel=preload; as=image` },
     ]
+    */
 
     if (req.url.toString().match(/.+odds$/)) {
-      earlyHintsResources.push({ name: 'Link', value: `</assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=image; crossorigin` })
-      hero = hero + `<link rel="preload" href="/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="image" />`
+      //earlyHintsResources.push({ name: 'Link', value: `</assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=font; crossorigin` })
+      //hero = hero + `<link rel="preload" href="/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="font" crossorigin/>`
+      res.raw.setHeader("Link", `</assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=font; crossorigin`)
+    } else {
+      //res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image`)
     }
 
-    res.writeEarlyHints(earlyHintsResources)
+    //res.writeEarlyHints(earlyHintsResources)
 
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
     const top = `${getHead(hero)}<body><div id="root" data-react=${JSON.stringify(race)}>`
