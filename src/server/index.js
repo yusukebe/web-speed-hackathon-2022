@@ -14,18 +14,16 @@ export const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
 const certPath = "/etc/letsencrypt/live/wsh2022.yusukebe.com";
 
-let server = fastify({ logger: true });
+//let server = fastify({ logger: true });
 
-if (IS_PRODUCTION) {
-  server = fastify({
+const server = fastify({
     https: {
       allowHTTP1: true,
       cert: fs.readFileSync(`${certPath}/fullchain.pem`),
       key: fs.readFileSync(`${certPath}/privkey.pem`),
     },
     logger: true,
-  });
-}
+})
 
 server.register(fastifySensible);
 
@@ -50,7 +48,7 @@ server.addHook("onRequest", async (_, res) => {
 server.register(appRoute);
 server.register(apiRoute, { prefix: "/api" });
 
-server.listen({ host: "0.0.0.0", port: process.env.PORT || 3000 }, (err) => {
+server.listen({ host: "0.0.0.0", port: process.env.PORT || 443 }, (err) => {
   if (err) {
     console.log(err);
     process.exit(1);
