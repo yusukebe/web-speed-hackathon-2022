@@ -27,9 +27,13 @@ export const appRoute = async (fastify) => {
     const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
     */
 
-    res.raw.setHeader("Link", `<https://wsh2022-cdn.yusukebe.com/assets/images/hero-small.webp>; rel=preload; as=image`)
+    const imageURL = 'https://wsh2022-cdn.yusukebe.com/assets/images/hero-small.webp'
 
-    let hero = `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/images/hero-small.webp" as="image" />`
+    let hero = `<link rel="preload" href="${imageURL}" as="image" />`
+    res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image`)
+    res.writeEarlyHints([
+      { name: 'Link', value: `<${imageURL}>; rel=preload; as=image` },
+    ])
 
     const top = `${getHead(hero)}<body><div id="root">`
 
