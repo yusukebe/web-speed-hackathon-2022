@@ -36,7 +36,6 @@ export const appRoute = async (fastify) => {
     ])
 
     const top = `${getHead(hero)}<body><div id="root">`
-
     res.send(top + getBottom())
 
     //res.raw.write(top)
@@ -46,25 +45,16 @@ export const appRoute = async (fastify) => {
 
   fastify.get("/:date", async (req, res) => {
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
-    /*
-    const sheet = new ServerStyleSheet()
-    const jsx = sheet.collectStyles(<App location={req.url.toString()} />)
-    const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
-    */
 
-    res.raw.setHeader("Link", `<https://wsh2022-cdn.yusukebe.com/assets/images/hero-small.webp>; rel=preload; as=image`)
-
-    let hero = `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/images/hero-small.webp" as="image" />`
+    const imageURL = 'https://wsh2022-cdn.yusukebe.com/assets/images/hero-small.webp'
+    let hero = `<link rel="preload" href="${imageURL}" as="image" />`
+    res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image`)
+    res.writeEarlyHints([
+      { name: 'Link', value: `<${imageURL}>; rel=preload; as=image` },
+    ])
 
     const top = `${getHead(hero)}<body><div id="root">`
-
     res.send(top + getBottom())
-
-    /*
-    res.raw.write(top)
-    stream.on('end', () => res.raw.end(getBottom()))
-    res.send(stream)
-    */
   })
 
   fastify.get("/races/:raceId/*", async (req, res) => {
@@ -79,7 +69,7 @@ export const appRoute = async (fastify) => {
 
     const match = race.image.match(/([0-9]+)\.jpg$/)
 
-    const imageURL = `/assets/images/races/400x225/${match[1]}.webp`
+    const imageURL = `https://wsh2022-cdn.yusukebe.com/assets/images/races/400x225/${match[1]}.webp`
 
     let hero = `<link rel="preload" href="${imageURL}" as="image" />`
 
@@ -89,13 +79,13 @@ export const appRoute = async (fastify) => {
 
     if (req.url.toString().match(/.+odds$/)) {
       earlyHintsResources.push({ name: 'Link', value: `<https://wsh2022-cdn.yusukebe.com/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=image; crossorigin` })
+      hero = hero + `<link rel="preload" href="https://wsh2022-cdn.yusukebe.com/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="image" />`
       //res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image, </assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=font; crossorigin`)
     }
 
     res.writeEarlyHints(earlyHintsResources)
 
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
-
     const top = `${getHead(hero)}<body><div id="root" data-react=${JSON.stringify(race)}>`
 
     //res.raw.write(top)

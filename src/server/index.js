@@ -17,13 +17,14 @@ const certPath = "/etc/letsencrypt/live/wsh2022.yusukebe.com";
 //let server = fastify({ logger: true });
 
 const server = fastify({
-    https: {
-      allowHTTP1: true,
-      cert: fs.readFileSync(`${certPath}/fullchain.pem`),
-      key: fs.readFileSync(`${certPath}/privkey.pem`),
-    },
-    logger: true,
-})
+  http2: true,
+  https: {
+    allowHTTP1: true,
+    cert: fs.readFileSync(`${certPath}/fullchain.pem`),
+    key: fs.readFileSync(`${certPath}/privkey.pem`),
+  },
+  logger: true,
+});
 
 server.register(fastifySensible);
 
