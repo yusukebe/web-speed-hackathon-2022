@@ -18,7 +18,6 @@ let server = fastify({ logger: true });
 
 if (IS_PRODUCTION) {
   server = fastify({
-    http2: true,
     https: {
       allowHTTP1: true,
       cert: fs.readFileSync(`${certPath}/fullchain.pem`),
@@ -51,12 +50,9 @@ server.addHook("onRequest", async (_, res) => {
 server.register(appRoute);
 server.register(apiRoute, { prefix: "/api" });
 
-server.listen(
-  { host: "0.0.0.0", port: process.env.PORT || IS_PRODUCTION ? 443 : 3000 },
-  (err) => {
-    if (err) {
-      console.log(err);
-      process.exit(1);
-    }
-  },
-);
+server.listen({ host: "0.0.0.0", port: process.env.PORT || 3000 }, (err) => {
+  if (err) {
+    console.log(err);
+    process.exit(1);
+  }
+});
