@@ -2,12 +2,14 @@ import { join } from "path"
 
 import fastifyStatic from "@fastify/static"
 import React from 'react'
-import { renderToString } from 'react-dom/server'
+import { renderToNodeStream } from 'react-dom/server'
 import { ServerStyleSheet } from 'styled-components'
 
 import { Race } from "../../model/index.js"
 import { App } from '../App.jsx'
 import { createConnection } from "../typeorm/connection.js"
+
+const SSR = true
 
 export const appRoute = async (fastify) => {
 
@@ -16,11 +18,11 @@ export const appRoute = async (fastify) => {
   })
 
   const topHandler = async (req, res) => {
-    res.header("Content-Type", "text/html; charset=utf-8")
+    res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
 
     const sheet = new ServerStyleSheet()
-    const html = renderToString(sheet.collectStyles(<App location={req.url.toString()} />))
-    const styleTags = sheet.getStyleTags()
+    const jsx = sheet.collectStyles(<App location={req.url.toString()} />)
+    const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
 
     const imageURL = '/assets/images/hero-small.webp'
 
@@ -28,22 +30,22 @@ export const appRoute = async (fastify) => {
     res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image`)
 
     const top = `${getHead(hero)}<body><div id="root">`
-    res.send(top + styleTags + html + getBottom())
+
+    if (SSR) {
+      res.raw.write(top)
+      stream.on('end', () => res.raw.end(getBottom()))
+      return res.send(stream)
+    }
+    res.send(top + getBottom())
   }
 
   fastify.get("/", topHandler)
   fastify.get("/:date", topHandler)
 
   fastify.get("/races/:raceId/*", async (req, res) => {
-    res.header("Content-Type", "text/html; charset=utf-8")
-
+    res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
     const repo = (await createConnection()).getRepository(Race)
     const race = await repo.findOne(req.params.raceId)
-
-    const sheet = new ServerStyleSheet()
-    const html = renderToString(sheet.collectStyles(<App location={req.url.toString()} serverData={race} />))
-    const styleTags = sheet.getStyleTags()
-
     const match = race.image.match(/([0-9]+)\.jpg$/)
     const imageURL = `/assets/images/races/400x225/${match[1]}.webp`
 
@@ -54,7 +56,16 @@ export const appRoute = async (fastify) => {
     }
 
     const top = `${getHead()}<body><div id="root" data-react=${JSON.stringify(race)}>`
-    res.send(top + styleTags + html + getBottom())
+
+    if (SSR) {
+      const sheet = new ServerStyleSheet()
+      const jsx = sheet.collectStyles(<App location={req.url.toString()} serverData={race} />)
+      const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
+      res.raw.write(top)
+      stream.on('end', () => res.raw.end(getBottom()))
+      return res.send(stream)
+    }
+    res.send(top + getBottom())
   })
 
   await fastify.register(fastifyStatic, {
@@ -68,16 +79,7 @@ export const appRoute = async (fastify) => {
 
 const getHead = (hero) => {
   if (hero === undefined) hero = ''
-  return `<!DOCTYPE html>
-  <html lang="ja">
-    <head>
-      <meta charset="UTF-8" />
-      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      ${hero}
-      <title>CyberTicket</title>
-      <style>${getCSS()}</style>
-    </head>`
+  return `<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />${hero}<title>CyberTicket</title><style>${getCSS()}</style></head>`
 }
 
 const getBottom = () => {
