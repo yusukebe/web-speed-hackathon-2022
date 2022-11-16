@@ -11,15 +11,11 @@ import { createConnection } from "../typeorm/connection.js"
 
 export const appRoute = async (fastify) => {
 
-  await fastify.register(import('@fastify/early-hints'), {
-    warn: true
-  })
-
   fastify.get("/favicon.ico", () => {
     throw fastify.httpErrors.notFound()
   })
 
-  fastify.get("/", async (req, res) => {
+  const topHandler = async (req, res) => {
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
 
     const sheet = new ServerStyleSheet()
@@ -30,9 +26,6 @@ export const appRoute = async (fastify) => {
 
     let hero = `<link rel="preload" href="${imageURL}" as="image" />`
     res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image`)
-    res.writeEarlyHints([
-      { name: 'Link', value: `<${imageURL}>; rel=preload; as=image` },
-    ])
 
     const top = `${getHead(hero)}<body><div id="root">`
     //res.send(top + getBottom())
@@ -40,30 +33,10 @@ export const appRoute = async (fastify) => {
     res.raw.write(top)
     stream.on('end', () => res.raw.end(getBottom()))
     res.send(stream)
-  })
+  }
 
-  fastify.get("/:date", async (req, res) => {
-    res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
-
-    const sheet = new ServerStyleSheet()
-    const jsx = sheet.collectStyles(<App location={req.url.toString()} />)
-    const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
-
-    const imageURL = '/assets/images/hero-small.webp'
-
-    let hero = `<link rel="preload" href="${imageURL}" as="image" />`
-    res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image`)
-    res.writeEarlyHints([
-      { name: 'Link', value: `<${imageURL}>; rel=preload; as=image` },
-    ])
-
-    const top = `${getHead(hero)}<body><div id="root">`
-    //res.send(top + getBottom())
-
-    res.raw.write(top)
-    stream.on('end', () => res.raw.end(getBottom()))
-    res.send(stream)
-  })
+  fastify.get("/", topHandler)
+  fastify.get("/:date", topHandler)
 
   fastify.get("/races/:raceId/*", async (req, res) => {
     const repo = (await createConnection()).getRepository(Race)
@@ -78,21 +51,12 @@ export const appRoute = async (fastify) => {
 
     let hero = `` // `<link rel="preload" href="${imageURL}" as="image" />`
 
-    /*
-    const earlyHintsResources = [
-      { name: 'Link', value: `<${imageURL}>; rel=preload; as=image` },
-    ]
-    */
-
     if (req.url.toString().match(/.+odds$/)) {
-      //earlyHintsResources.push({ name: 'Link', value: `</assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=font; crossorigin` })
       //hero = hero + `<link rel="preload" href="/assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff" as="font" crossorigin/>`
       res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image, </assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=font; crossorigin`)
     } else {
       res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image`)
     }
-
-    //res.writeEarlyHints(earlyHintsResources)
 
     res.raw.setHeader("Content-Type", "text/html; charset=utf-8")
     const top = `${getHead(hero)}<body><div id="root" data-react=${JSON.stringify(race)}>`
@@ -102,11 +66,6 @@ export const appRoute = async (fastify) => {
     res.send(stream)
     //res.send(top + getBottom())
   })
-
-  await fastify.register(
-    import('@fastify/compress'),
-    { encodings: ['gzip'] }
-  )
 
   await fastify.register(fastifyStatic, {
     cacheControl: false,
