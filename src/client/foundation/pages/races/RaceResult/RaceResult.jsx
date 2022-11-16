@@ -1,4 +1,4 @@
-import React from "react"
+import React, { lazy, Suspense } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
@@ -14,7 +14,10 @@ import { Color, Radius, Space } from "../../../styles/variables"
 import { formatTime } from "../../../utils/DateUtils"
 import { authorizedJsonFetcher } from "../../../utils/HttpUtils"
 
-import { BettingTicketList } from "./internal/BettingTicketList"
+//import BettingTicketList from "./internal/BettingTicketList"
+
+const BettingTicketList = React.lazy(() => import("./internal/BettingTicketList"))
+
 import RaceResultSection from "./internal/RaceResultSection"
 
 const LiveBadge = styled.span`
@@ -101,11 +104,12 @@ export const RaceResult = ({ serverData }) => {
         <Heading as="h2">購入した買い目</Heading>
 
         <Spacer mt={Space * 2} />
-        <BettingTicketList>
-          {(ticketData?.bettingTickets ?? []).map((ticket) => (
-            <BettingTicketList.Item key={ticket.id} ticket={ticket} />
-          ))}
-        </BettingTicketList>
+        <Suspense fallback="">
+          <BettingTicketList>
+            {(ticketData?.bettingTickets ?? []).map((ticket) => (
+              <BettingTicketList.Item key={ticket.id} ticket={ticket} />
+            ))}
+          </BettingTicketList></Suspense>
 
         <Spacer mt={Space * 4} />
         <Heading as="h2">勝負結果</Heading>
