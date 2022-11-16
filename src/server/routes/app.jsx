@@ -9,8 +9,6 @@ import { Race } from "../../model/index.js"
 import { App } from '../App.jsx'
 import { createConnection } from "../typeorm/connection.js"
 
-const SSR = true
-
 export const appRoute = async (fastify) => {
 
   fastify.get("/favicon.ico", () => {
@@ -44,7 +42,7 @@ export const appRoute = async (fastify) => {
 
     const sheet = new ServerStyleSheet()
     const html = renderToString(sheet.collectStyles(<App location={req.url.toString()} serverData={race} />))
-    const styleTags = sheet.getStyleTags() // or sheet.getStyleElement();
+    const styleTags = sheet.getStyleTags()
 
     const match = race.image.match(/([0-9]+)\.jpg$/)
     const imageURL = `/assets/images/races/400x225/${match[1]}.webp`

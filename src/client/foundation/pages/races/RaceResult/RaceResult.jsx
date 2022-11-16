@@ -56,6 +56,7 @@ export const RaceResult = ({ serverData }) => {
         if (dataPool) {
           const initialData = JSON.parse(dataPool)
           data = initialData
+          elem.dataset.react = ''
         } else {
           data = preData
         }
