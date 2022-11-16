@@ -166,12 +166,14 @@ export const Odds = React.memo(({ serverData }) => {
         <Heading as="h2">オッズ表</Heading>
 
         <Spacer mt={Space * 2} />
-        <OddsTable
-          entries={data.entries}
-          isRaceClosed={isRaceClosed}
-          odds={data.trifectaOdds}
-          onClickOdds={handleClickOdds}
-        />
+        {data.trifectaOdds.length > 1 ?
+          <OddsTable
+            entries={data.entries}
+            isRaceClosed={isRaceClosed}
+            odds={data.trifectaOdds}
+            onClickOdds={handleClickOdds}
+          />
+          : <Spacer mt={Space * 48} />}
 
         <Spacer mt={Space * 4} />
         <Heading as="h2">人気順</Heading>
