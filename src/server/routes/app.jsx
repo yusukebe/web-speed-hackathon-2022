@@ -75,13 +75,11 @@ export const appRoute = async (fastify) => {
 
     const match = race.image.match(/([0-9]+)\.jpg$/)
 
-    race['image'] = ''
     const imageURL = `/assets/images/races/400x225/${match[1]}.webp`
 
-    let hero = `<link rel="preload" href="/assets/images/races/400x225/gray.webp" as="image" /><link rel="preload" href="${imageURL}" as="image" />`
+    let hero = `<link rel="preload" href="${imageURL}" as="image" />`
 
     const earlyHintsResources = [
-      { name: 'Link', value: `/assets/images/races/400x225/gray.webp; rel=preload; as=image` },
       { name: 'Link', value: `<${imageURL}>; rel=preload; as=image` },
       { name: 'Link', value: `</assets/js/main.bundle.js>; rel=preload; as=script; crossorigin` },
     ]
@@ -89,8 +87,6 @@ export const appRoute = async (fastify) => {
     if (req.url.toString().match(/.+odds$/)) {
       earlyHintsResources.push({ name: 'Link', value: `</assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=image; crossorigin` })
       //res.raw.setHeader("Link", `<${imageURL}>; rel=preload; as=image, </assets/fonts/MODI_Senobi-Gothic_2017_0702/Senobi-Gothic-Bold.woff>; rel=preload; as=font; crossorigin`)
-    } else {
-      res.raw.setHeader("Link", `/assets/images/races/400x225/gray.webp; rel=preload; as=image, <${imageURL}>; rel=preload; as=image`)
     }
 
     res.writeEarlyHints(earlyHintsResources)
