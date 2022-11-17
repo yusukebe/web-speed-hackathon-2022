@@ -57,6 +57,12 @@ export function useMutation(apiPath, { auth, method }) {
         const res = await fetch(req);
         const resData = await res.json();
 
+        if (res.status !== 200) {
+          throw {
+            response: res,
+          }; // XXX
+        }
+
         setResult((cur) => ({
           ...cur,
           data: resData,

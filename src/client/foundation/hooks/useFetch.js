@@ -12,6 +12,13 @@ export function useFetch(apiPath) {
       try {
         const res = await fetch(apiPath);
         const data = await res.json();
+
+        if (res.status !== 200) {
+          throw {
+            response: res,
+          }; // XXX
+        }
+
         setResult({
           data: data,
           error: null,
