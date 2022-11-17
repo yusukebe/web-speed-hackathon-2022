@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react"
+import React, { Suspense } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
@@ -14,10 +14,7 @@ import { Color, Radius, Space } from "../../../styles/variables"
 import { formatTime } from "../../../utils/DateUtils"
 import { authorizedJsonFetcher } from "../../../utils/HttpUtils"
 
-//import BettingTicketList from "./internal/BettingTicketList"
-
-const BettingTicketList = React.lazy(() => import("./internal/BettingTicketList"))
-
+import BettingTicketList from "./internal/BettingTicketList"
 import RaceResultSection from "./internal/RaceResultSection"
 
 const LiveBadge = styled.span`
