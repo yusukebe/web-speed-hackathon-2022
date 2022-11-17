@@ -53,7 +53,7 @@ app.get("/api/races/:raceId", cacheHandler);
 app.get("/api/races/:raceId/betting-tickets", passHandler);
 
 app.post("/api/races/:raceId/betting-tickets", purgeMiddleware, passHandler);
-app.post("/api/initialize", purgeMiddleware, passHandler);
+app.post("/api/initialize", passHandler);
 
 app.get("/", cacheHandler);
 app.get("/:date{[0-9]{4}-[0-9]{2}-[0-9]{2}}", cacheHandler);
