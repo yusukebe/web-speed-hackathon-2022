@@ -31,7 +31,7 @@ const purgeMiddleware: Handler = async (c, next) => {
 
   const apiURL = `https://api.cloudflare.com/client/v4/zones/${c.env.ZONE_ID}/purge_cache`;
   const data = {
-    files: `http://${url.hostname}/api/races/${raceId}`,
+    files: [`https://${url.hostname}/api/races/${raceId}`],
   };
 
   const fetchResponse = await fetch(apiURL, {
@@ -50,15 +50,7 @@ app.get("/api/users/me", passHandler);
 app.post("/api/users/me/charge", passHandler);
 app.get("/api/races", cacheHandler);
 app.get("/api/races/:raceId", cacheHandler);
-app.get(
-  "/api/races/:raceId/betting-tickets",
-  async (c, next) => {
-    const raceId = c.req.param("raceId");
-    await c.env.CACHE_KEY_KV.put(raceId, "cached");
-    await next();
-  },
-  cacheHandler,
-);
+app.get("/api/races/:raceId/betting-tickets", passHandler);
 
 app.post("/api/races/:raceId/betting-tickets", purgeMiddleware, passHandler);
 app.post("/api/initialize", purgeMiddleware, passHandler);
