@@ -3,27 +3,16 @@ import type { Handler } from "hono";
 
 const maxAge = 60 * 60 * 24 * 3;
 
-type Bindings = {
-  ZONE_ID: string;
-  API_TOKEN: string;
-  CACHE_KEY_KV: KVNamespace;
-};
-
-type Variables = {
-  path: string;
-};
-
-type Env = { Bindings: Bindings; Variables: Variables };
-
-const app = new Hono<Env>();
+const app = new Hono();
 
 const passHandler: Handler = async (c) => {
   const response = await fetch(c.req);
   const newResponse = new Response(response.body, response);
+  newResponse.headers.delete("cache-control");
   return newResponse;
 };
 
-const cacheHandler: Handler<Env> = async (c) => {
+const cacheHandler: Handler = async (c) => {
   const response = await fetch(c.req, {
     cf: {
       cacheEverything: true,
@@ -57,10 +46,9 @@ const purgeMiddleware: Handler = async (c, next) => {
   await next();
 };
 
-app.get("*", cacheHandler);
-
-app.all("/api/user/me", passHandler);
-app.all("/api/races", cacheHandler);
+app.get("/api/users/me", passHandler);
+app.post("/api/users/me/charge", passHandler);
+app.get("/api/races", cacheHandler);
 app.get("/api/races/:raceId", cacheHandler);
 app.get(
   "/api/races/:raceId/betting-tickets",
@@ -74,6 +62,10 @@ app.get(
 
 app.post("/api/races/:raceId/betting-tickets", purgeMiddleware, passHandler);
 app.post("/api/initialize", purgeMiddleware, passHandler);
+
+app.get("/", cacheHandler);
+app.get("/races/*", cacheHandler);
+app.get("/assets/*", cacheHandler);
 
 app.onError((err, c) => {
   console.log(err);
