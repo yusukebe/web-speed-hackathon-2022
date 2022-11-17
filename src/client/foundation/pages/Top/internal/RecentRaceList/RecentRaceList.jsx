@@ -6,9 +6,7 @@ import styled from "styled-components"
 import { LinkButton } from "../../../../components/buttons/LinkButton"
 import { Spacer } from "../../../../components/layouts/Spacer"
 import { Stack } from "../../../../components/layouts/Stack"
-import { easeOutCubic, useAnimation } from "../../../../hooks/useAnimation"
 import { Color, FontSize, Radius, Space } from "../../../../styles/variables"
-//import { formatCloseAt } from "../../../../utils/DateUtils"
 
 export const RecentRaceList = React.memo(({ children }) => {
   return (

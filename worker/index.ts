@@ -1,9 +1,7 @@
 import { Hono } from "hono";
 import type { Handler } from "hono";
-import { getPathFromURL } from "hono/utils/url";
 
-const maxAge = 60 * 60 * 24 * 30;
-const prefix = "cacheKey:";
+const maxAge = 60 * 60 * 24 * 3;
 
 type Bindings = {
   ZONE_ID: string;
@@ -17,53 +15,34 @@ type Variables = {
 
 type Env = { Bindings: Bindings; Variables: Variables };
 
-const queryReg = new RegExp(/\?.+=.+/);
-
 const app = new Hono<Env>();
 
-const cacheHandler: Handler<Env> = async (c) => {
-  if (queryReg.test(c.req.url)) {
-    const response = await fetch(c.req);
-    return new Response(response.body);
-  }
+const passHandler: Handler = async (c) => {
+  const response = await fetch(c.req);
+  const newResponse = new Response(response.body, response);
+  return newResponse;
+};
 
+const cacheHandler: Handler<Env> = async (c) => {
   const response = await fetch(c.req, {
     cf: {
       cacheEverything: true,
       cacheTtl: maxAge,
     },
   });
-
   const newResponse = new Response(response.body, response);
   newResponse.headers.delete("cache-control");
   newResponse.headers.append("cache-control", `max-age=${maxAge}`);
-
   return newResponse;
 };
 
-app.get("*", cacheHandler);
-app.all("/api/*", async (c) => {
-  const response = await fetch(c.req);
-  const newResponse = new Response(response.body, response);
-  return newResponse;
-});
-
-const purgeHandler: Handler<{ Bindings: Bindings }> = async (c) => {
-  const { keys } = await c.env.CACHE_KEY_KV.list<{ path: string }>({ prefix });
-
-  const files: string[] = [];
-  keys.map((k) => {
-    const path = k.metadata?.path || "";
-    const url = new URL(c.req.url);
-    files.push(`https://${url.hostname}${path}`);
-    c.env.CACHE_KEY_KV.delete(k.name);
-  });
-
-  if (!files.length) return c.json({ result: { message: "not files" } });
+const purgeMiddleware: Handler = async (c, next) => {
+  const raceId = c.req.param("raceId");
+  const url = new URL(c.req.url);
 
   const apiURL = `https://api.cloudflare.com/client/v4/zones/${c.env.ZONE_ID}/purge_cache`;
   const data = {
-    files: files,
+    files: `http://${url.hostname}/api/races/${raceId}`,
   };
 
   const fetchResponse = await fetch(apiURL, {
@@ -74,14 +53,27 @@ const purgeHandler: Handler<{ Bindings: Bindings }> = async (c) => {
     },
     method: "POST",
   });
-
-  return c.json({
-    result: {
-      status: fetchResponse.status,
-      statusText: fetchResponse.statusText,
-    },
-  });
+  console.log(await fetchResponse.json());
+  await next();
 };
+
+app.get("*", cacheHandler);
+
+app.all("/api/user/me", passHandler);
+app.all("/api/races", cacheHandler);
+app.get("/api/races/:raceId", cacheHandler);
+app.get(
+  "/api/races/:raceId/betting-tickets",
+  async (c, next) => {
+    const raceId = c.req.param("raceId");
+    await c.env.CACHE_KEY_KV.put(raceId, "cached");
+    await next();
+  },
+  cacheHandler,
+);
+
+app.post("/api/races/:raceId/betting-tickets", purgeMiddleware, passHandler);
+app.post("/api/initialize", purgeMiddleware, passHandler);
 
 app.onError((err, c) => {
   console.log(err);

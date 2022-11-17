@@ -1,7 +1,6 @@
 import { motion } from "framer-motion"
-import React, { forwardRef, lazy, useCallback, useState } from "react"
-
-const zenginCode = lazy(() => "zengin-code")
+import React, { forwardRef, useCallback, useState } from "react"
+import zenginCode from "zengin-code"
 
 import { Dialog } from "../../../../components/layouts/Dialog"
 import { Spacer } from "../../../../components/layouts/Spacer"
