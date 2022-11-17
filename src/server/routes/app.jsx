@@ -83,7 +83,7 @@ const getHead = (hero) => {
 }
 
 const getBottom = () => {
-  return `</div><script src="/assets/js/main.bundle.js"></script></body></html>`
+  return `</div><script src="/assets/js/main.bundle.js" defer></script></body></html>`
 }
 
 const getCSS = () => {
